@@ -37,7 +37,7 @@ beGUI is a tiny and customizable GUI system for Lua, and fully written in Lua. I
 
 Setup:
 
-1. Clone this repository or download from releases
+1. Clone this repository or download from [releases](https://github.com/paladin-t/begui/releases)
 2. Open "src" directly or import it to your own projects with [Bitty Engine](https://github.com/paladin-t/bitty/)
 3. See code and comments for details
 
@@ -45,7 +45,6 @@ Code:
 
 ```lua
 require 'libs/beGUI/beGUI'
-require 'keycode'
 
 local widgets = nil
 local theme = nil
