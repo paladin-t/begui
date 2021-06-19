@@ -51,36 +51,36 @@ local widgets = nil
 local theme = nil
 
 function setup()
-	local P = beGUI.percent -- Alias of percent.
-	widgets = beGUI.Widget.new()
-		:put(0, 0)
-		:resize(P(100), P(100))
-		:addChild(
-			beGUI.Label.new('beGUI demo')
-				:setId('label')
-				:anchor(0, 0)
-				:put(10, 10)
-				:resize(100, 23)
-		)
-		:addChild(
-			beGUI.Button.new('Button')
-				:setId('button')
-				:anchor(0, 0)
-				:put(10, 36)
-				:resize(100, 23)
-				:on('clicked', function (sender)
-					local lbl = widgets:find('label')
-					lbl:setValue('Clicked ' .. tostring(sender))
-				end)
-		)
-	theme = beTheme.default()
+  local P = beGUI.percent -- Alias of percent.
+  widgets = beGUI.Widget.new()
+    :put(0, 0)
+    :resize(P(100), P(100))
+    :addChild(
+      beGUI.Label.new('beGUI demo')
+        :setId('label')
+        :anchor(0, 0)
+        :put(10, 10)
+        :resize(100, 23)
+    )
+    :addChild(
+      beGUI.Button.new('Button')
+        :setId('button')
+        :anchor(0, 0)
+        :put(10, 36)
+        :resize(100, 23)
+        :on('clicked', function (sender)
+          local lbl = widgets:find('label')
+          lbl:setValue('Clicked ' .. tostring(sender))
+        end)
+    )
+  theme = beTheme.default()
 end
 
 function update(delta)
-	cls(Color.new(255, 255, 255))
+  cls(Color.new(255, 255, 255))
 
-	font(theme['font'].resource)
-	widgets:update(theme, delta)
-	font(nil)
+  font(theme['font'].resource)
+  widgets:update(theme, delta)
+  font(nil)
 end
 ```
