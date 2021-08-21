@@ -49,6 +49,7 @@ local Widget = beClass.class({
 	popup = nil,
 	hovering = false,
 	focused = nil,                         -- Used to reserve focused widget before popup.
+	focusIfHovering = false,
 	focusTicks = 0,
 	context = nil,
 	tweens = nil,
@@ -638,7 +639,15 @@ local Widget = beClass.class({
 		self.worldX, self.worldY = x, y
 		self:_updateChildren(theme, delta, x, y, event)
 
-		if event.context and event.context.focus == self and event.context.navigated ~= nil then
+		if self.focusIfHovering then
+			local w, h = self:size()
+			if self.hovering or Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h)) then
+				if event.context then
+					event.context.focus = self
+				end
+			end
+		end
+		if event.context and event.context.focus == self and (event.context.navigated ~= nil or self.focusIfHovering) then
 			self:_updateFocus(delta, x, y)
 		end
 	end,

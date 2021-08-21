@@ -35,7 +35,7 @@ Exporting.
 ]]
 
 beGUI = {
-	version = '1.2.0',
+	version = '1.2.1',
 
 	-- Data structure to represent relative number.
 	percent = beStructures.percent,

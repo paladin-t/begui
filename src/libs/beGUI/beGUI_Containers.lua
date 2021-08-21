@@ -126,7 +126,7 @@ local List = beClass.class({
 			}
 		end
 
-		local x_, y_, w_, h_ = clip(x, y, w, h)
+		local x_, y_, w_, h_ = clip(x + 1, y + 1, w - 1, h - 2)
 		beWidget.Widget._update(self, theme, delta, dx, dy + self._scrollY, event)
 		if x_ then
 			clip(x_, y_, w_, h_)
