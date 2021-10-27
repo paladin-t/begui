@@ -30,6 +30,8 @@ Widgets.
 ]]
 
 local List = beClass.class({
+	_withScrollBar = false,
+	_scrolledTimestamp = nil,
 	_pressed = false,
 	_pressedTimestamp = nil,
 	_pressedPosition = nil,
@@ -39,8 +41,10 @@ local List = beClass.class({
 	_maxY = 0,
 
 	-- Constructs a List.
-	ctor = function (self)
+	ctor = function (self, withScrollBar)
 		beWidget.Widget.ctor(self)
+
+		self._withScrollBar = withScrollBar
 	end,
 
 	__tostring = function (self)
@@ -69,9 +73,13 @@ local List = beClass.class({
 		else
 			down = event.mouseDown and intersects
 		end
+		local now = DateTime.ticks()
 		if down and not self._pressed then
+			if self._withScrollBar then
+				self._scrolledTimestamp = now
+			end
 			self._pressed = true
-			self._pressedTimestamp = DateTime.ticks()
+			self._pressedTimestamp = now
 			self._pressedPosition = event.mousePosition
 			self._pressingPosition = event.mousePosition
 			self._scrolling = false
@@ -82,8 +90,11 @@ local List = beClass.class({
 			self._pressingPosition = nil
 			self._scrolling = false
 		elseif down and self._pressed then
+			if self._withScrollBar then
+				self._scrolledTimestamp = now
+			end
 			if self._pressedTimestamp ~= nil then
-				local diff = DateTime.toSeconds(DateTime.ticks() - self._pressedTimestamp)
+				local diff = DateTime.toSeconds(now - self._pressedTimestamp)
 				if diff < 0.3 and self._pressedPosition ~= self._pressingPosition then
 					self._scrolling = true
 					self._pressedTimestamp = nil
@@ -94,6 +105,16 @@ local List = beClass.class({
 		local elem = theme['list']
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency)
 
+		local scrollBarTransparency = nil
+		if self._scrolledTimestamp then
+			local SCROLL_BAR_TIMEOUT_SECONDS = 1
+			local diff = DateTime.toSeconds(now - self._scrolledTimestamp)
+			local factor = diff / SCROLL_BAR_TIMEOUT_SECONDS
+			scrollBarTransparency = factor < 0.7 and 1 or beUtils.clamp(1 - (factor - 0.7) / 0.3, 0, 1)
+			if factor >= 1 then
+				self._scrolledTimestamp = nil
+			end
+		end
 		if self._maxY < h then
 			self._maxY = h
 		end
@@ -104,8 +125,14 @@ local List = beClass.class({
 			end
 			self._pressingPosition = event.mousePosition
 		elseif intersects and event.mouseWheel < 0 then
+			if self._withScrollBar then
+				self._scrolledTimestamp = now
+			end
 			self._scrollY = beUtils.clamp(self._scrollY - 16, h - self._maxY, 0)
 		elseif intersects and event.mouseWheel > 0 then
+			if self._withScrollBar then
+				self._scrolledTimestamp = now
+			end
 			self._scrollY = beUtils.clamp(self._scrollY + 16, h - self._maxY, 0)
 		end
 		if not intersects then
@@ -128,6 +155,17 @@ local List = beClass.class({
 
 		local x_, y_, w_, h_ = clip(x + 1, y + 1, w - 1, h - 2)
 		beWidget.Widget._update(self, theme, delta, dx, dy + self._scrollY, event)
+		if scrollBarTransparency then
+			local widgetPos = y + 1
+			local widgetSize = h - 2
+			local contentSize = self._maxY
+			local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize), 8)
+			local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
+			local slide = widgetSize - barSize
+			local offset = slide * percent;
+			local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
+			rect(x + w - 4, widgetPos + offset, x + w - 1, widgetPos + offset + barSize + 1, true, col)
+		end
 		if x_ then
 			clip(x_, y_, w_, h_)
 		else

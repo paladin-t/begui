@@ -183,6 +183,7 @@ local default = function ()
 
 		['list'] = {
 			resource = Resources.load('imgs/panel_white.png'),
+			color = Color.new(127, 127, 127, 128),
 			area = { 0, 0, 17, 17 },
 			content_offset = nil
 		},
