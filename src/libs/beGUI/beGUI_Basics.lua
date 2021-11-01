@@ -581,6 +581,7 @@ local Picture = beClass.class({
 }, beWidget.Widget)
 
 local Button = beClass.class({
+	_enabled = true,
 	_pressed = false,
 
 	-- Constructs a Button with the specific content.
@@ -597,6 +598,17 @@ local Button = beClass.class({
 
 	setValue = function (self, content, stretched, permeation)
 		self.content = content
+	end,
+
+	-- Gets whether it's enabled.
+	enabled = function (self)
+		return self._enabled
+	end,
+	-- Sets whether it's enabled.
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
 	end,
 
 	navigatable = function (self)
@@ -630,13 +642,22 @@ local Button = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 		elseif event.context.focus == self and event.context.navigated == 'press' then
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 			event.context.navigated = false
 		end
 
-		local elem = down and theme['button_down'] or theme['button']
+		local elem = nil
+		if self._enabled then
+			elem = down and theme['button_down'] or theme['button']
+		else
+			elem = theme['button_disabled']
+		end
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency)
 		beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 

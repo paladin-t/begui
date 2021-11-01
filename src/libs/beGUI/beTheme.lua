@@ -83,6 +83,11 @@ local function default()
 			area = { 0, 23, 23, 23 },
 			content_offset = { 0, 1 }
 		},
+		['button_disabled'] = {
+			resource = Resources.load('imgs/button.png'),
+			area = { 0, 46, 23, 23 },
+			content_offset = nil
+		},
 
 		['button_close'] = {
 			resource = Resources.load('imgs/button_close.png'),
