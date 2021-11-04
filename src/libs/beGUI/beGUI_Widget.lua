@@ -586,7 +586,7 @@ local Widget = beClass.class({
 				mouseDown = lmb,
 				mouseWheel = wheel,
 				canceled = false,
-				context = self.context,
+				context = self.context
 			}
 
 			if lmb or wheel ~= 0 then

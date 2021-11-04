@@ -67,6 +67,13 @@ local Label = beClass.class({
 		return self
 	end,
 
+	-- Sets the theme.
+	setTheme = function (self, theme)
+		self._theme = theme
+
+		return self
+	end,
+
 	resize = function (self, width, height)
 		if width == -1 then
 			self.height = height
@@ -298,6 +305,13 @@ local Url = beClass.class({
 			val = tostring(val)
 		end
 		self.content = val
+
+		return self
+	end,
+
+	-- Sets the theme.
+	setTheme = function (self, theme)
+		self._theme = theme
 
 		return self
 	end,
@@ -545,6 +559,8 @@ local Picture = beClass.class({
 
 		self._stretched = not not stretched
 		self._permeation = permeation
+
+		return self
 	end,
 
 	navigatable = function (self)
@@ -598,6 +614,8 @@ local Button = beClass.class({
 
 	setValue = function (self, content, stretched, permeation)
 		self.content = content
+
+		return self
 	end,
 
 	-- Gets whether it's enabled.
