@@ -288,9 +288,6 @@ local Widget = beClass.class({
 		if not child then
 			return self
 		end
-		if not child.parent then
-			error('This widget is not a child of any other one.')
-		end
 		if type(child) == 'string' then
 			for i, v in ipairs(self.children) do
 				if v.id == child then
@@ -301,13 +298,19 @@ local Widget = beClass.class({
 					return self
 				end
 			end
+			error('Child doesn\'t exist.')
 		elseif type(child) == 'number' then
 			if child >= 1 and child <= #self.children then
 				local c = self.children[child]
 				table.remove(self.children, child)
 				c.parent = nil
+			else
+				error('Index out of bounds.')
 			end
 		else
+			if not child.parent then
+				error('This widget is not a child of any other one.')
+			end
 			for i, v in ipairs(self.children) do
 				if v == child then
 					local c = self.children[i]
