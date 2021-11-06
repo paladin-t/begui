@@ -108,24 +108,25 @@ local Label = beClass.class({
 		if self._theme and self._theme ~= 'font' then
 			font(theme[self._theme].resource)
 		end
+		local font_ = theme[self._theme or 'font']
 		if self._alignment == 'left' then
 			if shadow then
 				local elem_ = theme['label_shadow']
 				beUtils.textLeft(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
 			end
-			_1, _2, fw, _4 = beUtils.textLeft(self.content, theme[self._theme or 'font'], x, y, w, h, elem.content_offset, self.transparency)
+			_1, _2, fw, _4 = beUtils.textLeft(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
 		elseif self._alignment == 'center' then
 			if shadow then
 				local elem_ = theme['label_shadow']
 				beUtils.textCenter(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
 			end
-			_1, _2, fw, _4 = beUtils.textCenter(self.content, theme[self._theme or 'font'], x, y, w, h, elem.content_offset, self.transparency)
+			_1, _2, fw, _4 = beUtils.textCenter(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
 		else
 			if shadow then
 				local elem_ = theme['label_shadow']
 				beUtils.textRight(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
 			end
-			_1, _2, fw, _4 = beUtils.textRight(self.content, theme[self._theme or 'font'], x, y, w, h, elem.content_offset, self.transparency)
+			_1, _2, fw, _4 = beUtils.textRight(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
 		end
 		if self._theme and self._theme ~= 'font' then
 			font(theme['font'].resource)
@@ -155,6 +156,7 @@ local Label = beClass.class({
 local MultilineLabel = beClass.class({
 	_lineHeight = nil,
 	_words = nil,
+	_theme = nil,
 
 	-- Constructs a MultilineLabel with the specific content.
 	-- `content`: content string
@@ -181,6 +183,13 @@ local MultilineLabel = beClass.class({
 		end
 		self.content = val
 		self._words = nil
+
+		return self
+	end,
+
+	-- Sets the theme.
+	setTheme = function (self, theme)
+		self._theme = theme
 
 		return self
 	end,
@@ -212,10 +221,18 @@ local MultilineLabel = beClass.class({
 			_, height = measure('X', theme['font'].resource) -- Estimate safe height.
 		end
 		local elem = theme['multilinelabel']
+		if self._theme and self._theme ~= 'font' then
+			font(theme[self._theme].resource)
+		end
+		local font_ = theme[self._theme or 'font']
+		local color_ = nil
+		if self._theme then
+			color_ = font_.color
+		end
 		if self._words == nil then
 			self._words = { }
 			self.height = 0
-			local words = beUtils.escape(self.content, theme['font'].color, true)
+			local words = beUtils.escape(self.content, font_.color, true)
 			local posX, posY = 0, 0
 			local sizeW, sizeH = w, h
 			if elem.content_offset then
@@ -224,9 +241,9 @@ local MultilineLabel = beClass.class({
 			end
 			local initPos = Vec2.new(posX, posY)
 			local lineMargin = 1
-			local spaceW = measure(' ', theme['font'].resource)
+			local spaceW = measure(' ', font_.resource)
 			for i, v in ipairs(words) do
-				local w_, h_ = measure(v.text, theme['font'].resource)
+				local w_, h_ = measure(v.text, font_.resource)
 				if self._lineHeight ~= nil then
 					h_ = self._lineHeight
 				end
@@ -249,9 +266,9 @@ local MultilineLabel = beClass.class({
 					table.insert(
 						self._words,
 						{
-							resource = theme['font'].resource,
+							resource = font_.resource,
 							text = v.text,
-							color = v.color,
+							color = color_ or v.color,
 							position = pos
 						}
 					)
@@ -263,9 +280,11 @@ local MultilineLabel = beClass.class({
 				self.height = height * lines + lineMargin * (lines - 1)
 			end
 		end
-
 		for _, v in ipairs(self._words) do
 			beUtils.textLeft(v.text, v, x + v.position.x, y + v.position.y, w, height, elem.content_offset, self.transparency)
+		end
+		if self._theme and self._theme ~= 'font' then
+			font(theme['font'].resource)
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
