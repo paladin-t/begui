@@ -411,6 +411,7 @@ local Droppable = beClass.class({
 local Tab = beClass.class({
 	_pages = nil,
 	_pagesInitialized = false,
+	_tabSize = nil,
 	_value = 1,
 	_focusArea = nil,
 	_headHeight = nil,
@@ -466,6 +467,17 @@ local Tab = beClass.class({
 				c:setVisible(visible)
 			end
 		end
+
+		return self
+	end,
+
+	-- Gets the tab size.
+	tabSize = function (self)
+		return self._tabSize
+	end,
+	-- Sets the tab size to a specific value.
+	setTabSize = function (self, val)
+		self._tabSize = val
 
 		return self
 	end,
@@ -547,13 +559,17 @@ local Tab = beClass.class({
 		local x_ = x
 		for i, v in ipairs(self.content) do
 			local w_, h_ = nil, nil
-			if type(v) == 'string' then
-				w_, h_ = measure(v, theme['font'].resource)
+			if self._tabSize == nil then
+				if type(v) == 'string' then
+					w_, h_ = measure(v, theme['font'].resource)
+				else
+					w_, h_ = v.area[3], v.area[4]
+				end
+				w_ = w_ + paddingX * 2
+				h_ = h_ + paddingY * 2
 			else
-				w_, h_ = v.area[3], v.area[4]
+				w_, h_ = self._tabSize.x, self._tabSize.y
 			end
-			w_ = w_ + paddingX * 2
-			h_ = h_ + paddingY * 2
 			if self._headHeight == nil then
 				self._headHeight = h_
 			end
