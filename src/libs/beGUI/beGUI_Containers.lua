@@ -104,7 +104,7 @@ local List = beClass.class({
 		end
 
 		local elem = theme['list']
-		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency)
+		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 
 		local scrollBarTransparency = nil
 		if self._scrolledTimestamp then

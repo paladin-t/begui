@@ -526,7 +526,7 @@ local InputBox = beClass.class({
 		end
 
 		local elem = theme['inputbox']
-		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency)
+		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 		local x_, y_, w_, h_ = clip(x, y, w - elem.content_offset[1], h)
 		local caretX = x + self._size.x
 		if #self.content ~= 0 then
@@ -557,6 +557,7 @@ local InputBox = beClass.class({
 local Picture = beClass.class({
 	_stretched = false,
 	_permeation = nil,
+	_color = nil,
 
 	-- Constructs a Picture with the specific content.
 	-- `content`: content Texture
@@ -582,6 +583,17 @@ local Picture = beClass.class({
 		return self
 	end,
 
+	-- Gets the color of the picture.
+	color = function (self)
+		return self._color
+	end,
+	-- Sets the color of the picture.
+	setColor = function (self, val)
+		self._color = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'children'
 	end,
@@ -597,14 +609,25 @@ local Picture = beClass.class({
 		local w, h = self:size()
 
 		if self._stretched then
-			beUtils.tex9Grid(self.content, x, y, w, h, self._permeation, self.transparency)
+			beUtils.tex9Grid(self.content, x, y, w, h, self._permeation, self.transparency, self._color)
 		else
 			local sx, sy, sw, sh = nil, nil, nil, nil
 			if self.content.area then
 				sx, sy, sw, sh = self.content.area[1], self.content.area[2], self.content.area[3], self.content.area[4]
 			end
-			if self.transparency then
-				local col = Color.new(255, 255, 255, self.transparency)
+			if self._color or self.transparency then
+				local col = nil
+				if self._color then
+					if self.transparency then
+						col = Color.new(self._color.r, self._color.g, self._color.b, self._color.a * (self.transparency / 255))
+					else
+						col = self._color
+					end
+				else
+					if self.transparency then
+						col = Color.new(255, 255, 255, self.transparency)
+					end
+				end
 				tex(self.content.resource, x, y, w, h, sx, sy, sw, sh, 0, Vec2.new(0.5, 0.5), false, false, col)
 			else
 				tex(self.content.resource, x, y, w, h, sx, sy, sw, sh)
@@ -695,7 +718,7 @@ local Button = beClass.class({
 		else
 			elem = theme['button_disabled']
 		end
-		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency)
+		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 		beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
@@ -789,7 +812,7 @@ local PictureButton = beClass.class({
 		if self._background then
 			local down_, up_ = theme[self._themeBackgroundNormal or 'button_down'], theme[self._themeBackgroundPressed or 'button']
 			local elem = down and down_ or up_
-			beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency)
+			beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 			beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 		end
 
@@ -1215,7 +1238,7 @@ local ComboBox = beClass.class({
 		local elem = theme['combobox']
 		local img = elem.resource
 		local area = elem.area
-		beUtils.tex3Grid(elem, x - 1, y + (h - area[4]) * 0.5, w + 2, area[4], nil, self.transparency)
+		beUtils.tex3Grid(elem, x - 1, y + (h - area[4]) * 0.5, w + 2, area[4], nil, self.transparency, nil)
 		local item = self:getItemAt(self:getValue())
 		if item ~= nil then
 			local x_, y_, w_, h_ = clip(x, y, w, h)
@@ -1381,7 +1404,7 @@ local NumberBox = beClass.class({
 		local elem = theme['numberbox']
 		local img = elem.resource
 		local area = elem.area
-		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, w + 1, area[4], nil, self.transparency)
+		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, w + 1, area[4], nil, self.transparency, nil)
 		local item = tostring(self._value)
 		local x_, y_, w_, h_ = clip(x, y, w, h)
 		beUtils.textLeft(item, theme['font'], x + 1, y, w, h, elem.content_offset, self.transparency)
@@ -1471,7 +1494,7 @@ local ProgressBar = beClass.class({
 		local w, h = self:size()
 
 		local elem = theme['progressbar']
-		beUtils.tex9Grid(elem, x, y, w, h, 0, self.transparency)
+		beUtils.tex9Grid(elem, x, y, w, h, 0, self.transparency, nil)
 		if self._shadow == nil then
 			local w_ = (w - elem.content_offset[1] * 2) * (self.content / self._max)
 			local x1, y1, x2, y2 = 0, 0, 0, 0

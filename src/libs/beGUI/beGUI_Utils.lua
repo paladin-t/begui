@@ -181,7 +181,7 @@ end
 
 --[[ Text rendering. ]]
 
-local function tex3Grid(elem, x, y, w, h, permeation, alpha)
+local function tex3Grid(elem, x, y, w, h, permeation, alpha, color_)
 	local img = elem.resource
 	local area = elem.area
 	local srcx, srcy = 0, 0
@@ -190,7 +190,20 @@ local function tex3Grid(elem, x, y, w, h, permeation, alpha)
 		srcx, srcy = area[1], area[2]
 		srcw, srch = area[3], area[4]
 	end
-	local col = alpha and Color.new(255, 255, 255, alpha) or nil
+	local col = nil
+	if color_ or alpha then
+		if color_ then
+			if alpha then
+				col = Color.new(color_.r, color_.g, color_.b, color_.a * (alpha / 255))
+			else
+				col = color_
+			end
+		else
+			if alpha then
+				col = Color.new(255, 255, 255, alpha)
+			end
+		end
+	end
 	if not area and srcw == w and srch == h then
 		if col then
 			tex(res, x, y, w, h, x, y, w, h, 0, Vec2.new(0.5, 0.5), false, false, col)
@@ -218,7 +231,7 @@ local function tex3Grid(elem, x, y, w, h, permeation, alpha)
 	end
 end
 
-local function tex9Grid(elem, x, y, w, h, permeation, alpha)
+local function tex9Grid(elem, x, y, w, h, permeation, alpha, color_)
 	local img = elem.resource
 	local area = elem.area
 	local srcx, srcy = 0, 0
@@ -227,7 +240,20 @@ local function tex9Grid(elem, x, y, w, h, permeation, alpha)
 		srcx, srcy = area[1], area[2]
 		srcw, srch = area[3], area[4]
 	end
-	local col = alpha and Color.new(255, 255, 255, alpha) or nil
+	local col = nil
+	if color_ or alpha then
+		if color_ then
+			if alpha then
+				col = Color.new(color_.r, color_.g, color_.b, color_.a * (alpha / 255))
+			else
+				col = color_
+			end
+		else
+			if alpha then
+				col = Color.new(255, 255, 255, alpha)
+			end
+		end
+	end
 	if not area and srcw == w and srch == h then
 		if col then
 			tex(res, x, y, w, h, x, y, w, h, 0, Vec2.new(0.5, 0.5), false, false, col)
