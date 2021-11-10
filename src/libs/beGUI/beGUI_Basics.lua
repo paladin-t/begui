@@ -154,6 +154,7 @@ local Label = beClass.class({
 }, beWidget.Widget)
 
 local MultilineLabel = beClass.class({
+	_flexWidth = false, _flexHeight = true,
 	_lineHeight = nil,
 	_words = nil,
 	_theme = nil,
@@ -194,6 +195,27 @@ local MultilineLabel = beClass.class({
 		return self
 	end,
 
+	-- Gets whether to calculate widget width automatically.
+	flexWidth = function (self)
+		return self._flexWidth
+	end,
+	-- Sets whether to calculate widget width automatically.
+	setFlexWidth = function (self, val)
+		self._flexWidth = val
+
+		return self
+	end,
+	-- Gets whether to calculate widget height automatically.
+	flexHeight = function (self)
+		return self._flexHeight
+	end,
+	-- Sets whether to calculate widget height automatically.
+	setFlexHeight = function (self, val)
+		self._flexHeight = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'children'
 	end,
@@ -230,8 +252,14 @@ local MultilineLabel = beClass.class({
 			color_ = font_.color
 		end
 		if self._words == nil then
+			local flexWidth, flexHeight = self._flexWidth, self._flexHeight
 			self._words = { }
-			self.height = 0
+			if flexWidth then
+				self.width = 0
+			end
+			if flexHeight then
+				self.height = 0
+			end
 			local words = beUtils.escape(self.content, font_.color, true)
 			local posX, posY = 0, 0
 			local sizeW, sizeH = w, h
@@ -253,7 +281,13 @@ local MultilineLabel = beClass.class({
 					posY = posY + h_ + lineMargin
 				else
 					local pos = nil
-					if posX + w_ - spaceW < sizeW then
+					if flexWidth then
+						pos = Vec2.new(posX, posY)
+						posX = posX + w_
+						if posX > self.width then
+							self.width = posX
+						end
+					elseif posX + w_ - spaceW < sizeW then
 						pos = Vec2.new(posX, posY)
 						posX = posX + w_
 					else
@@ -274,10 +308,12 @@ local MultilineLabel = beClass.class({
 					)
 				end
 			end
-			if lines == 1 then
-				self.height = height
-			else
-				self.height = height * lines + lineMargin * (lines - 1)
+			if flexHeight then
+				if lines == 1 then
+					self.height = height
+				else
+					self.height = height * lines + lineMargin * (lines - 1)
+				end
 			end
 		end
 		local canvasWidth, canvasHeight = Canvas.main:size()
