@@ -195,11 +195,13 @@ local List = beClass.class({
 		if scrollBarTransparency then
 			local widgetPos = y + 1
 			local widgetSize = h - 2
+			local limit = 0
 			if self._scrollableHorizontally then
 				widgetSize = widgetSize - 4
+				limit = 3
 			end
 			local contentSize = self._maxY
-			local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize - 3), 8)
+			local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize - limit), 8)
 			local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
 			local slide = widgetSize - barSize
 			local offset = slide * percent;
