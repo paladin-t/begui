@@ -39,7 +39,7 @@ local List = beClass.class({
 	_scrolling = nil,
 	_scrollX = 0, _scrollY = 0,
 	_maxX = 0, _maxY = 0,
-	_horizontalScrollable = false,
+	_scrollableHorizontally = false,
 	_childrenCount = 0,
 
 	-- Constructs a List.
@@ -53,13 +53,13 @@ local List = beClass.class({
 		return 'List'
 	end,
 
-	-- Gets whether allow horizontal scrolling.
-	horizontalScrollable = function (self)
-		return self._horizontalScrollable
+	-- Gets whether allow scrolling horizontally.
+	scrollableHorizontally = function (self)
+		return self._scrollableHorizontally
 	end,
-	-- Sets whether allow horizontal scrolling.
-	setHorizontalScrollable = function (self, val)
-		self._horizontalScrollable = val
+	-- Sets whether allow scrolling horizontally.
+	setScrollableHorizontally = function (self, val)
+		self._scrollableHorizontally = val
 
 		return self
 	end,
@@ -109,7 +109,7 @@ local List = beClass.class({
 			if self._pressedTimestamp ~= nil then
 				local diff = DateTime.toSeconds(now - self._pressedTimestamp)
 				if diff < 0.3 and self._pressedPosition ~= self._pressingPosition then
-					if self._horizontalScrollable then
+					if self._scrollableHorizontally then
 						local diff = self._pressedPosition - self._pressingPosition
 						if math.abs(diff.x) < math.abs(diff.y) then
 							self._scrolling = 'y'
@@ -195,7 +195,7 @@ local List = beClass.class({
 		if scrollBarTransparency then
 			local widgetPos = y + 1
 			local widgetSize = h - 2
-			if self._horizontalScrollable then
+			if self._scrollableHorizontally then
 				widgetSize = widgetSize - 4
 			end
 			local contentSize = self._maxY
@@ -205,7 +205,7 @@ local List = beClass.class({
 			local offset = slide * percent;
 			local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
 			rect(x + w - 4, widgetPos + offset, x + w - 1, widgetPos + offset + barSize + 1, true, col)
-			if self._horizontalScrollable then
+			if self._scrollableHorizontally then
 				local widgetPos = x + 1
 				local widgetSize = w - 2 - 2
 				local contentSize = self._maxX
