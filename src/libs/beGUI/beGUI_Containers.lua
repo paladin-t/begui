@@ -199,7 +199,7 @@ local List = beClass.class({
 				widgetSize = widgetSize - 4
 			end
 			local contentSize = self._maxY
-			local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize), 8)
+			local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize - 3), 8)
 			local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
 			local slide = widgetSize - barSize
 			local offset = slide * percent;
@@ -209,7 +209,7 @@ local List = beClass.class({
 				local widgetPos = x + 1
 				local widgetSize = w - 2 - 2
 				local contentSize = self._maxX
-				local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize), 8)
+				local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize - 3), 8)
 				local percent = beUtils.clamp(-self._scrollX / (contentSize - widgetSize), 0, 1)
 				local slide = widgetSize - barSize
 				local offset = slide * percent;
