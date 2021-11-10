@@ -240,7 +240,7 @@ local MultilineLabel = beClass.class({
 		if self._lineHeight ~= nil then
 			height = self._lineHeight
 		else
-			_, height = measure('X', theme['font'].resource) -- Estimate safe height.
+			_, height = measure('X', theme[self._theme or 'font'].resource) -- Estimate safe height.
 		end
 		local elem = theme['multilinelabel']
 		if self._theme and self._theme ~= 'font' then

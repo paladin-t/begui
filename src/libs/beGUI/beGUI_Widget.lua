@@ -739,7 +739,7 @@ local Widget = beClass.class({
 				if self.context.focus == c then
 					local scrolled = false
 					if nav == 'content' then
-						if c:_scroll(-1) then
+						if c:_scroll(nil, -1) then
 							scrolled = true
 						end
 					end
@@ -752,7 +752,7 @@ local Widget = beClass.class({
 				if self.context.focus == c then
 					local scrolled = false
 					if nav == 'content' then
-						if c:_scroll(1) then
+						if c:_scroll(nil, 1) then
 							scrolled = true
 						end
 					end

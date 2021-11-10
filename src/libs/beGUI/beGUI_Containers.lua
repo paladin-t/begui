@@ -36,9 +36,10 @@ local List = beClass.class({
 	_pressedTimestamp = nil,
 	_pressedPosition = nil,
 	_pressingPosition = nil,
-	_scrolling = false,
-	_scrollY = 0,
-	_maxY = 0,
+	_scrolling = nil,
+	_scrollX = 0, _scrollY = 0,
+	_maxX = 0, _maxY = 0,
+	_horizontalScrollable = false,
 	_childrenCount = 0,
 
 	-- Constructs a List.
@@ -50,6 +51,17 @@ local List = beClass.class({
 
 	__tostring = function (self)
 		return 'List'
+	end,
+
+	-- Gets whether allow horizontal scrolling.
+	horizontalScrollable = function (self)
+		return self._horizontalScrollable
+	end,
+	-- Sets whether allow horizontal scrolling.
+	setHorizontalScrollable = function (self, val)
+		self._horizontalScrollable = val
+
+		return self
 	end,
 
 	navigatable = function (self)
@@ -83,13 +95,13 @@ local List = beClass.class({
 			self._pressedTimestamp = now
 			self._pressedPosition = event.mousePosition
 			self._pressingPosition = event.mousePosition
-			self._scrolling = false
+			self._scrolling = nil
 		elseif not down and self._pressed then
 			self._pressed = false
 			self._pressedTimestamp = nil
 			self._pressedPosition = nil
 			self._pressingPosition = nil
-			self._scrolling = false
+			self._scrolling = nil
 		elseif down and self._pressed then
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
@@ -97,7 +109,16 @@ local List = beClass.class({
 			if self._pressedTimestamp ~= nil then
 				local diff = DateTime.toSeconds(now - self._pressedTimestamp)
 				if diff < 0.3 and self._pressedPosition ~= self._pressingPosition then
-					self._scrolling = true
+					if self._horizontalScrollable then
+						local diff = self._pressedPosition - self._pressingPosition
+						if math.abs(diff.x) < math.abs(diff.y) then
+							self._scrolling = 'y'
+						else
+							self._scrolling = 'x'
+						end
+					else
+						self._scrolling = 'y'
+					end
 					self._pressedTimestamp = nil
 				end
 			end
@@ -116,11 +137,17 @@ local List = beClass.class({
 				self._scrolledTimestamp = nil
 			end
 		end
+		if self._maxX < w then
+			self._maxX = w
+		end
 		if self._maxY < h then
 			self._maxY = h
 		end
 		if self._pressingPosition then
-			if self._scrolling then
+			if self._scrolling == 'x' then
+				self._scrollX = self._scrollX + (event.mousePosition.x - self._pressingPosition.x)
+				self._scrollX = beUtils.clamp(self._scrollX, w - self._maxX, 0)
+			elseif self._scrolling == 'y' then
 				self._scrollY = self._scrollY + (event.mousePosition.y - self._pressingPosition.y)
 				self._scrollY = beUtils.clamp(self._scrollY, h - self._maxY, 0)
 			end
@@ -155,7 +182,7 @@ local List = beClass.class({
 		end
 
 		local x_, y_, w_, h_ = clip(x + 1, y + 1, w - 1, h - 2)
-		beWidget.Widget._update(self, theme, delta, dx, dy + self._scrollY, event)
+		beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
 		local count = self:getChildrenCount()
 		if count < self._childrenCount then
 			if self._scrollY < 0 then
@@ -168,6 +195,9 @@ local List = beClass.class({
 		if scrollBarTransparency then
 			local widgetPos = y + 1
 			local widgetSize = h - 2
+			if self._horizontalScrollable then
+				widgetSize = widgetSize - 4
+			end
 			local contentSize = self._maxY
 			local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize), 8)
 			local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
@@ -175,6 +205,17 @@ local List = beClass.class({
 			local offset = slide * percent;
 			local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
 			rect(x + w - 4, widgetPos + offset, x + w - 1, widgetPos + offset + barSize + 1, true, col)
+			if self._horizontalScrollable then
+				local widgetPos = x + 1
+				local widgetSize = w - 2 - 2
+				local contentSize = self._maxX
+				local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize), 8)
+				local percent = beUtils.clamp(-self._scrollX / (contentSize - widgetSize), 0, 1)
+				local slide = widgetSize - barSize
+				local offset = slide * percent;
+				local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
+				rect(widgetPos + offset, y + h - 4, widgetPos + offset + barSize + 1, y + h - 1, true, col)
+			end
 		end
 		if x_ then
 			clip(x_, y_, w_, h_)
@@ -186,12 +227,15 @@ local List = beClass.class({
 		if self.children == nil then
 			return
 		end
-		self._maxY = 0
+		self._maxX, self._maxY = 0, 0
 		for _, c in ipairs(self.children) do
 			c:_update(theme, delta, dx, dy, event)
-			local _, py = c:position()
-			local _, h = c:size()
-			local y = py + h
+			local px, py = c:position()
+			local w, h = c:size()
+			local x, y = px + w, py + h
+			if x > self._maxX then
+				self._maxX = x
+			end
 			if y > self._maxY then
 				self._maxY = y
 			end
@@ -212,22 +256,39 @@ local List = beClass.class({
 
 		local w, h = self:size()
 		local col = Color.new(55 + 200 * f, 55 + 200 * f, 55 + 200 * (1 - f))
-		rect(x, y - self._scrollY, x + w - 1, y + h - 1 - self._scrollY, false, col)
+		rect(x - self._scrollX, y - self._scrollY, x + w - 1 - self._scrollX, y + h - 1 - self._scrollY, false, col)
 	end,
 
-	_scroll = function (self, dir)
-		local _, h = self:size()
-		if dir < 0 then
-			if self._scrollY < 0 then
-				self._scrollY = beUtils.clamp(self._scrollY + 16, h - self._maxY, 0)
+	_scroll = function (self, dirX, dirY)
+		local w, h = self:size()
+		if dirX then
+			if dirX < 0 then
+				if self._scrollX < 0 then
+					self._scrollX = beUtils.clamp(self._scrollX + 16, w - self._maxX, 0)
 
-				return true
+					return true
+				end
+			elseif dirX > 0 then
+				if self._scrollX > w - self._maxX then
+					self._scrollX = beUtils.clamp(self._scrollX - 16, w - self._maxX, 0)
+
+					return true
+				end
 			end
-		elseif dir > 0 then
-			if self._scrollY > h - self._maxY then
-				self._scrollY = beUtils.clamp(self._scrollY - 16, h - self._maxY, 0)
+		end
+		if dirY then
+			if dirY < 0 then
+				if self._scrollY < 0 then
+					self._scrollY = beUtils.clamp(self._scrollY + 16, h - self._maxY, 0)
 
-				return true
+					return true
+				end
+			elseif dirY > 0 then
+				if self._scrollY > h - self._maxY then
+					self._scrollY = beUtils.clamp(self._scrollY - 16, h - self._maxY, 0)
+
+					return true
+				end
 			end
 		end
 
