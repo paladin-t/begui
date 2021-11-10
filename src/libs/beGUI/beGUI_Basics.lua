@@ -280,8 +280,14 @@ local MultilineLabel = beClass.class({
 				self.height = height * lines + lineMargin * (lines - 1)
 			end
 		end
+		local canvasWidth, canvasHeight = Canvas.main:size()
+		local canvasRect = Rect.byXYWH(0, 0, canvasWidth, canvasHeight)
 		for _, v in ipairs(self._words) do
-			beUtils.textLeft(v.text, v, x + v.position.x, y + v.position.y, w, height, elem.content_offset, self.transparency)
+			local x_, y_, w_, h_ = x + v.position.x, y + v.position.y, w, height
+			local intersects = Math.intersects(canvasRect, Rect.byXYWH(x_, y_, w_, h_))
+			if intersects then
+				beUtils.textLeft(v.text, v, x_, y_, w_, h_, elem.content_offset, self.transparency)
+			end
 		end
 		if self._theme and self._theme ~= 'font' then
 			font(theme['font'].resource)
