@@ -524,13 +524,6 @@ local Tab = beClass.class({
 		self._value = val
 		self:_trigger('changed', self, self._value)
 
-		for index, page in ipairs(self._pages) do
-			local visible = self._value == index
-			for _, c in ipairs(page) do
-				c:setVisible(visible)
-			end
-		end
-
 		return self
 	end,
 
@@ -678,6 +671,31 @@ local Tab = beClass.class({
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
+	end,
+	_updateChildren = function (self, theme, delta, dx, dy, event)
+		if self.children == nil then
+			return
+		end
+		local page = self._pages[self._value]
+		if not page then
+			return
+		end
+		for _, c in ipairs(page) do
+			if not self.popup or self.popup == c then
+				c:_update(theme, delta, dx, dy, event)
+			else
+				c:_update(
+					theme, delta, dx, dy,
+					{
+						mousePosition = nil,
+						mouseDown = false,
+						mouseWheel = 0,
+						canceled = false,
+						context = event.context
+					}
+				)
+			end
+		end
 	end,
 	_updateFocus = function (self, delta, x, y)
 		local HALF_DURATION = 1
