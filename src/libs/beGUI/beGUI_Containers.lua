@@ -109,7 +109,7 @@ local List = beClass.class({
 			if self._pressedTimestamp ~= nil then
 				local diff = DateTime.toSeconds(now - self._pressedTimestamp)
 				if diff < 0.3 and self._pressedPosition ~= self._pressingPosition then
-					if self._scrollableHorizontally then
+					if self._scrollableHorizontally and w < self._maxX then
 						local diff = self._pressedPosition - self._pressingPosition
 						if math.abs(diff.x) < math.abs(diff.y) then
 							self._scrolling = 'y'
