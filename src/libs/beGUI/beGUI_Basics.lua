@@ -768,6 +768,7 @@ local Button = beClass.class({
 }, beWidget.Widget)
 
 local PictureButton = beClass.class({
+	_enabled = true,
 	_pressed = false,
 	_pressedTimestamp = nil,
 	_repeat = false,
@@ -775,8 +776,10 @@ local PictureButton = beClass.class({
 
 	_themeBackgroundNormal = nil,
 	_themeBackgroundPressed = nil,
+	_themeBackgroundDisabled = nil,
 	_themeNormal = nil,
 	_themePressed = nil,
+	_themeDisabled = nil,
 
 	-- Constructs a PictureButton with the specific content.
 	-- `content`: content string
@@ -790,12 +793,25 @@ local PictureButton = beClass.class({
 
 		self._themeBackgroundNormal = theme.background_normal
 		self._themeBackgroundPressed = theme.background_pressed
+		self._themeBackgroundDisabled = theme.background_disabled
 		self._themeNormal = theme.normal
 		self._themePressed = theme.pressed
+		self._themeDisabled = theme.disabled
 	end,
 
 	__tostring = function (self)
 		return 'PictureButton'
+	end,
+
+	-- Gets whether it's enabled.
+	enabled = function (self)
+		return self._enabled
+	end,
+	-- Sets whether it's enabled.
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
 	end,
 
 	navigatable = function (self)
@@ -835,7 +851,9 @@ local PictureButton = beClass.class({
 			elseif self.parent and self.parent:navigatable() then
 				event.context.focus = self.parent
 			end
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 		elseif down and self._pressed and self._repeat then
 			local diff = DateTime.toSeconds(DateTime.ticks() - self._pressedTimestamp)
 			if diff > 0.5 then
@@ -844,21 +862,31 @@ local PictureButton = beClass.class({
 				elseif self.parent and self.parent:navigatable() then
 					event.context.focus = self.parent
 				end
-				self:_trigger('clicked', self)
+				if self._enabled then
+					self:_trigger('clicked', self)
+				end
 			end
 		elseif event.context.focus == self and event.context.navigated == 'press' then
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 			event.context.navigated = false
 		end
 
 		if self._background then
 			local down_, up_ = theme[self._themeBackgroundNormal or 'button_down'], theme[self._themeBackgroundPressed or 'button']
 			local elem = down and down_ or up_
+			if not self._enabled then
+				elem = theme[self._themeBackgroundDisabled or 'button_disabled']
+			end
 			beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 			beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 		end
 
 		local elem = down and theme[self._themePressed] or theme[self._themeNormal]
+		if not self._enabled then
+			elem = theme[self._themeDisabled]
+		end
 		local img = elem.resource
 		local area = elem.area
 		if self.transparency then
