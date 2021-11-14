@@ -103,7 +103,10 @@ local Label = beClass.class({
 
 		local elem = theme['label']
 		local shadow = self._shadow and theme[self._shadow] or nil
-		local x_, y_, w_, h_ = self._clip and clip(x, y, w, h) or nil
+		local x_, y_, w_, h_ = nil, nil, nil, nil
+		if self._clip then
+			x_, y_, w_, h_ = clip(x, y, w, h)
+		end
 		local _1, _2, fw, _4
 		if self._theme and self._theme ~= 'font' then
 			font(theme[self._theme].resource)
@@ -429,7 +432,10 @@ local Url = beClass.class({
 		end
 
 		local elem = down and theme['url_down'] or theme['url']
-		local x_, y_, w_, h_ = self._clip and clip(x, y, w, h) or nil
+		local x_, y_, w_, h_ = nil, nil, nil, nil
+		if self._clip then
+			x_, y_, w_, h_ = clip(x, y, w, h)
+		end
 		local theme_ = theme[self._theme or intersects and 'font_url_hover' or 'font_url']
 		local _, fy, fw, fh
 		if down and intersects then

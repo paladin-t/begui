@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!--
+Bitty Engine
+Copyright (C) 2020 - 2021 Tony Wang
+Learn more: https://paladin-t.github.io/bitty/
+Get Bitty Engine: https://store.steampowered.com/app/1386180/
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="beGUI | Bitty Engine">
+    <meta name="twitter:card" content="beGUI | Bitty Engine">
+    <meta name="og:title" property="og:title" content="Bitty Engine">
+    <meta name="og:description" property="og:description" content="beGUI | Bitty Engine">
+    <title>Bitty Engine</title>
+    <link rel="shortcut icon" href="https://paladin-t.github.io/bitty/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://paladin-t.github.io/bitty/icon.png" />
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #789;
+        font: 14px Helvetica, Arial, sans-serif;
+      }
+      #page {
+        width: 500px;
+        margin: 2em auto;
+        border-radius: 4px;
+        padding: 20px 10px;
+        background-color: #fff;
+      }
+      #content {
+        position: relative;
+      }
+      #canvas {
+        width: 480px;
+        height: 320px;
+        margin: 0 auto;
+        display: block;
+      }
+      #loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        z-index: 10;
+      }
+      #tips {
+        width: 480px;
+        height: 240px;
+        margin: 0 auto;
+        display: none;
+        resize: vertical;
+        border: none;
+        background-color: rgb(200, 200, 200);
+        overflow: auto;
+      }
+      .spinner {
+        width: 50px;
+        height: 50px;
+        margin: 0px auto;
+        border-left: 10px solid rgb(179, 179, 179);
+        border-right: 10px solid rgb(179, 179, 179);
+        border-bottom: 10px solid rgb(179, 179, 179);
+        border-top: 10px solid rgb(126, 126, 126);
+        border-radius: 100%;
+        background-color: rgba(255, 255, 255, 0);
+        -webkit-animation: rotation .8s linear infinite;
+        -moz-animation: rotation .8s linear infinite;
+        -o-animation: rotation .8s linear infinite;
+        animation: rotation 0.8s linear infinite;
+      }
+      @-webkit-keyframes rotation { from { -webkit-transform: rotate(0deg); } to { -webkit-transform: rotate(360deg); } }
+      @-moz-keyframes rotation { from { -moz-transform: rotate(0deg); } to { -moz-transform: rotate(360deg); } }
+      @-o-keyframes rotation { from { -o-transform: rotate(0deg); } to { -o-transform: rotate(360deg); } }
+      @keyframes rotation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .button {
+        border-radius: 6px;
+        padding: 5px 20px 5px 20px;
+        background: #3498db;
+        color: #ffffff;
+        font-size: 14px;
+        text-decoration: none;
+        display: none;
+      }
+      .button:hover {
+        background: #3cb0fd;
+        text-decoration: none;
+      }
+      a:link, a:visited {
+        color: #69c;
+        text-decoration: none;
+      }
+      @media (max-width: 520px) {
+        body {
+          background-color: #fff;
+        }
+        #page {
+          width: auto;
+          margin: 0 auto;
+          border-radius: 0;
+          padding: 1em;
+        }
+        #tips {
+          width: 100%;
+          height: 240px;
+          margin: 0 auto;
+          display: none;
+        }
+        #canvas {
+          width: 100%;
+          height: auto;
+          margin: 0 auto;
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page">
+      <div id="content">
+        <canvas id="canvas" width="480" height="320"></canvas>
+        <div id="loading">
+          <figure id="spinner">
+            <div class="spinner">
+          </figure>
+        </div>
+      </div>
+      <div id="controls" style="display: none;">
+        <p align="center">
+          <input id="fullscreen" type="button" class="button" value="Fullscreen" onclick="Module['canvas'].requestFullscreen()" />
+        </p>
+      </div>
+      <p align="left">
+        beGUI live demo, <a href="https://github.com/paladin-t/begui/" target="_blank">source code</a>
+      </p>
+      <p align="center">
+        Powered by <a href="https://paladin-t.github.io/bitty/" target="_blank">Bitty Engine</a>
+      </p>
+      <p align="center"></p>
+        <div id="tips">
+        </div>
+      </p>
+    </div>
+    <script type="text/javascript">
+      // Initialize the module.
+      var canvas = document.getElementById('canvas');
+      var spinner = document.getElementById('spinner');
+      var controls = document.getElementById('controls');
+      var Module = {
+        canvas: canvas,
+        print: function (text) {
+          console.log(text);
+        },
+        printErr: function (text) {
+          console.warn(text);
+        },
+        setStatus: function (text) {
+          if (!Module.setStatus.last) {
+            Module.setStatus.last = {
+              time: Date.now(),
+              text: ''
+            };
+          }
+          if (text === Module.setStatus.text)
+            return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Date.now() < 30)
+            return;
+          if (m) {
+            text = m[1];
+            spinner.hidden = false;
+            controls.style.display = 'none';
+          } else {
+            if (!text) {
+              spinner.hidden = true;
+              controls.style.display = 'block';
+            }
+          }
+        }
+      };
+      Module.setStatus('Loading...');
+      window.onerror = function () {
+        Module.setStatus('Error, see JavaScript console.');
+        spinner.style.display = 'none';
+        Module.setStatus = function (text) {
+          if (text)
+            Module.printErr('[post-exception status] ' + text);
+        };
+      };
+      document.addEventListener('fullscreenchange', function (event) {
+        if (document.fullscreenElement) {
+          console.log('Entered fullscreen mode.');
+        } else {
+          console.log('Left fullscreen mode.');
+        }
+      });
+      canvas.addEventListener('touchstart', function (event) {
+        event.preventDefault();
+      }, false);
+      canvas.addEventListener('touchend', function (event) {
+        event.preventDefault();
+      }, false);
+      canvas.addEventListener('mousedown', function (_) {
+        window.focus();
+      }, false);
+      canvas.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+      }, false);
+
+      // Returns whether to show a play button before running.
+      function getPlayButtonEnabled() {
+        return false;
+      }
+    </script>
+    <script type="text/javascript">
+      var search = location.search || '';
+      if (search && search[0] == '?')
+        search = search.substr(1);
+      var dev = search.indexOf('dev=1') >= 0;
+      if (dev) {
+        var txt = '';
+        var tips = document.getElementById('tips');
+        tips.innerHTML = txt;
+        tips.style.display = 'block';
+      } else {
+        var tips = document.getElementById('tips');
+        tips.style.display = 'none';
+      }
+    </script>
+    <script async type="text/javascript" src="bitty.js"></script>
+  </body>
+</html>
