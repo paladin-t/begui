@@ -83,6 +83,10 @@ local MessageBox = beClass.class({
 	_initialized = false,
 
 	-- Constructs a MessageBox.
+	-- `closable`: `true` to enable the close button, `false` to disable
+	-- `title`: the title text
+	-- `message`: the message text
+	-- `confirm`: the text for the confirm button
 	ctor = function (self, closable, title, message, confirm)
 		Popup.ctor(self)
 
@@ -181,6 +185,11 @@ local QuestionBox = beClass.class({
 	_initialized = false,
 
 	-- Constructs a QuestionBox.
+	-- `closable`: `true` to enable the close button, `false` to disable
+	-- `title`: the title text
+	-- `message`: the message text
+	-- `confirm`: the text for the confirm button
+	-- `deny`: the text for the deny button
 	ctor = function (self, closable, title, message, confirm, deny)
 		Popup.ctor(self)
 

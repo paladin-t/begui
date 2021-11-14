@@ -48,7 +48,7 @@ local Widget = beClass.class({
 
 	popup = nil,
 	hovering = false,
-	focused = nil,                         -- Used to reserve focused widget before popup.
+	focused = nil,                         -- Used to reserve focused Widget before popup.
 	focusIfHovering = false,
 	focusTicks = 0,
 	context = nil,
@@ -56,13 +56,14 @@ local Widget = beClass.class({
 	events = nil,
 
 	ctor = function (self)
+		-- Do nothing.
 	end,
 
 	__tostring = function (self)
 		return 'Widget'
 	end,
 
-	-- Sets the ID of the Widget.
+	-- Sets the ID of the Widget; an ID is used to identify a Widget from others for accessing.
 	-- `id`: ID string
 	setId = function (self, id)
 		if id ~= nil and type(id) ~= 'string' then
@@ -73,7 +74,8 @@ local Widget = beClass.class({
 
 		return self
 	end,
-	-- Gets a leaf node with the specific ID sequence.
+	-- Gets a sub Widget with the specific ID sequence.
+	-- `...`: ID sequence of the full hierarchy path
 	get = function (self, ...)
 		local full = { ... }
 		if #full == 0 then
@@ -88,8 +90,8 @@ local Widget = beClass.class({
 
 		return c:get(table.unpack(cdr_))
 	end,
-	-- Finds a Widget with the specific ID.
-	-- `id`: ID string
+	-- Finds the first matched Widget with the specific ID.
+	-- `id`: ID string at any level of the hierarchy path
 	find = function (self, id)
 		local find_ = nil
 		find_ = function (widget, id)
@@ -128,14 +130,14 @@ local Widget = beClass.class({
 		return self.capturability
 	end,
 	-- Sets the capturability of the Widget.
-	-- `val`: `true, `false` or 'children'
+	-- `val`: `true`, `false` or 'children'
 	setCapturable = function (self, val)
 		self.capturability = val
 
 		return self
 	end,
 
-	-- Sets the anchor of the Widget; anchor is used to calculate the offset when placing widget.
+	-- Sets the anchor of the Widget; anchor is used to calculate the offset when placing Widget.
 	-- `x`: x position of the anchor in local space as number, typically [0.0, 1.0] for [left, right]
 	-- `y`: y position of the anchor in local space as number, typically [0.0, 1.0] for [top, bottom]
 	anchor = function (self, x, y)
@@ -161,6 +163,7 @@ local Widget = beClass.class({
 		return self
 	end,
 	-- Gets the position of the Widget.
+	-- returns position x, y in local space
 	position = function (self)
 		local canvasWidth, canvasHeight = Canvas.main:size()
 		local x, y = self.x, self.y
@@ -212,6 +215,7 @@ local Widget = beClass.class({
 		return self.transparency
 	end,
 	-- Sets the alpha value of the Widget.
+	-- `val`: number with range of value from 0 to 255, or nil for default (255)
 	setAlpha = function (self, val)
 		if val == 255 then
 			val = nil
@@ -229,31 +233,31 @@ local Widget = beClass.class({
 	end,
 
 	-- Gets the child with the specific ID or index.
-	-- `id`: ID string, or index number
+	-- `idOrIndex`: ID string, or index number
 	-- returns the found child or nil
-	getChild = function (self, id)
+	getChild = function (self, idOrIndex)
 		if self.children == nil then
 			return nil
 		end
-		if not id then
+		if not idOrIndex then
 			return nil
 		end
-		if type(id) == 'string' then
+		if type(idOrIndex) == 'string' then
 			for _, v in ipairs(self.children) do
-				if v.id == id then
+				if v.id == idOrIndex then
 					return v
 				end
 			end
-		elseif type(id) == 'number' then
-			if id >= 1 and id <= #self.children then
-				return self.children[id]
+		elseif type(idOrIndex) == 'number' then
+			if idOrIndex >= 1 and idOrIndex <= #self.children then
+				return self.children[idOrIndex]
 			end
 		end
 
 		return nil
 	end,
-	-- Insert a child.
-	-- `child`: child widget
+	-- Inserts a child before the specific index.
+	-- `child`: the child Widget to insert
 	insertChild = function (self, child, index)
 		if not child then
 			return self
@@ -274,23 +278,23 @@ local Widget = beClass.class({
 
 		return self
 	end,
-	-- Adds a child.
-	-- `child`: child widget
+	-- Adds a child to the end of the children list.
+	-- `child`: the child Widget to add
 	addChild = function (self, child)
 		return self:insertChild(child, self.children and #self.children + 1 or 1)
 	end,
 	-- Removes a child with the specific child, or its ID or index.
-	-- `child`: child object, or its ID string, or index number
-	removeChild = function (self, child)
+	-- `child`: child Widget, or its ID string, or index number
+	removeChild = function (self, childOrIdOrIndex)
 		if self.children == nil then
 			return self
 		end
-		if not child then
+		if not childOrIdOrIndex then
 			return self
 		end
-		if type(child) == 'string' then
+		if type(childOrIdOrIndex) == 'string' then
 			for i, v in ipairs(self.children) do
-				if v.id == child then
+				if v.id == childOrIdOrIndex then
 					local c = self.children[i]
 					table.remove(self.children, i)
 					c.parent = nil
@@ -299,20 +303,20 @@ local Widget = beClass.class({
 				end
 			end
 			error('Child doesn\'t exist.')
-		elseif type(child) == 'number' then
-			if child >= 1 and child <= #self.children then
-				local c = self.children[child]
-				table.remove(self.children, child)
+		elseif type(childOrIdOrIndex) == 'number' then
+			if childOrIdOrIndex >= 1 and childOrIdOrIndex <= #self.children then
+				local c = self.children[childOrIdOrIndex]
+				table.remove(self.children, childOrIdOrIndex)
 				c.parent = nil
 			else
 				error('Index out of bounds.')
 			end
 		else
-			if not child.parent then
+			if not childOrIdOrIndex.parent then
 				error('This widget is not a child of any other one.')
 			end
 			for i, v in ipairs(self.children) do
-				if v == child then
+				if v == childOrIdOrIndex then
 					local c = self.children[i]
 					table.remove(self.children, i)
 					c.parent = nil
@@ -325,6 +329,7 @@ local Widget = beClass.class({
 		return self
 	end,
 	-- Iterates all children, and calls the specific handler.
+	-- `handler`: the children handler in form of `function (child, index) end`
 	foreachChild = function (self, handler)
 		if self.children == nil then
 			return self
@@ -335,7 +340,8 @@ local Widget = beClass.class({
 
 		return self
 	end,
-	-- Sorts all children.
+	-- Sorts all children with the specific comparer.
+	-- `comp`: the comparer in form of `function (left, right) end`
 	sortChildren = function (self, comp)
 		table.sort(self.children, comp)
 
@@ -448,7 +454,7 @@ local Widget = beClass.class({
 		return self
 	end,
 
-	-- Gets whether this widget is navigatable.
+	-- Gets whether this Widget is navigatable.
 	-- returns 'all' for fully navigatable,
 	--   `nil` for non-navigatable,
 	--   'children' for children only,
@@ -456,7 +462,7 @@ local Widget = beClass.class({
 	navigatable = function (self)
 		return 'children'
 	end,
-	-- Navigates.
+	-- Navigates through widgets, call this to perform key navigation, etc.
 	-- `dir`: can be one in 'prev', 'next', 'press', 'cancel'
 	navigate = function (self, dir)
 		if dir ~= 'prev' and dir ~= 'next' and dir ~= 'dec' and dir ~= 'inc' and dir ~= 'press' and dir ~= 'cancel' then
@@ -468,18 +474,21 @@ local Widget = beClass.class({
 		end
 	end,
 
-	-- Gets whether this widget is queriable.
+	-- Gets whether this Widget is queriable.
 	-- returns `true` for queriable, otherwise `false`
 	queriable = function (self)
 		return self.queriablility
 	end,
-	-- Sets whether this widget is queriable.
+	-- Sets whether this Widget is queriable.
+	-- `val`: whether this Widget is queriable
 	setQueriable = function (self, val)
 		self.queriablility = val
 
 		return self
 	end,
-	-- Queries a widget at the specific position.
+	-- Queries a Widget at the specific position.
+	-- `x`: the x position to query
+	-- `y`: the y position to query
 	query = function (self, x, y)
 		if not x or not y or beUtils.isNaN(x) or beUtils.isNaN(y) then
 			return nil
@@ -508,7 +517,7 @@ local Widget = beClass.class({
 		return nil
 	end,
 
-	-- Gets whether this widget has captured mouse event.
+	-- Gets whether this Widget has captured mouse event.
 	captured = function (self)
 		if not self.visibility then
 			return false
@@ -534,6 +543,7 @@ local Widget = beClass.class({
 	end,
 
 	-- Schedules a tweening procedure.
+	-- `t`: the tweening object
 	tween = function (self, t)
 		if self.tweens == nil then
 			self.tweens = { }

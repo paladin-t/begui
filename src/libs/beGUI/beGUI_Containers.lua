@@ -43,6 +43,7 @@ local List = beClass.class({
 	_childrenCount = 0,
 
 	-- Constructs a List.
+	-- `withScrollBar`: whether to draw scroll bar(s)
 	ctor = function (self, withScrollBar)
 		beWidget.Widget.ctor(self)
 
@@ -494,6 +495,8 @@ local Tab = beClass.class({
 		return 'Tab'
 	end,
 
+	-- Adds a Tab page with the specific title.
+	-- `title`: the Tab page title to add
 	add = function (self, title)
 		if self._pagesInitialized then
 			table.insert(self.content, title)
@@ -505,15 +508,16 @@ local Tab = beClass.class({
 
 		return self
 	end,
+	-- Gets the page count of the Tab Widget.
 	count = function (self)
 		return #self.content
 	end,
 
-	-- Gets the active index.
+	-- Gets the active page index.
 	getValue = function (self)
 		return self._value
 	end,
-	-- Sets the active index.
+	-- Sets the active page index.
 	setValue = function (self, val)
 		if self._value == val then
 			return self
@@ -527,11 +531,11 @@ local Tab = beClass.class({
 		return self
 	end,
 
-	-- Gets the tab size.
+	-- Gets the specified Tab size.
 	tabSize = function (self)
 		return self._tabSize
 	end,
-	-- Sets the tab size to a specific value.
+	-- Sets the specified Tab size.
 	setTabSize = function (self, val)
 		self._tabSize = val
 

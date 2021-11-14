@@ -37,7 +37,7 @@ local Label = beClass.class({
 	_shadow = nil,
 
 	-- Constructs a Label with the specific content.
-	-- `content`: content string
+	-- `content`: the content string
 	ctor = function (self, content, alignment, clip_, theme, shadow)
 		beWidget.Widget.ctor(self)
 
@@ -53,11 +53,11 @@ local Label = beClass.class({
 		return 'Label'
 	end,
 
-	-- Gets the text value.
+	-- Gets the content text.
 	getValue = function (self)
 		return self.content
 	end,
-	-- Sets the text value.
+	-- Sets the content text.
 	setValue = function (self, val)
 		if type(val) ~= 'string' then
 			val = tostring(val)
@@ -163,7 +163,7 @@ local MultilineLabel = beClass.class({
 	_theme = nil,
 
 	-- Constructs a MultilineLabel with the specific content.
-	-- `content`: content string
+	-- `content`: the content string
 	ctor = function (self, content, lineHeight)
 		beWidget.Widget.ctor(self)
 
@@ -176,11 +176,11 @@ local MultilineLabel = beClass.class({
 		return 'MultilineLabel'
 	end,
 
-	-- Gets the text value.
+	-- Gets the content text.
 	getValue = function (self)
 		return self.content
 	end,
-	-- Sets the text value.
+	-- Sets the content text.
 	setValue = function (self, val)
 		if type(val) ~= 'string' then
 			val = tostring(val)
@@ -198,21 +198,21 @@ local MultilineLabel = beClass.class({
 		return self
 	end,
 
-	-- Gets whether to calculate widget width automatically.
+	-- Gets whether to calculate Widget width automatically.
 	flexWidth = function (self)
 		return self._flexWidth
 	end,
-	-- Sets whether to calculate widget width automatically.
+	-- Sets whether to calculate Widget width automatically.
 	setFlexWidth = function (self, val)
 		self._flexWidth = val
 
 		return self
 	end,
-	-- Gets whether to calculate widget height automatically.
+	-- Gets whether to calculate Widget height automatically.
 	flexHeight = function (self)
 		return self._flexHeight
 	end,
-	-- Sets whether to calculate widget height automatically.
+	-- Sets whether to calculate Widget height automatically.
 	setFlexHeight = function (self, val)
 		self._flexHeight = val
 
@@ -344,7 +344,7 @@ local Url = beClass.class({
 	_pressed = false,
 
 	-- Constructs a Url with the specific content.
-	-- `content`: content string
+	-- `content`: the content string
 	ctor = function (self, content, alignment, clip_, theme)
 		beWidget.Widget.ctor(self)
 
@@ -359,11 +359,11 @@ local Url = beClass.class({
 		return 'Url'
 	end,
 
-	-- Gets the text value.
+	-- Gets the content text.
 	getValue = function (self)
 		return self.content
 	end,
-	-- Sets the text value.
+	-- Sets the content text.
 	setValue = function (self, val)
 		if type(val) ~= 'string' then
 			val = tostring(val)
@@ -484,7 +484,8 @@ local InputBox = beClass.class({
 	_ticks = 0,
 
 	-- Constructs an InputBox with the specific content.
-	-- `content`: content string
+	-- `content`: the content string
+	-- `placeholder`: the placeholder string when there's no input yet
 	ctor = function (self, content, placeholder)
 		beWidget.Widget.ctor(self)
 
@@ -497,11 +498,11 @@ local InputBox = beClass.class({
 		return 'InputBox'
 	end,
 
-	-- Gets the text value.
+	-- Gets the content text.
 	getValue = function (self)
 		return self.content
 	end,
-	-- Sets the text value.
+	-- Sets the content text.
 	setValue = function (self, val)
 		if type(val) ~= 'string' then
 			val = tostring(val)
@@ -608,7 +609,9 @@ local Picture = beClass.class({
 	_color = nil,
 
 	-- Constructs a Picture with the specific content.
-	-- `content`: content Texture
+	-- `content`: the content Texture
+	-- `stretched`: whether to use 9-grid-based splitting and stretching
+	-- `permeation`: whether to use permeation correction
 	ctor = function (self, content, stretched, permeation)
 		beWidget.Widget.ctor(self)
 
@@ -622,6 +625,7 @@ local Picture = beClass.class({
 		return 'Picture'
 	end,
 
+	-- Sets the content Texture.
 	setValue = function (self, content, stretched, permeation)
 		self.content = content
 
@@ -631,11 +635,12 @@ local Picture = beClass.class({
 		return self
 	end,
 
-	-- Gets the color of the picture.
+	-- Gets the mask color of the Picture.
 	color = function (self)
 		return self._color
 	end,
-	-- Sets the color of the picture.
+	-- Sets the mask color of the Picture.
+	-- `val`: the mask color
 	setColor = function (self, val)
 		self._color = val
 
@@ -691,7 +696,7 @@ local Button = beClass.class({
 	_pressed = false,
 
 	-- Constructs a Button with the specific content.
-	-- `content`: content string
+	-- `content`: the content string
 	ctor = function (self, content)
 		beWidget.Widget.ctor(self)
 
@@ -702,17 +707,17 @@ local Button = beClass.class({
 		return 'Button'
 	end,
 
-	setValue = function (self, content, stretched, permeation)
+	setValue = function (self, content)
 		self.content = content
 
 		return self
 	end,
 
-	-- Gets whether it's enabled.
+	-- Gets whether this Widget is enabled.
 	enabled = function (self)
 		return self._enabled
 	end,
-	-- Sets whether it's enabled.
+	-- Sets whether this Widget is enabled.
 	setEnabled = function (self, val)
 		self._enabled = val
 
@@ -788,7 +793,8 @@ local PictureButton = beClass.class({
 	_themeDisabled = nil,
 
 	-- Constructs a PictureButton with the specific content.
-	-- `content`: content string
+	-- `content`: the content Texture
+	-- `repeat_`: whether to enable repeating event
 	ctor = function (self, content, repeat_, theme, background)
 		beWidget.Widget.ctor(self)
 
@@ -809,11 +815,11 @@ local PictureButton = beClass.class({
 		return 'PictureButton'
 	end,
 
-	-- Gets whether it's enabled.
+	-- Gets whether this Widget is enabled.
 	enabled = function (self)
 		return self._enabled
 	end,
-	-- Sets whether it's enabled.
+	-- Sets whether this Widget is enabled.
 	setEnabled = function (self, val)
 		self._enabled = val
 
@@ -914,7 +920,8 @@ local CheckBox = beClass.class({
 	_value = false,
 
 	-- Constructs a CheckBox with the specific content.
-	-- `content`: content string
+	-- `content`: the content string
+	-- `value`: the initial checked state
 	ctor = function (self, content, value)
 		beWidget.Widget.ctor(self)
 
@@ -927,11 +934,11 @@ local CheckBox = beClass.class({
 		return 'CheckBox'
 	end,
 
-	-- Gets whether it's checked.
+	-- Gets whether this Widget is checked.
 	getValue = function (self)
 		return self._value
 	end,
-	-- Sets whether it's checked.
+	-- Sets whether this Widget is checked.
 	setValue = function (self, val)
 		if self._value == val then
 			return self
@@ -1006,7 +1013,8 @@ local RadioBox = beClass.class({
 	_value = false,
 
 	-- Constructs a RadioBox with the specific content.
-	-- `content`: content string
+	-- `content`: the content string
+	-- `value`: the initial checked state
 	ctor = function (self, content, value)
 		beWidget.Widget.ctor(self)
 
@@ -1019,11 +1027,11 @@ local RadioBox = beClass.class({
 		return 'RadioBox'
 	end,
 
-	-- Gets whether it's checked.
+	-- Gets whether this Widget is checked.
 	getValue = function (self)
 		return self._value
 	end,
-	-- Sets whether it's checked; not recommended to call this manually.
+	-- Sets whether this Widget is checked; not recommended to call this manually.
 	setValue = function (self, val)
 		if self._value == val then
 			return self
@@ -1121,6 +1129,7 @@ local ComboBox = beClass.class({
 
 	-- Constructs a ComboBox with the specific content.
 	-- `content`: list of string
+	-- `value`: the selected index number
 	ctor = function (self, content, value)
 		beWidget.Widget.ctor(self)
 
@@ -1177,7 +1186,7 @@ local ComboBox = beClass.class({
 		return 'ComboBox'
 	end,
 
-	-- Gets the item string at the specific index.
+	-- Gets the item text at the specific index.
 	getItemAt = function (self, index)
 		if index <= 0 or index > #self.content then
 			return nil
@@ -1185,7 +1194,7 @@ local ComboBox = beClass.class({
 
 		return self.content[index]
 	end,
-	-- Adds an item string with the specific content string.
+	-- Adds an item string with the specific content text.
 	addItem = function (self, item)
 		table.insert(self.content, item)
 
@@ -1352,7 +1361,11 @@ local NumberBox = beClass.class({
 	_buttonDown = nil,
 
 	-- Constructs a NumberBox with the specific value.
-	-- `value`: number
+	-- `value`: the initial value number
+	-- `step`: the changing step
+	-- `min`: the minumum limit
+	-- `max`: the maximum limit
+	-- `trim`: optional, used to trim before value setting
 	ctor = function (self, value, step, min, max, trim)
 		beWidget.Widget.ctor(self)
 
@@ -1394,11 +1407,11 @@ local NumberBox = beClass.class({
 		return 'NumberBox'
 	end,
 
-	-- Gets the value.
+	-- Gets the value number.
 	getValue = function (self)
 		return self._value
 	end,
-	-- Sets the value.
+	-- Sets the value number.
 	setValue = function (self, val)
 		if self._trim ~= nil then
 			val = self._trim(val)
@@ -1502,6 +1515,9 @@ local ProgressBar = beClass.class({
 	_shadowTicks = 0,
 
 	-- Constructs a ProgressBar.
+	-- `max`: the maximum value
+	-- `color`: the color for the completed bar
+	-- `increasing`: indicates whether to increase from left to right, or reversed, one in `'left'`, `'right'`
 	ctor = function (self, max, color, increasing)
 		beWidget.Widget.ctor(self)
 
@@ -1669,7 +1685,9 @@ local Slide = beClass.class({
 	_maxValue = nil,
 
 	-- Constructs a Slide with the specific value.
-	-- `value`: number
+	-- `value`: the initial value number
+	-- `min`: the minimum limit number
+	-- `max`: the maximum limit number
 	ctor = function (self, value, min, max)
 		beWidget.Widget.ctor(self)
 

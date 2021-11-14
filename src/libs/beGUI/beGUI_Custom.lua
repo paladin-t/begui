@@ -31,7 +31,7 @@ Widgets.
 local Custom = beClass.class({
 	_name = 'Custom',
 
-	-- Constructs a Custom.
+	-- Constructs a Custom Widget.
 	ctor = function (self, name)
 		beWidget.Widget.ctor(self)
 
