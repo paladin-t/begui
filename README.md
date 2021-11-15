@@ -123,7 +123,13 @@ function update(delta)
 end
 ```
 
-Some resources are splitted into nine grids evenly for flex scale.
+Each widget has an anchor property which represents for the locating point in its local space, and a position property for either absolute or percentage position in its parent's space relatively. The final position is calculated according to these two properties.
+
+![](imgs/docking_absolutely.png)
+
+![](imgs/docking_relatively.png)
+
+Resources are splitted into nine grids evenly for flex scaled widgets.
 
 ![](imgs/grids.png)
 
@@ -274,7 +280,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Label
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Label.new(content, alignment = 'left', clip_ = false, theme = nil, shadow = nil)`: constructs a `Label` with the specific content
   * `content`: the content string
@@ -294,7 +300,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.MultilineLabel
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`MultilineLabel.new(content, lineHeight = nil)`: constructs a `MultilineLabel` with the specific content
   * `content`: the content string
@@ -321,7 +327,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Url
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Url.new(content, alighment = 'left', clip_ = false, theme = nil)`: constructs a `Url` with the specific content
   * `content`: the content string
@@ -343,7 +349,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.InputBox
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`InputBox.new(content placeholder)`: constructs an InputBox with the specific content
   * `content`: the content string
@@ -359,7 +365,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Picture
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Picture.new(content, stretched = false, permeation = false)`: constructs a Picture with the specific content
   * `content`: the content `Texture`
@@ -377,7 +383,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Button
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Button.new(content)`: constructs a Button with the specific content
   * `content`: the content string
@@ -395,7 +401,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.PictureButton
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`PictureButton.new(content, repeat_ = false, theme = nil, background = nil)`: constructs a `PictureButton` with the specific content
   * `content`: the content `Texture`
@@ -414,7 +420,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.CheckBox
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`CheckBox.new(content, value = false)`: constructs a `CheckBox` with the specific content
   * `content`: the content string
@@ -431,7 +437,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.RadioBox
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`RadioBox.new(content, value = false)`: constructs a `RadioBox` with the specific content
   * `content`: the content string
@@ -447,7 +453,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.ComboBox
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`ComboBox.new(content, value = nil)`: constructs a `ComboBox` with the specific content
   * `content`: list of string
@@ -475,7 +481,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.NumberBox
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`NumberBox.new(value, step, min = nil, max = nil, trim = nil)`: constructs a `NumberBox` with the specific value
   * `value`: the initial value number
@@ -495,7 +501,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.ProgressBar
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`ProgressBar.new(max, color, increasing = 'right')`: constructs a `ProgressBar`
   * `max`: the maximum value
@@ -523,7 +529,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Slide
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Slide.new(value, min, max)`: constructs a `Slide` with the specific value
   * `value`: the initial value number
@@ -541,7 +547,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.List
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`List.new(withScrollBar = false)`: constructs a `List`
   * `withScrollBar`: whether to draw scroll bar(s)
@@ -554,13 +560,13 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Draggable
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Draggable.new()`: constructs a `Draggable`
 
 ### beGUI.Droppable
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Droppable.new()`: constructs a `Droppable`
 
@@ -577,7 +583,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Tab
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Tab.new()`: constructs a `Tab`
 
@@ -602,13 +608,13 @@ Shortcut to create `Percent` object.
 
 ### beGUI.Popup
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Popup.new()`: constructs a `Popup`
 
 ### beGUI.MessageBox
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Popup`**
 
 * beGUI.`MessageBox.new(closable, title, message, confirm = 'OK')`: constructs a `MessageBox`
   * `closable`: `true` to enable the close button, `false` to disable
@@ -623,7 +629,7 @@ Shortcut to create `Percent` object.
 
 ### beGUI.QuestionBox
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Popup`**
 
 * beGUI.`QuestionBox.new(closable, title, messsage, confirm, deny)`: constructs a `QuestionBox`
   * `closable`: `true` to enable the close button, `false` to disable
@@ -693,7 +699,7 @@ There are two ways to customize your own `Widget`, one is to use the beWidget.`C
 
 The `Custom` `Widget` exposes a `'updated'` event to let you write short customized update routine in the callback.
 
-**Model: `require 'libs/beGUI/beGUI'`**
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
 * beGUI.`Custom.new(name = 'Custom')`: constructs a `Custom` `Widget`
   * `name`: the custom `Widget` name used to perform `__tostring`
