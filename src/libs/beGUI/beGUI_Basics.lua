@@ -67,9 +67,32 @@ local Label = beClass.class({
 		return self
 	end,
 
+	-- Gets the alignment config string.
+	alignment = function (self)
+		return self._alignment
+	end,
+	-- Sets the alignment config string.
+	setAlignment = function (self, val)
+		self._alignment = val
+
+		return self
+	end,
+
+	-- Gets whether to clip drawing outside the Widget's bounds.
+	clipping = function (self)
+		return self._clip
+	end,
+	-- Sets whether to clip drawing outside the Widget's bounds.
+	setClipping = function (self, val)
+		self._clip = val
+
+		return self
+	end,
+
 	-- Sets the theme.
-	setTheme = function (self, theme)
+	setTheme = function (self, theme, shadow)
 		self._theme = theme
+		self._shadow = shadow
 
 		return self
 	end,
@@ -157,8 +180,8 @@ local Label = beClass.class({
 }, beWidget.Widget)
 
 local MultilineLabel = beClass.class({
-	_flexWidth = false, _flexHeight = true,
 	_lineHeight = nil,
+	_flexWidth = false, _flexHeight = true,
 	_words = nil,
 	_theme = nil,
 
@@ -187,6 +210,17 @@ local MultilineLabel = beClass.class({
 		end
 		self.content = val
 		self._words = nil
+
+		return self
+	end,
+
+	-- Gets the line height.
+	lineHeight = function (self)
+		return self._lineHeight
+	end,
+	-- Sets the line height.
+	setLineHeight = function (self, val)
+		self._lineHeight = val
 
 		return self
 	end,
@@ -373,6 +407,28 @@ local Url = beClass.class({
 		return self
 	end,
 
+	-- Gets the alignment config string.
+	alignment = function (self)
+		return self._alignment
+	end,
+	-- Sets the alignment config string.
+	setAlignment = function (self, val)
+		self._alignment = val
+
+		return self
+	end,
+
+	-- Gets whether to clip drawing outside the Widget's bounds.
+	clipping = function (self)
+		return self._clip
+	end,
+	-- Sets whether to clip drawing outside the Widget's bounds.
+	setClipping = function (self, val)
+		self._clip = val
+
+		return self
+	end,
+
 	-- Sets the theme.
 	setTheme = function (self, theme)
 		self._theme = theme
@@ -514,6 +570,17 @@ local InputBox = beClass.class({
 		return self
 	end,
 
+	-- Gets the placeholder text.
+	placeholder = function (self)
+		return self._placeholder
+	end,
+	-- Sets the placeholder text.
+	setPlaceholder = function (self, val)
+		self._placeholder = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -626,11 +693,26 @@ local Picture = beClass.class({
 	end,
 
 	-- Sets the content Texture.
-	setValue = function (self, content, stretched, permeation)
+	setValue = function (self, content)
 		self.content = content
 
-		self._stretched = not not stretched
-		self._permeation = permeation
+		return self
+	end,
+
+	stretched = function (self)
+		return self._stretched
+	end,
+	setStretched = function (self, val)
+		self._stretched = val
+
+		return self
+	end,
+
+	permeation = function (self)
+		return self._permeation
+	end,
+	setPermeation = function (self, val)
+		self._permeation = val
 
 		return self
 	end,
@@ -949,6 +1031,12 @@ local CheckBox = beClass.class({
 		return self
 	end,
 
+	setContent = function (self, val)
+		self.content = content
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1038,6 +1126,12 @@ local RadioBox = beClass.class({
 		end
 		self._value = val
 		self:_trigger('changed', self, self._value)
+
+		return self
+	end,
+
+	setContent = function (self, val)
+		self.content = content
 
 		return self
 	end,

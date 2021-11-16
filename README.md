@@ -178,7 +178,7 @@ Shortcut to create `Percent` object.
 * `widget:setId(id)`: sets the ID of the `Widget`; an ID is used to identify a `Widget` from others for accessing
   * `id`: ID string
   * returns `self`
-* `widget:get(...)`: gets a sub `Widget` with the specific ID sequence
+* `widget:get(...)`: gets a child `Widget` with the specific ID sequence
   * `...`: ID sequence of the full hierarchy path
   * returns the got `Widget` or `nil`
 * `widget:find(id)`: finds the first matched `Widget` with the specific ID
@@ -294,8 +294,19 @@ Shortcut to create `Percent` object.
 * `label:setValue(val)`: sets the content text
   * `val`: the content string
   * returns `self`
-* `label:setTheme(theme)`: sets the theme
+* `label:alignment()`: gets the alignment
+  * returns the alignment config string
+* `label:setAlignment(val)`: sets the alignment config
+  * `val`: the alignment config string
+  * returns `self`
+* `label:clipping()`: gets whether to clip drawing outside the `Widget`'s bounds
+  * returns `true` for clipping, otherwise `false`
+* `label:setClipping(val)`: sets whether to clip drawing outside the `Widget`'s bounds
+  * `val`: `true` to clip
+  * returns `self`
+* `label:setTheme(theme, shadow = nil)`: sets the theme
   * `theme`: the custom theme
+  * `shadow`: the custom shadow theme
   * returns `self`
 
 ### beGUI.MultilineLabel
@@ -310,6 +321,11 @@ Shortcut to create `Percent` object.
   * returns the content string
 * `multilinelabel:setValue(val)`: sets the content text
   * `val`: the content string
+  * returns `self`
+* `multilinelabel:lineHeight()`: gets the line height
+  * returns the line height
+* `multilinelabel:setLineHeight(val)`: sets the line height
+  * `val`: the line height
   * returns `self`
 * `multilinelabel:setTheme(theme)`: sets the theme
   * `theme`: the custom theme
@@ -340,6 +356,16 @@ Shortcut to create `Percent` object.
 * `url:setValue(val)`: sets the content text
   * `val`: the content string
   * returns `self`
+* `url:alignment()`: gets the alignment
+  * returns the alignment config string
+* `url:setAlignment(val)`: sets the alignment config
+  * `val`: the alignment config string
+  * returns `self`
+* `url:clipping()`: gets whether to clip drawing outside the `Widget`'s bounds
+  * returns `true` for clipping, otherwise `false`
+* `url:setClipping(val)`: sets whether to clip drawing outside the `Widget`'s bounds
+  * `val`: `true` to clip
+  * returns `self`
 * `url:setTheme(theme)`: sets the theme
   * `theme`: the custom theme
   * returns `self`
@@ -359,6 +385,11 @@ Shortcut to create `Percent` object.
   * returns the content string
 * `inputbox:setValue(val)`: sets the content text
   * `val`: the content string
+* `inputbox:placeholder()`: gets the placeholder text
+  * returns the placeholder string
+* `inputbox:setPlaceholder(val)`: sets the placeholder text
+  * `val`: the placeholder string
+  * returns `self`
 
 * `inputbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` content text has been changed
   * returns `self`
@@ -369,11 +400,21 @@ Shortcut to create `Percent` object.
 
 * beGUI.`Picture.new(content, stretched = false, permeation = false)`: constructs a Picture with the specific content
   * `content`: the content `Texture`
-  * `stretched`: whether to use 9-grid-based splitting and stretching
+  * `stretched`: whether to use 9-grid-based splitting for stretching
   * `permeation`: whether to use permeation correction
 
 * `picture:setValue(content, stretched = false, permeation = false)`: sets the content `Texture`
   * `content`: the content `Texture`
+  * returns `self`
+* `picture:stretched()`: gets whether to use 9-grid-based splitting for stretching
+  * returns `true` for 9-grid-based splitting, otherwise `false`
+* `picture:setStretched(val)`: sets whether to use 9-grid-based splitting for stretching
+  * `val`: `true` to use 9-grid-based splitting for stretching
+  * returns `self`
+* `picture:permeation()`: gets whether to use permeation correction
+  * returns `true` for permeation correction, otherwise `false`
+* `picture:setPermeation(val)`: sets whether to use permeation correction
+  * `val`: `true` to use permeation correction
   * returns `self`
 * `picture:color()`: gets the mask color of the `Picture`
   * returns the mask color or `nil`

@@ -39,6 +39,16 @@ local function clamp(x, min, max)
 	return math.max(math.min(x, max), min)
 end
 
+--[[ String. ]]
+
+local function startsWith(txt, part)
+	return part == '' or string.sub(txt, 1, #part) == part
+end
+
+local function endsWith(str, part)
+	return part == '' or string.sub(str, -#part) == part
+end
+
 local function split(txt, sep)
 	local result = { }
 	for line in string.gmatch(txt, '[^\n]*') do
@@ -173,6 +183,27 @@ local function filter(lst, pred)
 			table.insert(result, v)
 		elseif not pred and not v then
 			return { }
+		end
+	end
+
+	return result
+end
+
+--[[ Dictionary. ]]
+
+local function merge(first, second)
+	if first == nil and second == nil then
+		return nil
+	end
+	local result = { }
+	if first then
+		for k, v in pairs(first) do
+			result[k] = v
+		end
+	end
+	if second then
+		for k, v in pairs(second) do
+			result[k] = v
 		end
 	end
 
@@ -337,12 +368,15 @@ return {
 	NaN = NaN,
 	isNaN = isNaN,
 	clamp = clamp,
+	startsWith = startsWith,
+	endsWith = endsWith,
 	split = split,
 	escape = escape,
 	car = car,
 	cdr = cdr,
 	exists = exists,
 	filter = filter,
+	merge = merge,
 	tex3Grid = tex3Grid,
 	tex9Grid = tex9Grid,
 	textLeft = textLeft,
