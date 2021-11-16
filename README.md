@@ -292,12 +292,12 @@ Shortcut to create `Percent` object.
 * `label:getValue()`: gets the content text
   * returns the content string
 * `label:setValue(val)`: sets the content text
-  * `val`: the content string
+  * `val`: the specific content string
   * returns `self`
 * `label:alignment()`: gets the alignment
   * returns the alignment config string
 * `label:setAlignment(val)`: sets the alignment config
-  * `val`: the alignment config string
+  * `val`: the specific alignment config string
   * returns `self`
 * `label:clipping()`: gets whether to clip drawing outside the `Widget`'s bounds
   * returns `true` for clipping, otherwise `false`
@@ -320,12 +320,12 @@ Shortcut to create `Percent` object.
 * `multilinelabel:getValue()`: gets the content text
   * returns the content string
 * `multilinelabel:setValue(val)`: sets the content text
-  * `val`: the content string
+  * `val`: the specific content string
   * returns `self`
 * `multilinelabel:lineHeight()`: gets the line height
   * returns the line height
 * `multilinelabel:setLineHeight(val)`: sets the line height
-  * `val`: the line height
+  * `val`: the specific line height
   * returns `self`
 * `multilinelabel:setTheme(theme)`: sets the theme
   * `theme`: the custom theme
@@ -354,12 +354,12 @@ Shortcut to create `Percent` object.
 * `url:getValue()`: gets the content text
   * returns the content string
 * `url:setValue(val)`: sets the content text
-  * `val`: the content string
+  * `val`: the specific content string
   * returns `self`
 * `url:alignment()`: gets the alignment
   * returns the alignment config string
 * `url:setAlignment(val)`: sets the alignment config
-  * `val`: the alignment config string
+  * `val`: the specific alignment config string
   * returns `self`
 * `url:clipping()`: gets whether to clip drawing outside the `Widget`'s bounds
   * returns `true` for clipping, otherwise `false`
@@ -384,11 +384,11 @@ Shortcut to create `Percent` object.
 * `inputbox:getValue()`: gets the content text
   * returns the content string
 * `inputbox:setValue(val)`: sets the content text
-  * `val`: the content string
+  * `val`: the specific content string
 * `inputbox:placeholder()`: gets the placeholder text
   * returns the placeholder string
 * `inputbox:setPlaceholder(val)`: sets the placeholder text
-  * `val`: the placeholder string
+  * `val`: the specific placeholder string
   * returns `self`
 
 * `inputbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` content text has been changed
@@ -419,7 +419,7 @@ Shortcut to create `Percent` object.
 * `picture:color()`: gets the mask color of the `Picture`
   * returns the mask color or `nil`
 * `picture:setColor(val)`: sets the mask color of the `Picture`
-  * `val`: the mask color
+  * `val`: the specific mask color
   * returns `self`
 
 ### beGUI.Button
@@ -430,7 +430,7 @@ Shortcut to create `Percent` object.
   * `content`: the content string
 
 * `button:setValue(content)`: sets the content text
-  * `val`: the content string
+  * `val`: the specific content string
 * `button:enabled()`: gets whether this `Widget` is enabled
   * returns `true` for enabled, otherwise `false`
 * `button:setEnabled(val)`: sets whether this `Widget` is enabled
@@ -514,7 +514,7 @@ Shortcut to create `Percent` object.
 * `combobox:getValue()`: gets the selected index
   * returns the selected index number
 * `combobox:setValue(val)`: sets the selected index
-  * `val`: the selected index
+  * `val`: the specific selected index
   * returns `self`
 
 * `combobox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` selection state has been changed
@@ -534,7 +534,27 @@ Shortcut to create `Percent` object.
 * `numberbox:getValue()`: gets the value number
   * returns the value number
 * `numberbox:setValue(val)`: sets the value number
-  * `val`: the specific value number to set
+  * `val`: the specific value number
+  * returns `self`
+* `numberbox:getMinValue()`: gets the minimum limit number
+  * returns the minimum limit number
+* `numberbox:setMinValue(val)`: sets the minimum limit number
+  * `val`: the specific minimum limit number
+  * returns `self`
+* `numberbox:getMaxValue()`: gets the maximum limit number
+  * returns the maximum limit number
+* `numberbox:setMaxValue(val)`: sets the maximum limit number
+  * `val`: the specific maximum limit number
+  * returns `self`
+* `numberbox:step()`: gets the changing step
+  * returns the changing step
+* `numberbox:setStep(val)`: sets the changing step
+  * `val`: the specific changing step number
+  * returns `self`
+* `numberbox:trim()`: gets the trim function
+  * returns the trim function
+* `numberbox:setTrim(val)`: sets the trim function
+  * `val`: the specific trim function
   * returns `self`
 
 * `numberbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
@@ -552,17 +572,17 @@ Shortcut to create `Percent` object.
 * `progressbar:getValue()`: gets the value number
   * returns the value number
 * `progressbar:setValue(val)`: sets the value number
-  * `val`: the specific value number to set
+  * `val`: the specific value number
   * returns `self`
 * `progressbar:getMaxValue()`: gets the maximum limit number
   * returns the maximum limit number
 * `progressbar:setMaxValue(val)`: sets the maximum limit number
-  * `val`: the specific maximum limit number to set
+  * `val`: the specific maximum limit number
   * returns `self`
 * `progressbar:getShadowValue()`: gets the shadow value number
   * returns the value number
 * `progressbar:setShadowValue(val)`: sets the shadow value number
-  * `val`: the specific shadow value number to set
+  * `val`: the specific shadow value number
   * returns `self`
 
 * `progressbar:on('changed', function (sender, value, maxValue, shadowValue) end)`: registers an event which will be triggered when the `Widget` value has been changed
@@ -580,7 +600,17 @@ Shortcut to create `Percent` object.
 * `slide:getValue()`: gets the value number
   * returns the value number
 * `slide:setValue(val)`: sets the value number
-  * `val`: the specific value number to set
+  * `val`: the specific value number
+  * returns `self`
+* `slide:getMinValue()`: gets the minimum limit number
+  * returns the minimum limit number
+* `slide:setMinValue(val)`: sets the minimum limit number
+  * `val`: the specific minimum limit number
+  * returns `self`
+* `slide:getMaxValue()`: gets the maximum limit number
+  * returns the maximum limit number
+* `slide:setMaxValue(val)`: sets the maximum limit number
+  * `val`: the specific maximum limit number
   * returns `self`
 
 * `slide:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
@@ -636,7 +666,7 @@ Shortcut to create `Percent` object.
 * `tab:getValue()`: gets the active page index
   * returns the active page index number
 * `tab:setValue(val)`: sets the active page index
-  * `val`: the specific page index to set
+  * `val`: the specific page index
   * returns `self`
 * `tab:tabSize()`: gets the specified `Tab` size
   * returns the specified `Tab` size
@@ -744,6 +774,12 @@ The `Custom` `Widget` exposes a `'updated'` event to let you write short customi
 
 * beGUI.`Custom.new(name = 'Custom')`: constructs a `Custom` `Widget`
   * `name`: the custom `Widget` name used to perform `__tostring`
+
+* `custom:name()`: gets the custom `Widget` name
+  * returns the custom `Widget` name
+* `custom:setName(val)`: sets the custom `Widget` name
+  * `val`: the specific custom `Widget` name
+  * returns `self`
 
 * `custom:on('updated', function (sender, x, y, w, h) end)`: registers an event which will be triggered when the `Widget` has been updated per frame
   * returns `self`

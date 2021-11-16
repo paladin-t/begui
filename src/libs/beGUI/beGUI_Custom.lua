@@ -48,6 +48,15 @@ local Custom = beClass.class({
 		return 'children'
 	end,
 
+	name = function (self)
+		return self._name
+	end,
+	setName = function (self, val)
+		self._name = val
+
+		return self
+	end,
+
 	_update = function (self, theme, delta, dx, dy, event)
 		if not self.visibility then
 			return

@@ -743,29 +743,31 @@ local Picture = beClass.class({
 		local x, y = dx + px + ox, dy + py + oy
 		local w, h = self:size()
 
-		if self._stretched then
-			beUtils.tex9Grid(self.content, x, y, w, h, self._permeation, self.transparency, self._color)
-		else
-			local sx, sy, sw, sh = nil, nil, nil, nil
-			if self.content.area then
-				sx, sy, sw, sh = self.content.area[1], self.content.area[2], self.content.area[3], self.content.area[4]
-			end
-			if self._color or self.transparency then
-				local col = nil
-				if self._color then
-					if self.transparency then
-						col = Color.new(self._color.r, self._color.g, self._color.b, self._color.a * (self.transparency / 255))
-					else
-						col = self._color
-					end
-				else
-					if self.transparency then
-						col = Color.new(255, 255, 255, self.transparency)
-					end
-				end
-				tex(self.content.resource, x, y, w, h, sx, sy, sw, sh, 0, Vec2.new(0.5, 0.5), false, false, col)
+		if self.content then
+			if self._stretched then
+				beUtils.tex9Grid(self.content, x, y, w, h, self._permeation, self.transparency, self._color)
 			else
-				tex(self.content.resource, x, y, w, h, sx, sy, sw, sh)
+				local sx, sy, sw, sh = nil, nil, nil, nil
+				if self.content.area then
+					sx, sy, sw, sh = self.content.area[1], self.content.area[2], self.content.area[3], self.content.area[4]
+				end
+				if self._color or self.transparency then
+					local col = nil
+					if self._color then
+						if self.transparency then
+							col = Color.new(self._color.r, self._color.g, self._color.b, self._color.a * (self.transparency / 255))
+						else
+							col = self._color
+						end
+					else
+						if self.transparency then
+							col = Color.new(255, 255, 255, self.transparency)
+						end
+					end
+					tex(self.content.resource, x, y, w, h, sx, sy, sw, sh, 0, Vec2.new(0.5, 0.5), false, false, col)
+				else
+					tex(self.content.resource, x, y, w, h, sx, sy, sw, sh)
+				end
 			end
 		end
 
@@ -1525,6 +1527,42 @@ local NumberBox = beClass.class({
 		return self
 	end,
 
+	getMinValue = function (self)
+		return self._minValue
+	end,
+	setMinValue = function (self, val)
+		self._minValue = val
+
+		return self
+	end,
+
+	getMaxValue = function (self)
+		return self._maxValue
+	end,
+	setMaxValue = function (self, val)
+		self._maxValue = val
+
+		return self
+	end,
+
+	step = function (self)
+		return self._step
+	end,
+	setStep = function (self, val)
+		self._step = val
+
+		return self
+	end,
+
+	trim = function (self)
+		return self._trim
+	end,
+	setTrim = function (self, val)
+		self._trim = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1815,6 +1853,24 @@ local Slide = beClass.class({
 		return self
 	end,
 
+	getMinValue = function (self)
+		return self._minValue
+	end,
+	setMinValue = function (self, val)
+		self._minValue = val
+
+		return self
+	end,
+
+	getMaxValue = function (self)
+		return self._maxValue
+	end,
+	setMaxValue = function (self, val)
+		self._maxValue = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1847,14 +1903,18 @@ local Slide = beClass.class({
 		elseif down and self._pressed then
 			value = math.floor(self._minValue + (event.mousePosition.x - x) / w * (self._maxValue - self._minValue + 1))
 			value = beUtils.clamp(value, self._minValue, self._maxValue)
-			self:setValue(value)
+			if value and not beUtils.isNaN(value) then
+				self:setValue(value)
+			end
 		elseif not down and self._pressed then
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
 			value = math.floor(self._minValue + (event.mousePosition.x - x) / w * (self._maxValue - self._minValue + 1))
 			value = beUtils.clamp(value, self._minValue, self._maxValue)
-			self:setValue(value)
+			if value and not beUtils.isNaN(value) then
+				self:setValue(value)
+			end
 		elseif intersects and event.mouseWheel < 0 then
 			local val = self._value - 1
 			self:setValue(val)
