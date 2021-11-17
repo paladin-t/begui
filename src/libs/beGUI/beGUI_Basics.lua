@@ -1668,6 +1668,15 @@ local ProgressBar = beClass.class({
 		return self
 	end,
 
+	color = function (self)
+		return self._color
+	end,
+	setColor = function (self, val)
+		self._color = val or Color.new(0, 0, 0)
+
+		return self
+	end,
+
 	getShadowValue = function (self)
 		return self._shadow
 	end,
