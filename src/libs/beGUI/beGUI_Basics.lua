@@ -67,29 +67,24 @@ local Label = beClass.class({
 		return self
 	end,
 
-	-- Gets the alignment config string.
 	alignment = function (self)
 		return self._alignment
 	end,
-	-- Sets the alignment config string.
 	setAlignment = function (self, val)
 		self._alignment = val
 
 		return self
 	end,
 
-	-- Gets whether to clip drawing outside the Widget's bounds.
 	clipping = function (self)
 		return self._clip
 	end,
-	-- Sets whether to clip drawing outside the Widget's bounds.
 	setClipping = function (self, val)
 		self._clip = val
 
 		return self
 	end,
 
-	-- Sets the theme.
 	setTheme = function (self, theme, shadow)
 		self._theme = theme
 		self._shadow = shadow
@@ -214,18 +209,15 @@ local MultilineLabel = beClass.class({
 		return self
 	end,
 
-	-- Gets the line height.
 	lineHeight = function (self)
 		return self._lineHeight
 	end,
-	-- Sets the line height.
 	setLineHeight = function (self, val)
 		self._lineHeight = val
 
 		return self
 	end,
 
-	-- Sets the theme.
 	setTheme = function (self, theme)
 		self._theme = theme
 
@@ -407,29 +399,24 @@ local Url = beClass.class({
 		return self
 	end,
 
-	-- Gets the alignment config string.
 	alignment = function (self)
 		return self._alignment
 	end,
-	-- Sets the alignment config string.
 	setAlignment = function (self, val)
 		self._alignment = val
 
 		return self
 	end,
 
-	-- Gets whether to clip drawing outside the Widget's bounds.
 	clipping = function (self)
 		return self._clip
 	end,
-	-- Sets whether to clip drawing outside the Widget's bounds.
 	setClipping = function (self, val)
 		self._clip = val
 
 		return self
 	end,
 
-	-- Sets the theme.
 	setTheme = function (self, theme)
 		self._theme = theme
 
@@ -570,11 +557,9 @@ local InputBox = beClass.class({
 		return self
 	end,
 
-	-- Gets the placeholder text.
 	placeholder = function (self)
 		return self._placeholder
 	end,
-	-- Sets the placeholder text.
 	setPlaceholder = function (self, val)
 		self._placeholder = val
 
@@ -717,12 +702,9 @@ local Picture = beClass.class({
 		return self
 	end,
 
-	-- Gets the mask color of the Picture.
 	color = function (self)
 		return self._color
 	end,
-	-- Sets the mask color of the Picture.
-	-- `val`: the mask color
 	setColor = function (self, val)
 		self._color = val
 
@@ -797,11 +779,9 @@ local Button = beClass.class({
 		return self
 	end,
 
-	-- Gets whether this Widget is enabled.
 	enabled = function (self)
 		return self._enabled
 	end,
-	-- Sets whether this Widget is enabled.
 	setEnabled = function (self, val)
 		self._enabled = val
 
@@ -899,11 +879,9 @@ local PictureButton = beClass.class({
 		return 'PictureButton'
 	end,
 
-	-- Gets whether this Widget is enabled.
 	enabled = function (self)
 		return self._enabled
 	end,
-	-- Sets whether this Widget is enabled.
 	setEnabled = function (self, val)
 		self._enabled = val
 

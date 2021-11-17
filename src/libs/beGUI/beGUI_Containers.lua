@@ -181,16 +181,17 @@ local List = beClass.class({
 				context = event.context
 			}
 		end
+		if self._scrollX < 0 then
+			self._scrollX = beUtils.clamp(self._scrollX, w - self._maxX, 0)
+		end
+		if self._scrollY < 0 then
+			self._scrollY = beUtils.clamp(self._scrollY, h - self._maxY, 0)
+		end
 
 		local x_, y_, w_, h_ = clip(x + 1, y + 1, w - 1, h - 2)
 		beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
 		local count = self:getChildrenCount()
-		if count < self._childrenCount then
-			if self._scrollY < 0 then
-				self._scrollY = beUtils.clamp(self._scrollY, h - self._maxY, 0) -- Recalculate scroll value when shrank.
-			end
-			self._childrenCount = count
-		elseif count > self._childrenCount then
+		if count ~= self._childrenCount then
 			self._childrenCount = count
 		end
 		if scrollBarTransparency then
