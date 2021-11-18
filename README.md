@@ -524,12 +524,13 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
-* beGUI.`NumberBox.new(value, step, min = nil, max = nil, trim = nil)`: constructs a `NumberBox` with the specific value
+* beGUI.`NumberBox.new(value, step, min = nil, max = nil, trim = nil, format = nil)`: constructs a `NumberBox` with the specific value
   * `value`: the initial value number
   * `step`: the changing step
   * `min`: the minumum limit
   * `max`: the maximum limit
   * `trim`: optional, used to trim before value setting
+  * `format`: optional, used to format value for output
 
 * `numberbox:getValue()`: gets the value number
   * returns the value number
@@ -555,6 +556,11 @@ Shortcut to create `Percent` object.
   * returns the trim function
 * `numberbox:setTrim(val)`: sets the trim function
   * `val`: the specific trim function
+  * returns `self`
+* `numberbox:format()`: gets the format function
+  * returns the format function
+* `numberbox:setFormat(val)`: sets the format function
+  * `val`: the specific format function
   * returns `self`
 
 * `numberbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed

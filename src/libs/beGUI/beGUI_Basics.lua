@@ -1430,6 +1430,7 @@ local NumberBox = beClass.class({
 	_minValue = nil,
 	_maxValue = nil,
 	_trim = nil,
+	_format = nil,
 
 	_buttonUp = nil,
 	_buttonDown = nil,
@@ -1440,7 +1441,8 @@ local NumberBox = beClass.class({
 	-- `min`: the minumum limit
 	-- `max`: the maximum limit
 	-- `trim`: optional, used to trim before value setting
-	ctor = function (self, value, step, min, max, trim)
+	-- `format`: optional, used to format value for output
+	ctor = function (self, value, step, min, max, trim, format)
 		beWidget.Widget.ctor(self)
 
 		self._value = value
@@ -1448,6 +1450,7 @@ local NumberBox = beClass.class({
 		self._minValue = min
 		self._maxValue = max
 		self._trim = trim
+		self._format = format or tostring
 
 		self._buttonUp = PictureButton.new(
 			'', true,
@@ -1541,6 +1544,15 @@ local NumberBox = beClass.class({
 		return self
 	end,
 
+	format = function (self)
+		return self._format
+	end,
+	setFormat = function (self, val)
+		self._format = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1604,7 +1616,7 @@ local NumberBox = beClass.class({
 		local img = elem.resource
 		local area = elem.area
 		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, w + 1, area[4], nil, self.transparency, nil)
-		local item = tostring(self._value)
+		local item = self._format(self._value)
 		local x_, y_, w_, h_ = clip(x, y, w, h)
 		beUtils.textLeft(item, theme['font'], x + 1, y, w, h, elem.content_offset, self.transparency)
 		if x_ then
