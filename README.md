@@ -562,6 +562,9 @@ Shortcut to create `Percent` object.
 * `numberbox:setFormat(val)`: sets the format function
   * `val`: the specific format function
   * returns `self`
+* `numberbox:setValueTheme(val)`: sets the value theme
+  * `val`: the specific theme
+  * returns `self`
 
 * `numberbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`

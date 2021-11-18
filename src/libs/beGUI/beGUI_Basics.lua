@@ -1431,6 +1431,7 @@ local NumberBox = beClass.class({
 	_maxValue = nil,
 	_trim = nil,
 	_format = nil,
+	_valueTheme = nil,
 
 	_buttonUp = nil,
 	_buttonDown = nil,
@@ -1553,6 +1554,12 @@ local NumberBox = beClass.class({
 		return self
 	end,
 
+	setValueTheme = function (self, val)
+		self._valueTheme = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1618,7 +1625,14 @@ local NumberBox = beClass.class({
 		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, w + 1, area[4], nil, self.transparency, nil)
 		local item = self._format(self._value)
 		local x_, y_, w_, h_ = clip(x, y, w, h)
-		beUtils.textLeft(item, theme['font'], x + 1, y, w, h, elem.content_offset, self.transparency)
+		if self._valueTheme and self._valueTheme ~= 'font' then
+			font(theme[self._valueTheme].resource)
+		end
+		local font_ = theme[self._valueTheme or 'font']
+		beUtils.textLeft(item, font_, x + 1, y, w, h, elem.content_offset, self.transparency)
+		if self._valueTheme and self._valueTheme ~= 'font' then
+			font(theme['font'].resource)
+		end
 		if x_ then
 			clip(x_, y_, w_, h_)
 		else
