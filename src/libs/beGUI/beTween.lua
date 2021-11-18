@@ -470,7 +470,12 @@ function Tween_idx:set(clock)
 end
 
 function Tween_idx:reset()
-	return self:set(0)
+	self.initial = self.initial or copyTables({ }, self.target, self.subject)
+	self.clock = 0
+	copyTables(self.subject, self.initial)
+	self.finished = false
+
+	return self
 end
 
 function Tween_idx:update(delta)
