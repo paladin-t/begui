@@ -1446,6 +1446,15 @@ local NumberBox = beClass.class({
 	ctor = function (self, value, step, min, max, trim, format)
 		beWidget.Widget.ctor(self)
 
+		if min > max then
+			error('Invalid bounds.')
+		end
+		if value and min and value < min then
+			value = min
+		end
+		if value and max and value > max then
+			value = max
+		end
 		self._value = value
 		self._step = step
 		self._minValue = min
