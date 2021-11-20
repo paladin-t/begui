@@ -145,12 +145,18 @@ local List = beClass.class({
 			self._maxY = h
 		end
 		if self._pressingPosition then
-			if self._scrolling == 'x' then
-				self._scrollX = self._scrollX + (event.mousePosition.x - self._pressingPosition.x)
-				self._scrollX = beUtils.clamp(self._scrollX, w - self._maxX, 0)
-			elseif self._scrolling == 'y' then
-				self._scrollY = self._scrollY + (event.mousePosition.y - self._pressingPosition.y)
-				self._scrollY = beUtils.clamp(self._scrollY, h - self._maxY, 0)
+			if self._scrolling == 'x' and event.mousePosition then
+				local diff = event.mousePosition.x - self._pressingPosition.x
+				if not beUtils.isNaN(diff) then
+					self._scrollX = self._scrollX + diff
+					self._scrollX = beUtils.clamp(self._scrollX, w - self._maxX, 0)
+				end
+			elseif self._scrolling == 'y' and event.mousePosition then
+				local diff = event.mousePosition.y - self._pressingPosition.y
+				if not beUtils.isNaN(diff) then
+					self._scrollY = self._scrollY + diff
+					self._scrollY = beUtils.clamp(self._scrollY, h - self._maxY, 0)
+				end
 			end
 			self._pressingPosition = event.mousePosition
 		elseif intersects and event.mouseWheel < 0 then
