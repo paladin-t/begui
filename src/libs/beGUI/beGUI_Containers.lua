@@ -41,6 +41,7 @@ local List = beClass.class({
 	_maxX = 0, _maxY = 0,
 	_scrollableHorizontally = false,
 	_childrenCount = 0,
+	_theme = nil,
 
 	-- Constructs a List.
 	-- `withScrollBar`: whether to draw scroll bar(s)
@@ -61,6 +62,12 @@ local List = beClass.class({
 	-- Sets whether allow scrolling horizontally.
 	setScrollableHorizontally = function (self, val)
 		self._scrollableHorizontally = val
+
+		return self
+	end,
+
+	setTheme = function (self, theme)
+		self._theme = theme
 
 		return self
 	end,
@@ -125,7 +132,7 @@ local List = beClass.class({
 			end
 		end
 
-		local elem = theme['list']
+		local elem = theme[self._theme or 'list']
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 
 		local scrollBarTransparency = nil
@@ -200,7 +207,7 @@ local List = beClass.class({
 		if count ~= self._childrenCount then
 			self._childrenCount = count
 		end
-		if scrollBarTransparency then
+		if elem.color and scrollBarTransparency then
 			local widgetPos = y + 1
 			local widgetSize = h - 2
 			local limit = 0

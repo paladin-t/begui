@@ -637,6 +637,9 @@ Shortcut to create `Percent` object.
 * `list:setScrollableHorizontally(val)`: sets whether allow scrolling horizontally
   * `val`: `true` for allowing scrolling horizontally, otherwise `false`
   * returns `self`
+* `list:setTheme(theme)`: sets the theme
+  * `theme`: the custom theme
+  * returns `self`
 
 ### beGUI.Draggable
 
