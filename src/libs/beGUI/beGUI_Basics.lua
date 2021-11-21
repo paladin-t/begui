@@ -298,7 +298,7 @@ local MultilineLabel = beClass.class({
 			end
 			local initPos = Vec2.new(posX, posY)
 			local lineMargin = 1
-			local spaceW = measure(' ', font_.resource)
+			local spaceW, _ = measure(' ', font_.resource)
 			for i, v in ipairs(words) do
 				local w_, h_ = measure(v.text, font_.resource)
 				if self._lineHeight ~= nil then
@@ -351,7 +351,7 @@ local MultilineLabel = beClass.class({
 			local x_, y_, w_, h_ = x + v.position.x, y + v.position.y, w, height
 			local intersects = Math.intersects(canvasRect, Rect.byXYWH(x_, y_, w_, h_))
 			if intersects then
-				beUtils.textLeft(v.text, v, x_, y_, w_, h_, elem.content_offset, self.transparency)
+				beUtils.textLeftSameLine(v.text, v, x_, y_, w_, h_, elem.content_offset, self.transparency)
 			end
 		end
 		if self._theme and self._theme ~= 'font' then

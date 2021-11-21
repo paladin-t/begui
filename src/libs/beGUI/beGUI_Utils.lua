@@ -327,6 +327,17 @@ local function tex9Grid(elem, x, y, w, h, permeation, alpha, color_)
 	end
 end
 
+local function textLeftSameLine(txt, font_, x, y, w, h, offset_, alpha)
+	local dx = offset_ and offset_[1] or 0
+	local dy = offset_ and offset_[2] or 0
+	local textWidth, textHeight = measure(txt, font_.resource)
+	local fx, fy = x + dx, y + dy
+	local col = alpha and Color.new(font_.color.r, font_.color.g, font_.color.b, alpha) or font_.color
+	text(txt, fx, fy, col)
+
+	return fx, fy, textWidth, textHeight
+end
+
 local function textLeft(txt, font_, x, y, w, h, offset_, alpha)
 	local dx = offset_ and offset_[1] or 0
 	local dy = offset_ and offset_[2] or 0
@@ -379,6 +390,7 @@ return {
 	merge = merge,
 	tex3Grid = tex3Grid,
 	tex9Grid = tex9Grid,
+	textLeftSameLine = textLeftSameLine,
 	textLeft = textLeft,
 	textCenter = textCenter,
 	textRight = textRight

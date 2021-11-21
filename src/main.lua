@@ -447,9 +447,9 @@ function setup()
 				:put(0, 90)
 				:resize(P(100), 60)
 				:addChild(
-					beGUI.MultilineLabel.new('The Quick Brown Fox Jumps Over the Lazy Dog.\n[col=0xff0000ff]ABCDEFG[/col] [col=0x00ff00ff]HIJKLMN[/col] [col=0x0000ffff]OPQRST[/col] UVWXYZ abcdefg hijklmn opqrst uvwxyz 1234567890 ! @ # $ % ^ & * ( ) ` - = [ ] \\ ; \' , . / ~ _ + { } | : " < > ?')
+					beGUI.MultilineLabel.new('The Quick Brown Fox Jumps Over the Lazy Dog.\n[col=0xff0000ff]ABCDEFG[/col] [col=0x00ff00ff]HIJKLMN[/col] [col=0x0000ffff]OPQRST[/col] UVWXYZ abcdefg hijklmn opqrst uvwxyz 1234567890 ! @ # $ % ^ & * ( ) ` - = [ ] \\ ; \' , . / ~ _ + { } | : " < > ?\n')
 						:setId('multilinelabel')
-						:put(P(1), 0)
+						:put(P(1), 2)
 						:resize(P(98), 0) -- Height is automatically calculated.
 				)
 		)
