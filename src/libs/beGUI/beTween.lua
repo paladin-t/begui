@@ -2,6 +2,7 @@
 MIT LICENSE
 
 Copyright (c) 2014 Enrique García Cota, Yuichi Tateno, Emmanuel Oga
+Adapted by Tony for Bitty Engine
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
@@ -436,6 +437,15 @@ end
 local Tween_idx = { }
 local Tween_mt = { __index = Tween_idx }
 
+function Tween_idx:reset()
+	self.initial = self.initial or copyTables({ }, self.target, self.subject)
+	self.clock = 0
+	copyTables(self.subject, self.initial)
+	self.finished = false
+
+	return self
+end
+
 function Tween_idx:set(clock)
 	assert(type(clock) == 'number', "clock must be a positive number or 0")
 
@@ -469,15 +479,6 @@ function Tween_idx:set(clock)
 	return true
 end
 
-function Tween_idx:reset()
-	self.initial = self.initial or copyTables({ }, self.target, self.subject)
-	self.clock = 0
-	copyTables(self.subject, self.initial)
-	self.finished = false
-
-	return self
-end
-
 function Tween_idx:update(delta)
 	assert(type(delta) == 'number', "delta must be a number")
 
@@ -492,6 +493,21 @@ function Tween_idx:on(event, handler)
 		self.events = { }
 	end
 	self.events[event] = handler
+
+	return self
+end
+
+function Tween_idx:off(event)
+	if not event then
+		return self
+	end
+	if self.events == nil then
+		return self
+	end
+	if self.events[event] == nil then
+		return self
+	end
+	self.events[event] = nil
 
 	return self
 end

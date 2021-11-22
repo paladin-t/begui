@@ -29,6 +29,58 @@ local beWidget = require 'libs/beGUI/beGUI_Widget'
 Widgets.
 ]]
 
+local Group = beClass.class({
+	ctor = function (self, content)
+		beWidget.Widget.ctor(self)
+
+		self.content = content
+	end,
+
+	__tostring = function (self)
+		return 'Group'
+	end,
+
+	-- Gets the group name.
+	getValue = function (self)
+		return self.content
+	end,
+	-- Sets the group name.
+	setValue = function (self, val)
+		self.content = val
+
+		return self
+	end,
+
+	navigatable = function (self)
+		return 'children'
+	end,
+
+	_update = function (self, theme, delta, dx, dy, event)
+		if not self.visibility then
+			return
+		end
+
+		local ox, oy = self:offset()
+		local px, py = self:position()
+		local x, y = dx + px + ox, dy + py + oy
+		local w, h = self:size()
+
+		local elem = theme['group']
+		local x_ = x + elem.content_offset[1]
+		local w_, h_ = measure(self.content, theme['font'].resource)
+		local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
+		line(x, y + h_ * 0.5, x, y + h - 1, black)
+		line(x, y + h - 1, x + w - 1, y + h - 1, black)
+		line(x + w - 1, y + h_ * 0.5, x + w - 1, y + h - 1, black)
+		line(x, y + h_ * 0.5, x_ - 2, y + h_ * 0.5, black)
+		line(x_ + w_ + 2, y + h_ * 0.5, x + w - 1, y + h_ * 0.5, black)
+		local elem_ = theme['group_title']
+		beUtils.textCenter(self.content, theme['font'], x_, y, w_, h_, elem_.content_offset, self.transparency)
+
+		beWidget.Widget._update(self, theme, delta, dx, dy, event)
+	end
+}, beWidget.Widget)
+
 local List = beClass.class({
 	_withScrollBar = false,
 	_scrolledTimestamp = nil,
@@ -757,6 +809,7 @@ Exporting.
 ]]
 
 return {
+	Group = Group,
 	List = List,
 	Draggable = Draggable,
 	Droppable = Droppable,

@@ -13,8 +13,9 @@ Try it [in browser](https://paladin-t.github.io/begui/).
   * [2. Structures](#2-structures)
     * [beStructures.Percent](#bestructurespercent)
     * [beGUI.percent](#beguipercent)
-  * [3. Widgets](#3-widgets)
+  * [3. Widget](#3-widget)
     * [beGUI.Widget](#beguiwidget)
+  * [4. Basic Widgets](#4-basic-widgets)
     * [beGUI.Label](#beguilabel)
     * [beGUI.MultilineLabel](#beguimultilinelabel)
     * [beGUI.Url](#beguiurl)
@@ -28,6 +29,8 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     * [beGUI.NumberBox](#beguinumberbox)
     * [beGUI.ProgressBar](#beguiprogressbar)
     * [beGUI.Slide](#beguislide)
+    * [beGUI.Group](#beguigroup)
+  * [5. Container Widgets](#5-container-widgets)
     * [beGUI.List](#beguilist)
     * [beGUI.Draggable](#beguidraggable)
     * [beGUI.Droppable](#beguidroppable)
@@ -35,12 +38,12 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     * [beGUI.Popup](#beguipopup)
     * [beGUI.MessageBox](#beguimessagebox)
     * [beGUI.QuestionBox](#beguiquestionbox)
-  * [4. Theme](#4-theme)
-  * [5. Tweening](#5-tweening)
-    * [beGUI.Tween](#beguitween)
-  * [6. Custom Widgets](#6-custom-widgets)
+  * [6. Custom Widget](#6-custom-widget)
     * [beGUI.Custom](#beguicustom)
     * [Writing Your Own Widget](#writing-your-own-widget)
+  * [7. Theme](#7-theme)
+  * [8. Tweening](#8-tweening)
+    * [beGUI.Tween](#beguitween)
 * [License](#license)
 
 # Features
@@ -59,6 +62,7 @@ Try it [in browser](https://paladin-t.github.io/begui/).
 * `ComboBox`
 * `NumberBox`
 * `ProgressBar`, `Slide`
+* `Group`
 * Scrollable `List`
 * `Draggable` and `Droppable`
 * `Tab`
@@ -164,10 +168,10 @@ Shortcut to create `Percent` object.
 
 </details>
 
-## 3. Widgets
+## 3. Widget
 
 <details open>
-<summary>Widgets</summary>
+<summary>Widget</summary>
 
 ### beGUI.Widget
 
@@ -277,6 +281,13 @@ Shortcut to create `Percent` object.
   * returns `self`
 * `widget:clearTweenings()`: clears all tweening procedures
   * returns `self`
+
+</details>
+
+## 4. Basic Widgets
+
+<details open>
+<summary>Basic Widgets</summary>
 
 ### beGUI.Label
 
@@ -625,6 +636,26 @@ Shortcut to create `Percent` object.
 * `slide:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`
 
+### beGUI.Group
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+* beGUI.`Group.new(content)`: constructs a `Group`
+  * `content`: the content string
+
+* `group:getValue()`: gets the content text
+  * returns the content string
+* `group:setValue(val)`: sets the content text
+  * `val`: the specific content string
+  * returns `self`
+
+</details>
+
+## 5. Container Widgets
+
+<details open>
+<summary>Container Widgets</summary>
+
 ### beGUI.List
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
@@ -730,51 +761,10 @@ Shortcut to create `Percent` object.
 
 </details>
 
-## 4. Theme
+## 6. Custom Widget
 
 <details open>
-<summary>Theme</summary>
-
-Defined in "src/libs/beGUI/beTheme.lua". Widget classes will lookup for image resources, client area, content offset, fonts, colors and all other appearance config from it.
-
-</details>
-
-## 5. Tweening
-
-<details open>
-<summary>Tweening</summary>
-
-beGUI is integrated with a tweening lib adapted from [kikito/tween.lua](https://github.com/kikito/tween.lua), which allows to create tweening animations.
-
-### beGUI.Tween
-
-**Model: `require 'libs/beGUI/beGUI'`**
-
-* beGUI.`Tween.new(duration, subject, target, easing)`: constructs a `Tween` object
-  * `duration`: the duration in seconds
-  * `subject`: the tweening subject
-  * `target`: the tweening target
-  * `easing`: the easing function
-
-* `tween:set(clock)`: sets the `Tween` object to a specific clock point
-  * `clock`: the click time point
-  * returns `true` for success, otherwise `false`
-* `tween:reset()`: resets the `Tween` object
-  * returns `true` for success, otherwise `false`
-* `tween:update(delta)`: updates the `Tween` object with a specific delta time in seconds
-  * returns `true` for success, otherwise `false`
-
-* `tween:on('changed', function (sender) end)`: registers an event which will be triggered when the `Tween` has been updated
-  * returns `self`
-* `tween:on('completed', function (sender) end)`: registers an event which will be triggered when the `Tween` has completed
-  * returns `self`
-
-</details>
-
-## 6. Custom Widgets
-
-<details open>
-<summary>Custom Widgets</summary>
+<summary>Custom Widget</summary>
 
 There are two ways to customize your own `Widget`, one is to use the beWidget.`Custom` `Widget`, the other is to write your own `Widget` class.
 
@@ -846,6 +836,50 @@ local MyWidget = beClass.class({
   end
 }, beWidget.Widget)
 ```
+
+</details>
+
+## 7. Theme
+
+<details open>
+<summary>Theme</summary>
+
+Defined in "src/libs/beGUI/beTheme.lua". Widget classes will lookup for image resources, client area, content offset, fonts, colors and all other appearance config from it.
+
+</details>
+
+## 8. Tweening
+
+<details open>
+<summary>Tweening</summary>
+
+beGUI is integrated with a tweening lib adapted from [kikito/tween.lua](https://github.com/kikito/tween.lua), which allows to create tweening animations.
+
+### beGUI.Tween
+
+**Model: `require 'libs/beGUI/beGUI'`**
+
+* beGUI.`Tween.new(duration, subject, target, easing)`: constructs a `Tween` object
+  * `duration`: the duration in seconds
+  * `subject`: the tweening subject
+  * `target`: the tweening target
+  * `easing`: the easing function
+
+* `tween:reset()`: resets the `Tween` object
+  * returns `self`
+* `tween:set(clock)`: sets the `Tween` object to a specific clock point
+  * `clock`: the click time point
+  * returns `true` for success, otherwise `false`
+* `tween:update(delta)`: updates the `Tween` object with a specific delta time in seconds
+  * returns `true` for success, otherwise `false`
+
+* `tween:on('changed', function (sender) end)`: registers an event which will be triggered when the `Tween` has been updated
+  * returns `self`
+* `tween:on('completed', function (sender) end)`: registers an event which will be triggered when the `Tween` has completed
+  * returns `self`
+* `tween:off(event)`: unregisters the handlers of the specific event
+  * `event`: event name string
+  * returns `self`
 
 </details>
 

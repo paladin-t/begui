@@ -186,6 +186,16 @@ local function default()
 			content_offset = nil
 		},
 
+		['group'] = {
+			resource = nil,
+			color = Color.new(0, 0, 0),
+			area = nil,
+			content_offset = { 8, 0 }
+		},
+		['group_title'] = {
+			content_offset = nil
+		},
+
 		['list'] = {
 			resource = Resources.load('imgs/panel_white.png'),
 			color = Color.new(127, 127, 127, 128),

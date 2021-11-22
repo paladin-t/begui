@@ -41,7 +41,7 @@ end
 beGUI = beUtils.merge(
 	beGUI,
 	{
-		version = '1.3.1',
+		version = '1.4.0',
 	
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,
@@ -94,6 +94,8 @@ beGUI = beUtils.merge(
 		-- Events:
 		--   'changed': function (sender, value) end
 		Slide = beBasics.Slide,
+		-- Group widget.
+		Group = beContainers.Group,
 		-- List widget.
 		List = beContainers.List,
 		-- Draggable widget.
