@@ -758,6 +758,7 @@ local Picture = beClass.class({
 }, beWidget.Widget)
 
 local Button = beClass.class({
+	_themeNormal = nil, _themeDown = nil, _themeDisabled = nil,
 	_enabled = true,
 	_pressed = false,
 
@@ -775,6 +776,12 @@ local Button = beClass.class({
 
 	setValue = function (self, content)
 		self.content = content
+
+		return self
+	end,
+
+	setTheme = function (self, themeNormal, themeDown, themeDisabled)
+		self._themeNormal, self._themeDown, self._themeDisabled = themeNormal, themeDown, themeDisabled
 
 		return self
 	end,
@@ -831,9 +838,9 @@ local Button = beClass.class({
 
 		local elem = nil
 		if self._enabled then
-			elem = down and theme['button_down'] or theme['button']
+			elem = down and theme[self._themeDown or 'button_down'] or theme[self._themeNormal or 'button']
 		else
-			elem = theme['button_disabled']
+			elem = theme[self._themeDisabled or 'button_disabled']
 		end
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 		beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
