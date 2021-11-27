@@ -788,7 +788,7 @@ The `Custom` `Widget` exposes a `'updated'` event to let you write short customi
   * `val`: the specific custom `Widget` name
   * returns `self`
 
-* `custom:on('updated', function (sender, x, y, w, h) end)`: registers an event which will be triggered when the `Widget` has been updated per frame
+* `custom:on('updated', function (sender, x, y, w, h, delta) end)`: registers an event which will be triggered when the `Widget` has been updated per frame
   * returns `self`
 
 ### Writing Your Own Widget

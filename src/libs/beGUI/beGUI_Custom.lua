@@ -66,7 +66,7 @@ local Custom = beClass.class({
 		local px, py = self:position()
 		local x, y = dx + px + ox, dy + py + oy
 		local w, h = self:size()
-		self:_trigger('updated', self, x, y, w, h)
+		self:_trigger('updated', self, x, y, w, h, delta)
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
 	end

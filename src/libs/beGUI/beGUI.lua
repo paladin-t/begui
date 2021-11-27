@@ -127,7 +127,7 @@ beGUI = beUtils.merge(
 		QuestionBox = bePopups.QuestionBox,
 		-- Custom widget.
 		-- Events:
-		--   'updated': function (sender, x, y, w, h) end
+		--   'updated': function (sender, x, y, w, h, delta) end
 		Custom = beCustom.Custom,
 		-- Tweening helper.
 		Tween = beTween.Tween
