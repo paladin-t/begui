@@ -147,7 +147,7 @@ local Widget = beClass.class({
 		return self
 	end,
 	-- Gets the offset of the Widget.
-	-- returns offset width, height in world space
+	-- returns offset x, y in world space
 	offset = function (self)
 		local w, h = self:size()
 

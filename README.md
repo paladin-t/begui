@@ -203,7 +203,7 @@ Shortcut to create `Percent` object.
   * `y`: y position of the anchor in local space as number, typically [0.0, 1.0] for [top, bottom]
   * returns `self`
 * `widget:offset()`: gets the offset of the `Widget`
-  * returns offset `width`, `height` in world space
+  * returns offset `x`, `y` in world space
 * `widget:put(x, y)`: sets the position of the `Widget`
   * `x`: number for absolute position, or `Percent` for relative position
   * `y`: number for absolute position, or `Percent` for relative position
@@ -796,8 +796,13 @@ The `Custom` `Widget` exposes a `'updated'` event to let you write short customi
 You can also write your own `Widget` inheriting from beWidget.`Widget`.
 
 ```lua
+local beClass = require 'libs/beGUI/beClass'
+local beUtils = require 'libs/beGUI/beGUI_Utils'
+local beWidget = require 'libs/beGUI/beGUI_Widget'
+
 local MyWidget = beClass.class({
   _value = nil, -- Define your fields.
+  _pressed = false,
 
   ctor = function (self, ...)
     beWidget.Widget.ctor(self)
@@ -823,20 +828,53 @@ local MyWidget = beClass.class({
   end,
 
   _update = function (self, theme, delta, dx, dy, event)
+    -- Ignore if invisible.
     if not self.visibility then
       return
     end
 
+    -- Get the offset x, y, which is calculated by this widget's size and its anchor.
     local ox, oy = self:offset()
+    -- Get the position x, y in local space.
     local px, py = self:position()
+    -- Calculate the final position with the delta position, offset and local position,
+    -- where the delta position (`dx`, `dy`) is from this widget's parent, or 0, 0 for root widget.
     local x, y = dx + px + ox, dy + py + oy
+    -- Get the size width, height of this widget.
     local w, h = self:size()
+
+    -- The following code detects clicking.
     local down = false
-    local intersects = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
-    local value = self._value
+    if event.context.active and event.context.active ~= self then
+      self._pressed = false
+    elseif event.canceled or event.context.dragging then
+      event.context.active = nil
+      self._pressed = false
+    elseif self._pressed then
+      down = event.mouseDown
+    else
+      -- Intersection detection.
+      down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+    end
+    if down and not self._pressed then
+      event.context.active = self
+      self._pressed = true
+    elseif not down and self._pressed then
+      event.context.active = nil
+      self._pressed = false
+      event.context.focus = self
+      self:_trigger('clicked', self) -- Trigger 'clicked' event by clicking.
+    elseif event.context.focus == self and event.context.navigated == 'press' then
+      self:_trigger('clicked', self) -- Trigger 'clicked' event by key navigation.
+      event.context.navigated = false
+    end
 
-    -- Your widget logic and drawing code here.
+    -- Draw the widget.
+    local elem = down and theme['button_down'] or theme['button'] -- Using the button theme.
+    beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil) -- Draw texture.
+    beUtils.textCenter(self._value, theme['font'], x, y, w, h, elem.content_offset, self.transparency) -- Draw text.
 
+    -- Call base update to update its children.
     beWidget.Widget._update(self, theme, delta, dx, dy, event)
   end
 }, beWidget.Widget)
