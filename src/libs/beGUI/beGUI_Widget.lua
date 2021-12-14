@@ -165,6 +165,9 @@ local Widget = beClass.class({
 	-- Gets the position of the Widget.
 	-- returns position x, y in local space
 	position = function (self)
+		if self.parentWidth == nil --[[ or self.parentHeight == nil ]] then
+			self:_updateHierarchy()
+		end
 		local canvasWidth, canvasHeight = Canvas.main:size()
 		local x, y = self.x, self.y
 		if beClass.is(x, beStructures.Percent) then
@@ -195,6 +198,9 @@ local Widget = beClass.class({
 	end,
 	-- Gets the size of the Widget.
 	size = function (self)
+		if self.parentWidth == nil --[[ or self.parentHeight == nil ]] then
+			self:_updateHierarchy()
+		end
 		local w, h = self.width, self.height
 		if beClass.is(w, beStructures.Percent) then
 			w = w * self.parentWidth
@@ -559,6 +565,15 @@ local Widget = beClass.class({
 		return self
 	end,
 
+	_updateHierarchy = function (self)
+		if self.parent then
+			local w, h = self.parent:size()
+			self:_updateLayout(w, h)
+		else
+			local canvasWidth, canvasHeight = Canvas.main:size()
+			self:_updateLayout(canvasWidth, canvasHeight)
+		end
+	end,
 	_updateLayout = function (self, parentWidth, parentHeight)
 		if self.parentWidth == parentWidth and self.parentHeight == parentHeight then
 			return
