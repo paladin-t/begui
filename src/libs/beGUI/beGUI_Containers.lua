@@ -85,13 +85,17 @@ local List = beClass.class({
 	_withScrollBar = false,
 	_scrolledTimestamp = nil,
 	_pressed = false,
-	_pressedTimestamp = nil,
 	_pressedPosition = nil,
 	_pressingPosition = nil,
 	_scrolling = nil,
 	_scrollX = 0, _scrollY = 0,
 	_maxX = 0, _maxY = 0,
+	_scrollDirectionalTimestamp = nil,
 	_scrollableHorizontally = false,
+	_inertance = nil,
+	_inertanceTimestamp = nil,
+	_inertancePosition = nil,
+	_inertanceDirection = nil,
 	_childrenCount = 0,
 	_theme = nil,
 
@@ -152,22 +156,43 @@ local List = beClass.class({
 				self._scrolledTimestamp = now
 			end
 			self._pressed = true
-			self._pressedTimestamp = now
 			self._pressedPosition = event.mousePosition
 			self._pressingPosition = event.mousePosition
 			self._scrolling = nil
+			self._scrollDirectionalTimestamp = now
+			self._inertancePosition = event.mousePosition
+			self._inertanceTimestamp = now
 		elseif not down and self._pressed then
+			local diff = DateTime.toSeconds(now - self._inertanceTimestamp)
+			if diff < 0.05 then
+				local force = beUtils.clamp(1 - diff / 0.05, 0, 1) * 20 + 4
+				local dist = self._pressingPosition - self._pressedPosition
+				if self._scrollableHorizontally and w < self._maxX then
+					if math.abs(dist.x) < math.abs(dist.y) then
+						self._inertance = dist.y * force
+						self._inertanceDirection = 'y'
+					else
+						self._inertance = dist.x * force
+						self._inertanceDirection = 'x'
+					end
+				else
+					self._inertance = dist.y * force
+					self._inertanceDirection = 'y'
+				end
+			end
 			self._pressed = false
-			self._pressedTimestamp = nil
 			self._pressedPosition = nil
 			self._pressingPosition = nil
 			self._scrolling = nil
+			self._scrollDirectionalTimestamp = nil
+			self._inertancePosition = nil
+			self._inertanceTimestamp = nil
 		elseif down and self._pressed then
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
 			end
-			if self._pressedTimestamp ~= nil then
-				local diff = DateTime.toSeconds(now - self._pressedTimestamp)
+			if self._scrollDirectionalTimestamp ~= nil then
+				local diff = DateTime.toSeconds(now - self._scrollDirectionalTimestamp)
 				if diff < 0.3 and self._pressedPosition ~= self._pressingPosition then
 					if self._scrollableHorizontally and w < self._maxX then
 						local diff = self._pressedPosition - self._pressingPosition
@@ -179,8 +204,12 @@ local List = beClass.class({
 					else
 						self._scrolling = 'y'
 					end
-					self._pressedTimestamp = nil
+					self._scrollDirectionalTimestamp = nil
 				end
+			end
+			if self._inertancePosition ~= event.mousePosition then
+				self._inertancePosition = event.mousePosition
+				self._inertanceTimestamp = now
 			end
 		end
 
@@ -245,6 +274,23 @@ local List = beClass.class({
 				canceled = true,
 				context = event.context
 			}
+		end
+		if self._inertance then
+			if self._withScrollBar then
+				self._scrolledTimestamp = now
+			end
+			if self._inertanceDirection == 'y' then
+				self._scrollY = beUtils.clamp(self._scrollY + self._inertance * delta, h - self._maxY, 0)
+			else
+				self._scrollX = beUtils.clamp(self._scrollX + self._inertance * delta, w - self._maxX, 0)
+			end
+			self._inertance = self._inertance * 0.9
+			if math.abs(self._inertance) < 0.1 then
+				self._inertance = nil
+				self._inertanceTimestamp = nil
+				self._inertancePosition = nil
+				self._inertanceDirection = nil
+			end
 		end
 		if self._scrollX < 0 then
 			self._scrollX = beUtils.clamp(self._scrollX, w - self._maxX, 0)
