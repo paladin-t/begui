@@ -955,13 +955,12 @@ local PictureButton = beClass.class({
 		end
 
 		if self._background then
-			local down_, up_ = theme[self._themeBackgroundNormal or 'button_down'], theme[self._themeBackgroundPressed or 'button']
+			local down_, up_ = theme[self._themeBackgroundPressed or 'button_down'], theme[self._themeBackgroundNormal or 'button']
 			local elem = down and down_ or up_
 			if not self._enabled then
 				elem = theme[self._themeBackgroundDisabled or 'button_disabled']
 			end
 			beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
-			beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 		end
 
 		local elem = down and theme[self._themePressed] or theme[self._themeNormal]
@@ -970,11 +969,15 @@ local PictureButton = beClass.class({
 		end
 		local img = elem.resource
 		local area = elem.area
+		local offsetX, offsetY = 0, 0
+		if elem.content_offset then
+			offsetX, offsetY = elem.content_offset[1], elem.content_offset[2]
+		end
 		if self.transparency then
 			local col = Color.new(255, 255, 255, self.transparency)
-			tex(img, x + (w - area[3]) * 0.5, y + (h - area[4]) * 0.5, area[3], area[4], area[1], area[2], area[3], area[4], 0, Vec2.new(0.5, 0.5), false, false, col)
+			tex(img, x + (w - area[3]) * 0.5 + offsetX, y + (h - area[4]) * 0.5 + offsetY, area[3], area[4], area[1], area[2], area[3], area[4], 0, Vec2.new(0.5, 0.5), false, false, col)
 		else
-			tex(img, x + (w - area[3]) * 0.5, y + (h - area[4]) * 0.5, area[3], area[4], area[1], area[2], area[3], area[4])
+			tex(img, x + (w - area[3]) * 0.5 + offsetX, y + (h - area[4]) * 0.5 + offsetY, area[3], area[4], area[1], area[2], area[3], area[4])
 		end
 		if self.content then
 			beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
