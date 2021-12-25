@@ -960,7 +960,7 @@ local PictureButton = beClass.class({
 			if not self._enabled then
 				elem = theme[self._themeBackgroundDisabled or 'button_disabled']
 			end
-			beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
+			beUtils.tex9Grid(elem, x, y, w, h, 0, self.transparency, nil)
 		end
 
 		local elem = down and theme[self._themePressed] or theme[self._themeNormal]
