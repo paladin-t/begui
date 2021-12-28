@@ -643,7 +643,7 @@ local InputBox = beClass.class({
 			beUtils.textLeft(self._placeholder, theme['font_placeholder'], x, y, w, h, elem.content_offset, self.transparency)
 		end
 		if self._ticks < 0.4 then
-			beUtils.textLeft('_', theme['font'], caretX, y, w, h, elem.content_offset, self.transparency)
+			beUtils.textLeft('_', theme['font'], caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
 		end
 		if x_ then
 			clip(x_, y_, w_, h_)

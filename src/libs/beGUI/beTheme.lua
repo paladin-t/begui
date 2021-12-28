@@ -70,7 +70,7 @@ local function default()
 		['inputbox'] = {
 			resource = Resources.load('imgs/panel_white.png'),
 			area = { 0, 0, 17, 17 },
-			content_offset = { 2, 0 }
+			content_offset = { 2, 0, 2 }
 		},
 
 		['button'] = {
