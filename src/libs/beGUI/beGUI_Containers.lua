@@ -65,9 +65,10 @@ local Group = beClass.class({
 		local x, y = dx + px + ox, dy + py + oy
 		local w, h = self:size()
 
+		local font_ = theme['font']
 		local elem = theme['group']
 		local x_ = x + elem.content_offset[1]
-		local w_, h_ = measure(self.content, theme['font'].resource)
+		local w_, h_ = measure(self.content, font_.resource)
 		local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
 		line(x, y + h_ * 0.5, x, y + h - 1, black)
 		line(x, y + h - 1, x + w - 1, y + h - 1, black)
@@ -75,7 +76,7 @@ local Group = beClass.class({
 		line(x, y + h_ * 0.5, x_ - 2, y + h_ * 0.5, black)
 		line(x_ + w_ + 2, y + h_ * 0.5, x + w - 1, y + h_ * 0.5, black)
 		local elem_ = theme['group_title']
-		beUtils.textCenter(self.content, theme['font'], x_, y, w_, h_, elem_.content_offset, self.transparency)
+		beUtils.textCenter(self.content, font_, x_, y, w_, h_, elem_.content_offset, self.transparency)
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
 	end
@@ -299,7 +300,7 @@ local List = beClass.class({
 			self._scrollY = beUtils.clamp(self._scrollY, h - self._maxY, 0)
 		end
 
-		local x_, y_, w_, h_ = clip(x + 1, y + 1, w - 1, h - 2)
+		local x_, y_, w_, h_ = clip(x + 1, y + 1, w - 2, h - 2)
 		beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
 		local count = self:getChildrenCount()
 		if count ~= self._childrenCount then
@@ -726,6 +727,7 @@ local Tab = beClass.class({
 			event.context.navigated = false
 		end
 
+		local font_ = theme['font']
 		local elem = theme['tab']
 		local paddingX, paddingY = elem.content_offset[1] or 2, elem.content_offset[2] or 2
 		local x_ = x
@@ -733,7 +735,7 @@ local Tab = beClass.class({
 			local w_, h_ = nil, nil
 			if self._tabSize == nil then
 				if type(v) == 'string' then
-					w_, h_ = measure(v, theme['font'].resource)
+					w_, h_ = measure(v, font_.resource)
 				else
 					w_, h_ = v.area[3], v.area[4]
 				end
@@ -770,7 +772,7 @@ local Tab = beClass.class({
 			end
 			if type(v) == 'string' then
 				local elem_ = theme['tab_title']
-				beUtils.textCenter(v, theme['font'], x_, y, w_, h_, elem_.content_offset, self.transparency)
+				beUtils.textCenter(v, font_, x_, y, w_, h_, elem_.content_offset, self.transparency)
 			else
 				local sx, sy, sw, sh = nil, nil, nil, nil
 				if v.area then

@@ -266,16 +266,16 @@ local MultilineLabel = beClass.class({
 
 		local lines = 1
 		local _, height = nil, nil
+		local font_ = theme[self._theme or 'font']
 		if self._lineHeight ~= nil then
 			height = self._lineHeight
 		else
-			_, height = measure('X', theme[self._theme or 'font'].resource) -- Estimate safe height.
+			_, height = measure('X', font_.resource) -- Estimate safe height.
 		end
 		local elem = theme['multilinelabel']
 		if self._theme and self._theme ~= 'font' then
 			font(theme[self._theme].resource)
 		end
-		local font_ = theme[self._theme or 'font']
 		local color_ = nil
 		if self._theme then
 			color_ = font_.color
@@ -617,8 +617,9 @@ local InputBox = beClass.class({
 			event.context.navigated = false
 		end
 
+		local font_ = theme['font']
 		if self._size == nil then
-			local w_, h_ = measure(self.content, theme['font'].resource)
+			local w_, h_ = measure(self.content, font_.resource)
 			self._size = Vec2.new(w_, h_)
 		end
 		self._ticks = self._ticks + delta
@@ -633,17 +634,17 @@ local InputBox = beClass.class({
 		if #self.content ~= 0 then
 			local txtW = self._size.x + elem.content_offset[1] * 2 + 14
 			if txtW <= w then
-				beUtils.textLeft(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
+				beUtils.textLeft(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
 			else
-				beUtils.textLeft(self.content, theme['font'], x + (w - txtW), y, w, h, elem.content_offset, self.transparency)
-				local caretW = measure('_', theme['font'].resource)
+				beUtils.textLeft(self.content, font_, x + (w - txtW), y, w, h, elem.content_offset, self.transparency)
+				local caretW = measure('_', font_.resource)
 				caretX = x + w - caretW - 10
 			end
 		else
 			beUtils.textLeft(self._placeholder, theme['font_placeholder'], x, y, w, h, elem.content_offset, self.transparency)
 		end
 		if self._ticks < 0.4 then
-			beUtils.textLeft('_', theme['font'], caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
+			beUtils.textLeft('_', font_, caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
 		end
 		if x_ then
 			clip(x_, y_, w_, h_)
