@@ -164,21 +164,23 @@ local List = beClass.class({
 			self._inertancePosition = event.mousePosition
 			self._inertanceTimestamp = now
 		elseif not down and self._pressed then
-			local diff = DateTime.toSeconds(now - self._inertanceTimestamp)
-			if diff < 0.05 then
-				local force = beUtils.clamp(1 - diff / 0.05, 0, 1) * 20 + 4
-				local dist = self._pressingPosition - self._pressedPosition
-				if self._scrollableHorizontally and w < self._maxX then
-					if math.abs(dist.x) < math.abs(dist.y) then
+			if self._inertanceTimestamp ~= nil then
+				local diff = DateTime.toSeconds(now - self._inertanceTimestamp)
+				if diff < 0.05 then
+					local force = beUtils.clamp(1 - diff / 0.05, 0, 1) * 20 + 4
+					local dist = self._pressingPosition - self._pressedPosition
+					if self._scrollableHorizontally and w < self._maxX then
+						if math.abs(dist.x) < math.abs(dist.y) then
+							self._inertance = dist.y * force
+							self._inertanceDirection = 'y'
+						else
+							self._inertance = dist.x * force
+							self._inertanceDirection = 'x'
+						end
+					else
 						self._inertance = dist.y * force
 						self._inertanceDirection = 'y'
-					else
-						self._inertance = dist.x * force
-						self._inertanceDirection = 'x'
 					end
-				else
-					self._inertance = dist.y * force
-					self._inertanceDirection = 'y'
 				end
 			end
 			self._pressed = false
