@@ -1,7 +1,7 @@
 --[[
 Example for the Bitty Engine
 
-Copyright (C) 2020 - 2021 Tony Wang, all rights reserved
+Copyright (C) 2020 - 2022 Tony Wang, all rights reserved
 
 Homepage: https://paladin-t.github.io/bitty/
 ]]

@@ -1,7 +1,7 @@
 --[[
 The MIT License
 
-Copyright (C) 2021 Tony Wang
+Copyright (C) 2021 - 2022 Tony Wang
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -90,6 +90,7 @@ local List = beClass.class({
 	_pressingPosition = nil,
 	_scrolling = nil,
 	_scrollX = 0, _scrollY = 0,
+	_scrollSpeed = 16,
 	_maxX = 0, _maxY = 0,
 	_scrollDirectionalTimestamp = nil,
 	_scrollableHorizontally = false,
@@ -112,13 +113,24 @@ local List = beClass.class({
 		return 'List'
 	end,
 
-	-- Gets whether allow scrolling horizontally.
+	-- Gets whether to allow scrolling horizontally.
 	scrollableHorizontally = function (self)
 		return self._scrollableHorizontally
 	end,
-	-- Sets whether allow scrolling horizontally.
+	-- Sets whether to allow scrolling horizontally.
 	setScrollableHorizontally = function (self, val)
 		self._scrollableHorizontally = val
+
+		return self
+	end,
+
+	-- Gets the scroll speed.
+	scrollSpeed = function (self)
+		return self._scrollSpeed
+	end,
+	-- Sets the scroll speed.
+	setScrollSpeed = function (self, val)
+		self._scrollSpeed = val
 
 		return self
 	end,
@@ -254,12 +266,12 @@ local List = beClass.class({
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
 			end
-			self._scrollY = beUtils.clamp(self._scrollY - 16, h - self._maxY, 0)
+			self._scrollY = beUtils.clamp(self._scrollY - self._scrollSpeed, h - self._maxY, 0)
 		elseif intersects and event.mouseWheel > 0 then
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
 			end
-			self._scrollY = beUtils.clamp(self._scrollY + 16, h - self._maxY, 0)
+			self._scrollY = beUtils.clamp(self._scrollY + self._scrollSpeed, h - self._maxY, 0)
 		end
 		if not intersects then
 			event = {
@@ -382,13 +394,13 @@ local List = beClass.class({
 		if dirX then
 			if dirX < 0 then
 				if self._scrollX < 0 then
-					self._scrollX = beUtils.clamp(self._scrollX + 16, w - self._maxX, 0)
+					self._scrollX = beUtils.clamp(self._scrollX + self._scrollSpeed, w - self._maxX, 0)
 
 					return true
 				end
 			elseif dirX > 0 then
 				if self._scrollX > w - self._maxX then
-					self._scrollX = beUtils.clamp(self._scrollX - 16, w - self._maxX, 0)
+					self._scrollX = beUtils.clamp(self._scrollX - self._scrollSpeed, w - self._maxX, 0)
 
 					return true
 				end
@@ -397,13 +409,13 @@ local List = beClass.class({
 		if dirY then
 			if dirY < 0 then
 				if self._scrollY < 0 then
-					self._scrollY = beUtils.clamp(self._scrollY + 16, h - self._maxY, 0)
+					self._scrollY = beUtils.clamp(self._scrollY + self._scrollSpeed, h - self._maxY, 0)
 
 					return true
 				end
 			elseif dirY > 0 then
 				if self._scrollY > h - self._maxY then
-					self._scrollY = beUtils.clamp(self._scrollY - 16, h - self._maxY, 0)
+					self._scrollY = beUtils.clamp(self._scrollY - self._scrollSpeed, h - self._maxY, 0)
 
 					return true
 				end
