@@ -907,11 +907,12 @@ beGUI is integrated with a tweening lib adapted from [kikito/tween.lua](https://
 
 **Model: `require 'libs/beGUI/beGUI'`**
 
-* beGUI.`Tween.new(duration, subject, target, easing)`: constructs a `Tween` object
+* beGUI.`Tween.new(duration, subject, target, easing, loop)`: constructs a `Tween` object
   * `duration`: the duration in seconds
   * `subject`: the tweening subject
   * `target`: the tweening target
   * `easing`: the easing function
+  * `loop`: whether to loop the tweening
 
 * `tween:reset()`: resets the `Tween` object
   * returns `self`
@@ -923,7 +924,7 @@ beGUI is integrated with a tweening lib adapted from [kikito/tween.lua](https://
 
 * `tween:on('changed', function (sender) end)`: registers an event which will be triggered when the `Tween` has been updated
   * returns `self`
-* `tween:on('completed', function (sender) end)`: registers an event which will be triggered when the `Tween` has completed
+* `tween:on('completed', function (sender) end)`: registers an event which will be triggered when the `Tween` has completed or looped
   * returns `self`
 * `tween:off(event)`: unregisters the handlers of the specific event
   * `event`: event name string

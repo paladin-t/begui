@@ -471,6 +471,12 @@ function Tween_idx:set(clock)
 	if self.clock < self.duration then
 		return false
 	end
+	if self.loop then
+		self:trigger('completed', self.subject)
+		self.clock = 0
+
+		return false
+	end
 	if not self.finished then
 		self:trigger('completed', self.subject)
 		self.finished = true
@@ -529,7 +535,7 @@ end
 
 -- Public interface.
 
-function tween.new(duration, subject, target, easing)
+function tween.new(duration, subject, target, easing, loop)
 	easing = getEasingFunction(easing)
 	checkNewParams(duration, subject, target, easing)
 
@@ -539,7 +545,8 @@ function tween.new(duration, subject, target, easing)
 		target    = target,
 		easing    = easing,
 		clock     = 0,
-		finished  = false
+		finished  = false,
+		loop      = loop
 	}, Tween_mt)
 end
 
