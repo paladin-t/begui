@@ -609,6 +609,9 @@ Shortcut to create `Percent` object.
 * `progressbar:setShadowValue(val)`: sets the shadow value number
   * `val`: the specific shadow value number
   * returns `self`
+* `progressbar:setTheme(theme)`: sets the theme
+  * `theme`: the custom theme
+  * returns `self`
 
 * `progressbar:on('changed', function (sender, value, maxValue, shadowValue) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`

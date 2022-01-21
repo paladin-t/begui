@@ -1668,6 +1668,7 @@ local ProgressBar = beClass.class({
 	_shadow = nil,
 	_color = nil,
 	_reversed = nil,
+	_theme = nil,
 	_shadowTicks = 0,
 
 	-- Constructs a ProgressBar.
@@ -1736,6 +1737,12 @@ local ProgressBar = beClass.class({
 		return self
 	end,
 
+	setTheme = function (self, theme)
+		self._theme = theme
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return nil
 	end,
@@ -1750,20 +1757,22 @@ local ProgressBar = beClass.class({
 		local x, y = dx + px + ox, dy + py + oy
 		local w, h = self:size()
 
-		local elem = theme['progressbar']
+		local elem = theme[self._theme or 'progressbar']
 		beUtils.tex9Grid(elem, x, y, w, h, 0, self.transparency, nil)
 		if self._shadow == nil then
 			local w_ = (w - elem.content_offset[1] * 2) * (self.content / self._max)
 			local x1, y1, x2, y2 = 0, 0, 0, 0
 			if self._reversed then
-				x1, y1, x2, y2 = x - elem.content_offset[1] + (w - w_),
+				x1, y1, x2, y2 =
+					x - elem.content_offset[1] + beUtils.clamp(w - w_, 0, w - 2),
 					y + elem.content_offset[2],
-					x - elem.content_offset[1] + w - 1,
+					x - elem.content_offset[1] + w - 2,
 					y + h - (elem.content_offset[2] * 2 - 1)
 			else
-				x1, y1, x2, y2 = x + elem.content_offset[1],
+				x1, y1, x2, y2 =
+					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + w_ - 1,
+					x + elem.content_offset[1] + beUtils.clamp(w_ - 1, 0, w - 6),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			local showVal = self.content > 0
@@ -1787,14 +1796,16 @@ local ProgressBar = beClass.class({
 			local w_ = (w - elem.content_offset[1] * 2) * (self.content / self._max)
 			local x1, y1, x2, y2 = 0, 0, 0, 0
 			if self._reversed then
-				x1, y1, x2, y2 = x - elem.content_offset[1] + (w - w_),
+				x1, y1, x2, y2 =
+					x - elem.content_offset[1] + beUtils.clamp(w - w_, 0, w - 2),
 					y + elem.content_offset[2],
-					x - elem.content_offset[1] + w - 1,
+					x - elem.content_offset[1] + w - 2,
 					y + h - (elem.content_offset[2] * 2 - 1)
 			else
-				x1, y1, x2, y2 = x + elem.content_offset[1],
+				x1, y1, x2, y2 =
+					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + w_ - 1,
+					x + elem.content_offset[1] + beUtils.clamp(w_ - 1, 0, w - 6),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			self._shadowTicks = self._shadowTicks + delta
@@ -1804,14 +1815,16 @@ local ProgressBar = beClass.class({
 			local sw = (w - elem.content_offset[1] * 2) * (self._shadow / self._max)
 			local sx1, sy1, sx2, sy2 = 0, 0, 0, 0
 			if self._reversed then
-				sx1, sy1, sx2, sy2 = x - elem.content_offset[1] + (w - sw),
+				sx1, sy1, sx2, sy2 =
+					x - elem.content_offset[1] + beUtils.clamp(w - sw, 0, w - 2),
 					y + elem.content_offset[2],
-					x - elem.content_offset[1] + w - 1,
+					x - elem.content_offset[1] + w - 2,
 					y + h - (elem.content_offset[2] * 2 - 1)
 			else
-				sx1, sy1, sx2, sy2 = x + elem.content_offset[1],
+				sx1, sy1, sx2, sy2 =
+					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + sw - 1,
+					x + elem.content_offset[1] + beUtils.clamp(sw - 1, 0, w - 6),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			local showVal, showShadow = self.content > 0, self._shadow > 0
