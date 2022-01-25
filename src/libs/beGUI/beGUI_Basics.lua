@@ -331,7 +331,7 @@ local MultilineLabel = beClass.class({
 						{
 							resource = font_.resource,
 							text = v.text,
-							color = color_ or v.color,
+							color = v.color or color_,
 							position = pos
 						}
 					)
@@ -1772,7 +1772,7 @@ local ProgressBar = beClass.class({
 				x1, y1, x2, y2 =
 					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + beUtils.clamp(w_ - 1, 0, w - 6),
+					x + elem.content_offset[1] + beUtils.clamp(math.floor(w_ - 1), 0, w - 5),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			local showVal = self.content > 0
@@ -1805,7 +1805,7 @@ local ProgressBar = beClass.class({
 				x1, y1, x2, y2 =
 					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + beUtils.clamp(w_ - 1, 0, w - 6),
+					x + elem.content_offset[1] + beUtils.clamp(math.floor(w_ - 1), 0, w - 5),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			self._shadowTicks = self._shadowTicks + delta
@@ -1824,7 +1824,7 @@ local ProgressBar = beClass.class({
 				sx1, sy1, sx2, sy2 =
 					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + beUtils.clamp(sw - 1, 0, w - 6),
+					x + elem.content_offset[1] + beUtils.clamp(math.floor(sw - 1), 0, w - 5),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			local showVal, showShadow = self.content > 0, self._shadow > 0
