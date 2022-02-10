@@ -54,7 +54,34 @@ local function split(txt, sep)
 	for line in string.gmatch(txt, '[^\n]*') do
 		if sep == nil then
 			for str in string.gmatch(line, '[\33-\127\192-\255]+[\128-\191]*') do
-				table.insert(result, str)
+				local codes = { }
+				for _, v in utf8.codes(str) do
+					table.insert(codes, v)
+				end
+				local j = nil
+				for i = #codes, 1, -1 do
+					if codes[i] <= 255 then
+						break
+					end
+					j = i
+				end
+				if j == nil then
+					table.insert(result, str)
+				else
+					local first, second = '', ''
+					for k = 1, j - 1, 1 do
+						first = first .. utf8.char(codes[k])
+					end
+					for k = j, #codes, 1 do
+						second = second .. utf8.char(codes[k])
+					end
+					if first ~= '' then
+						table.insert(result, first)
+					end
+					if second ~= '' then
+						table.insert(result, second)
+					end
+				end
 			end
 		else
 			for str in string.gmatch(line, '([^' .. sep .. ']+)') do
