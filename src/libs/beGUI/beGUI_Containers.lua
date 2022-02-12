@@ -432,6 +432,9 @@ local Draggable = beClass.class({
 	_draggingPosition = nil,
 	_dragging = false,
 	_dragOffset = nil,
+	_draggingX = 0, _draggingY = 0,
+	_draggingEvent = nil,
+	_draggingTimeout = false,
 
 	-- Constructs a Draggable.
 	ctor = function (self)
@@ -446,6 +449,10 @@ local Draggable = beClass.class({
 
 	navigatable = function (self)
 		return 'children'
+	end,
+
+	updateDragging = function (self, theme, delta, event)
+		beWidget.Widget._update(self, theme, delta, self._draggingX, self._draggingY, self._draggingEvent or event)
 	end,
 
 	_update = function (self, theme, delta, dx, dy, event)
@@ -464,25 +471,57 @@ local Draggable = beClass.class({
 		else
 			down = event.mouseDown and intersects
 		end
-		if down and not event.context.dragging then
+		local picking = false
+		local dropping = false
+		if self._draggingTimeout then
+			if not down then
+				self._draggingTimeout = false
+			end
+		elseif down and not event.context.dragging then -- Picked the current widget.
 			event.context.dragging = self
 			self._draggedTimestamp = DateTime.ticks()
 			self._draggedPosition = event.mousePosition
 			self._draggingPosition = event.mousePosition
 			self._dragging = false
-		elseif not down and event.context.dragging == self then
+			picking = true
+			self._draggingEvent = {
+				mousePosition = event.mousePosition,
+				mouseDown = false,
+				mouseWheel = 0,
+				canceled = false,
+				context = {
+					navigated = nil,
+					focus = nil,
+					active = nil,
+					dragging = nil,
+					popup = nil
+				}
+			}
+		elseif not down and event.context.dragging == self then -- Dropped the current widget.
 			event.context.dragging = nil
 			self._draggedTimestamp = nil
 			self._draggedPosition = nil
 			self._draggingPosition = nil
 			self._dragging = false
 			self._dragOffset = Vec2.new(0, 0)
-		elseif down and event.context.dragging == self then
+			dropping = true
+			self._draggingEvent = nil
+			self._draggingTimeout = false
+		elseif down and event.context.dragging == self then -- Is dragging the current widget.
 			if self._draggedTimestamp ~= nil then
 				local diff = DateTime.toSeconds(DateTime.ticks() - self._draggedTimestamp)
 				if diff < 0.3 and self._draggedPosition ~= self._draggingPosition then
 					self._dragging = true
 					self._draggedTimestamp = nil
+				elseif diff >= 0.3 and self._draggedPosition ~= self._draggingPosition then
+					event.context.dragging = nil
+					self._draggedTimestamp = nil
+					self._draggedPosition = nil
+					self._draggingPosition = nil
+					self._dragging = false
+					self._dragOffset = Vec2.new(0, 0)
+					self._draggingEvent = nil
+					self._draggingTimeout = true
 				end
 			end
 		end
@@ -493,25 +532,24 @@ local Draggable = beClass.class({
 			end
 			self._draggingPosition = event.mousePosition
 		end
-		if not intersects then
-			event = {
-				mousePosition = event.mousePosition,
-				mouseDown = false,
-				mouseWheel = 0,
-				canceled = false,
-				context = event.context
-			}
-		elseif self._dragging then
-			event = {
-				mousePosition = event.mousePosition,
-				mouseDown = false,
-				mouseWheel = 0,
-				canceled = event.canceled,
-				context = event.context
-			}
+		if self._draggingEvent then
+			if self._dragging then
+				self._draggingEvent.mousePosition = nil
+				self._draggingEvent.mouseDown = false
+				self._draggingEvent.mouseWheel = 0
+				self._draggingEvent.canceled = true
+			else
+				self._draggingEvent.mousePosition = event.mousePosition
+				self._draggingEvent.mouseDown = event.mouseDown
+				self._draggingEvent.mouseWheel = event.mouseWheel
+				self._draggingEvent.canceled = event.canceled
+			end
 		end
 
-		beWidget.Widget._update(self, theme, delta, dx + self._dragOffset.x, dy + self._dragOffset.y, event)
+		self._draggingX, self._draggingY = dx + self._dragOffset.x, dy + self._dragOffset.y
+		if not picking and not dropping and not self._dragging then
+			beWidget.Widget._update(self, theme, delta, self._draggingX, self._draggingY, self._draggingEvent or event)
+		end
 	end
 }, beWidget.Widget)
 

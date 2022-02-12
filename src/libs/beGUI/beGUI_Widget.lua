@@ -29,7 +29,8 @@ local beStructures = require 'libs/beGUI/beGUI_Structures'
 Widgets.
 ]]
 
-local Widget = beClass.class({
+local Widget = nil
+Widget = beClass.class({
 	DEBUG = false,
 
 	id = nil,                              -- String.
@@ -677,6 +678,13 @@ local Widget = beClass.class({
 		end
 		if event.context and event.context.focus == self and (event.context.navigated ~= nil or self.focusIfHovering) then
 			self:_updateFocus(delta, x, y)
+		end
+
+		if once then
+			local dragging = self.context and self.context.dragging
+			if dragging then
+				dragging:updateDragging(theme, delta, event)
+			end
 		end
 	end,
 	_updateChildren = function (self, theme, delta, dx, dy, event)
