@@ -386,7 +386,7 @@ local List = beClass.class({
 
 		local w, h = self:size()
 		local col = Color.new(55 + 200 * f, 55 + 200 * f, 55 + 200 * (1 - f))
-		rect(x - self._scrollX, y - self._scrollY, x + w - 1 - self._scrollX, y + h - 1 - self._scrollY, false, col)
+		rect(x - self._scrollX + 1, y - self._scrollY + 1, x + w - 1 - self._scrollX - 2, y + h - 1 - self._scrollY - 1, false, col)
 	end,
 
 	_scroll = function (self, dirX, dirY)
@@ -435,6 +435,7 @@ local Draggable = beClass.class({
 	_draggingX = 0, _draggingY = 0,
 	_draggingEvent = nil,
 	_draggingTimeout = false,
+	_dropping = false,
 
 	-- Constructs a Draggable.
 	ctor = function (self)
@@ -507,6 +508,7 @@ local Draggable = beClass.class({
 			dropping = true
 			self._draggingEvent = nil
 			self._draggingTimeout = false
+			self._dropping = true
 		elseif down and event.context.dragging == self then -- Is dragging the current widget.
 			if self._draggedTimestamp ~= nil then
 				local diff = DateTime.toSeconds(DateTime.ticks() - self._draggedTimestamp)
@@ -548,7 +550,11 @@ local Draggable = beClass.class({
 
 		self._draggingX, self._draggingY = dx + self._dragOffset.x, dy + self._dragOffset.y
 		if not picking and not dropping and not self._dragging then
-			beWidget.Widget._update(self, theme, delta, self._draggingX, self._draggingY, self._draggingEvent or event)
+			if self._dropping then
+				self._dropping = false
+			else
+				beWidget.Widget._update(self, theme, delta, self._draggingX, self._draggingY, self._draggingEvent or event)
+			end
 		end
 	end
 }, beWidget.Widget)
@@ -601,11 +607,11 @@ local Droppable = beClass.class({
 				local droppable = self:_trigger('dropping', self, self._dropping)
 				if droppable then
 					dropped = droppable -- Doesn't trigger 'clicked' when has droppable.
-					self:_trigger('dropped', self, self._dropping)
 					if self._dropping.parent then
 						self._dropping.parent:removeChild(self._dropping)
 						self:addChild(self._dropping)
 					end
+					self:_trigger('dropped', self, self._dropping)
 				else
 					self:_trigger('left', self, self._dropping)
 				end
@@ -613,15 +619,12 @@ local Droppable = beClass.class({
 			self._dropping = nil
 		end
 		if dropped then
-			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
 			self._dropped = nil
 		elseif down and not self._pressed then
-			event.context.active = self
 			self._pressed = true
 		elseif not event.mouseDown and self._pressed then
-			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
 			if not self._dropped then
