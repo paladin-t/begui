@@ -127,7 +127,7 @@ function update(delta)
 end
 ```
 
-Each widget has an anchor property which represents for the locating point in its local space, and a position property for either absolute or percentage position in its parent's space relatively. The final position is calculated according to these two properties.
+Each widget has an anchor property which represents for the locating point in its local space, and a position property for either absolute or percentage position in its parent's space relatively. The final position is calculated according to these two properties. An anchor component is typically in range of values from 0.0 to 1.0, but it could be also less than 0.0 or greater than 1.0. A relative position component is typically in range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`.
 
 ![](imgs/docking_absolutely.png)
 
@@ -199,20 +199,20 @@ Shortcut to create `Percent` object.
   * `val`: `true`, `false` or `'children'`
   * returns `self`
 * `widget:anchor(x, y)`: sets the anchor of the `Widget`; anchor is used to calculate the offset when placing `Widget`
-  * `x`: x position of the anchor in local space as number, typically [0.0, 1.0] for [left, right]
-  * `y`: y position of the anchor in local space as number, typically [0.0, 1.0] for [top, bottom]
+  * `x`: x position of the anchor in local space as number, typically [0.0, 1.0] for [left, right], but it could be also less than 0.0 or greater than 1.0
+  * `y`: y position of the anchor in local space as number, typically [0.0, 1.0] for [top, bottom], but it could be also less than 0.0 or greater than 1.0
   * returns `self`
 * `widget:offset()`: gets the offset of the `Widget`
   * returns offset `x`, `y` in world space
 * `widget:put(x, y)`: sets the position of the `Widget`
-  * `x`: number for absolute position, or `Percent` for relative position
-  * `y`: number for absolute position, or `Percent` for relative position
+  * `x`: number for absolute position; or `Percent` for relative position, typically with range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`
+  * `y`: number for absolute position; or `Percent` for relative position, typically with range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`
   * returns `self`
 * `widget:position()`: gets the position of the `Widget`
   * returns position `x`, `y` in local space
 * `widget:resize(width, height)`: sets the size of the `Widget`
-  * `width`: number for absolute size, or `Percent` for relative size
-  * `height`: number for absolute size, or `Percent` for relative size
+  * `width`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`
+  * `height`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`
   * returns `self`
 * `widget:size()`: gets the size of the `Widget`
   * returns size `width`, `height`
@@ -337,6 +337,11 @@ Shortcut to create `Percent` object.
   * returns the line height
 * `multilinelabel:setLineHeight(val)`: sets the line height
   * `val`: the specific line height
+  * returns `self`
+* `multilinelabel:alignment()`: gets the alignment
+  * returns the alignment config string
+* `multilinelabel:setAlignment(val)`: sets the alignment config
+  * `val`: the specific alignment config string
   * returns `self`
 * `multilinelabel:setTheme(theme)`: sets the theme
   * `theme`: the custom theme

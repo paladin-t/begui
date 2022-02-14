@@ -176,18 +176,20 @@ local Label = beClass.class({
 
 local MultilineLabel = beClass.class({
 	_lineHeight = nil,
+	_alignment = 'left',
 	_flexWidth = false, _flexHeight = true,
 	_words = nil,
 	_theme = nil,
 
 	-- Constructs a MultilineLabel with the specific content.
 	-- `content`: the content string
-	ctor = function (self, content, lineHeight)
+	ctor = function (self, content, lineHeight, alignment)
 		beWidget.Widget.ctor(self)
 
 		self.content = content
 
 		self._lineHeight = lineHeight
+		self._alignment = alignment or 'left'
 	end,
 
 	__tostring = function (self)
@@ -214,6 +216,15 @@ local MultilineLabel = beClass.class({
 	end,
 	setLineHeight = function (self, val)
 		self._lineHeight = val
+
+		return self
+	end,
+
+	alignment = function (self)
+		return self._alignment
+	end,
+	setAlignment = function (self, val)
+		self._alignment = val
 
 		return self
 	end,
@@ -299,12 +310,40 @@ local MultilineLabel = beClass.class({
 			local initPos = Vec2.new(posX, posY)
 			local lineMargin = 1
 			local spaceW, _ = measure(' ', font_.resource)
+			local lineBeginIndex, lineOffset = 1, 0
+			local adjustAlignment = function (beginIndex, endIndex, beginX, endX)
+				if not flexWidth then
+					if self._alignment == 'center' then
+						local space = w - (endX - beginX - spaceW)
+						local diff = space * 0.5
+						for i = beginIndex, endIndex, 1 do
+							local word = self._words[i]
+							if word then
+								word.position.x = word.position.x + diff
+							end
+						end
+					elseif self._alignment == 'right' then
+						local space = w - (endX - beginX - spaceW)
+						local diff = space
+						for i = beginIndex, endIndex, 1 do
+							local word = self._words[i]
+							if word then
+								word.position.x = word.position.x + diff
+							end
+						end
+					end
+				end
+			end
 			for i, v in ipairs(words) do
 				local w_, h_ = measure(v.text, font_.resource)
 				if self._lineHeight ~= nil then
 					h_ = self._lineHeight
 				end
+				local adjust = nil
 				if v.text == '\n' then
+					adjust = { lineBeginIndex - lineOffset, i - 1 - lineOffset, initPos.x, posX }
+					lineBeginIndex = i + 1
+					lineOffset = lineOffset + 1
 					lines = lines + 1
 					posX = initPos.x
 					posY = posY + h_ + lineMargin
@@ -320,6 +359,8 @@ local MultilineLabel = beClass.class({
 						pos = Vec2.new(posX, posY)
 						posX = posX + w_
 					else
+						adjust = { lineBeginIndex - lineOffset, i - 1 - lineOffset, initPos.x, posX }
+						lineBeginIndex = i
 						lines = lines + 1
 						posX = initPos.x
 						posY = posY + h_ + lineMargin
@@ -335,6 +376,9 @@ local MultilineLabel = beClass.class({
 							position = pos
 						}
 					)
+				end
+				if adjust then
+					adjustAlignment(table.unpack(adjust))
 				end
 			end
 			if flexHeight then
