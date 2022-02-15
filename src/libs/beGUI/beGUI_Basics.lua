@@ -205,6 +205,9 @@ local MultilineLabel = beClass.class({
 		if type(val) ~= 'string' then
 			val = tostring(val)
 		end
+		if self.content == val then
+			return self
+		end
 		self.content = val
 		self._words = nil
 
@@ -215,7 +218,11 @@ local MultilineLabel = beClass.class({
 		return self._lineHeight
 	end,
 	setLineHeight = function (self, val)
+		if self._lineHeight == val then
+			return self
+		end
 		self._lineHeight = val
+		self._words = nil
 
 		return self
 	end,
@@ -224,7 +231,14 @@ local MultilineLabel = beClass.class({
 		return self._alignment
 	end,
 	setAlignment = function (self, val)
+		if self._alignment == val then
+			return self
+		end
 		self._alignment = val
+		if self._flexWidth and self._alignment and self._alignment ~= 'left' then
+			warn('[WARN] beGUI.MultilineLabel\n  Cannot mix non-left alignment and flex width.')
+		end
+		self._words = nil
 
 		return self
 	end,
@@ -241,7 +255,14 @@ local MultilineLabel = beClass.class({
 	end,
 	-- Sets whether to calculate Widget width automatically.
 	setFlexWidth = function (self, val)
+		if self._flexWidth == val then
+			return self
+		end
 		self._flexWidth = val
+		if self._flexWidth and self._alignment and self._alignment ~= 'left' then
+			warn('[WARN] beGUI.MultilineLabel\n  Cannot mix non-left alignment and flex width.')
+		end
+		self._words = nil
 
 		return self
 	end,
@@ -251,7 +272,11 @@ local MultilineLabel = beClass.class({
 	end,
 	-- Sets whether to calculate Widget height automatically.
 	setFlexHeight = function (self, val)
+		if self._flexHeight == val then
+			return self
+		end
 		self._flexHeight = val
+		self._words = nil
 
 		return self
 	end,
@@ -313,18 +338,15 @@ local MultilineLabel = beClass.class({
 			local lineBeginIndex, lineOffset = 1, 0
 			local adjustAlignment = function (beginIndex, endIndex, beginX, endX)
 				if not flexWidth then
+					local diff = nil
 					if self._alignment == 'center' then
 						local space = w - (endX - beginX - spaceW)
-						local diff = space * 0.5
-						for i = beginIndex, endIndex, 1 do
-							local word = self._words[i]
-							if word then
-								word.position.x = word.position.x + diff
-							end
-						end
+						diff = space * 0.5
 					elseif self._alignment == 'right' then
 						local space = w - (endX - beginX - spaceW)
-						local diff = space
+						diff = space
+					end
+					if diff then
 						for i = beginIndex, endIndex, 1 do
 							local word = self._words[i]
 							if word then
@@ -358,6 +380,10 @@ local MultilineLabel = beClass.class({
 					elseif posX + w_ - spaceW < sizeW then
 						pos = Vec2.new(posX, posY)
 						posX = posX + w_
+						if i == #words then
+							adjust = { lineBeginIndex - lineOffset, i - lineOffset, initPos.x, posX }
+							lineBeginIndex = i + 1
+						end
 					else
 						adjust = { lineBeginIndex - lineOffset, i - 1 - lineOffset, initPos.x, posX }
 						lineBeginIndex = i
