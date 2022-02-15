@@ -82,7 +82,7 @@ Play live demo [in browser](https://paladin-t.github.io/begui/).
 
 ## 1. Principles
 
-beGUI implements a [retained mode](https://en.wikipedia.org/wiki/Retained_mode) GUI system, it separates behaviour and appearance into widget classes and theme config. Widgets are organized in tree hierarchies, each widget can have none or one parent, and none or multiple children. There are two phases of the lib, first to construct the hierarchy, second to update it. It enumerates from root widget to it's descendents during update, beGUI will handle internal states like visibility, click event, etc. then draw it properly with the theme config during this procedure.
+beGUI implements a [retained mode](https://en.wikipedia.org/wiki/Retained_mode) GUI system, it separates behaviour and appearance into widget classes and theme preference. Widgets are organized in tree hierarchies, each widget can have none or one parent, and none or multiple children. There are two phases of the lib, first to construct the hierarchy, second to update it. It enumerates from root widget to it's descendents during update, beGUI will handle internal states like visibility, click event, etc. then draw it properly with the theme preference during this procedure.
 
 Most of the member functions return the widget object itself, it makes it easier to write internal DSL to construct full hierarchy in a tree style code.
 
@@ -306,9 +306,9 @@ Shortcut to create `Percent` object.
   * `val`: the specific content string
   * returns `self`
 * `label:alignment()`: gets the alignment
-  * returns the alignment config string
-* `label:setAlignment(val)`: sets the alignment config
-  * `val`: the specific alignment config string
+  * returns the alignment preference string
+* `label:setAlignment(val)`: sets the alignment preference
+  * `val`: the specific alignment preference string
   * returns `self`
 * `label:clipping()`: gets whether to clip drawing outside the `Widget`'s bounds
   * returns `true` for clipping, otherwise `false`
@@ -324,9 +324,10 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
-* beGUI.`MultilineLabel.new(content, lineHeight = nil)`: constructs a `MultilineLabel` with the specific content
+* beGUI.`MultilineLabel.new(content, lineHeight = nil, alighment = 'left')`: constructs a `MultilineLabel` with the specific content
   * `content`: the content string
   * `lineHeight`: the custom line height
+  * `alignment`: one in `nil`, `'left'`, `'right'`, `'center'`
 
 * `multilinelabel:getValue()`: gets the content text
   * returns the content string
@@ -339,9 +340,9 @@ Shortcut to create `Percent` object.
   * `val`: the specific line height
   * returns `self`
 * `multilinelabel:alignment()`: gets the alignment
-  * returns the alignment config string
-* `multilinelabel:setAlignment(val)`: sets the alignment config
-  * `val`: the specific alignment config string
+  * returns the alignment preference string
+* `multilinelabel:setAlignment(val)`: sets the alignment preference, the preference falls to `'left'` if had set flex width to `true`
+  * `val`: the specific alignment preference string
   * returns `self`
 * `multilinelabel:setTheme(theme)`: sets the theme
   * `theme`: the custom theme
@@ -373,9 +374,9 @@ Shortcut to create `Percent` object.
   * `val`: the specific content string
   * returns `self`
 * `url:alignment()`: gets the alignment
-  * returns the alignment config string
-* `url:setAlignment(val)`: sets the alignment config
-  * `val`: the specific alignment config string
+  * returns the alignment preference string
+* `url:setAlignment(val)`: sets the alignment preference
+  * `val`: the specific alignment preference string
   * returns `self`
 * `url:clipping()`: gets whether to clip drawing outside the `Widget`'s bounds
   * returns `true` for clipping, otherwise `false`
@@ -900,7 +901,7 @@ local MyWidget = beClass.class({
 <details open>
 <summary>Theme</summary>
 
-Defined in "src/libs/beGUI/beTheme.lua". Widget classes will lookup for image resources, client area, content offset, fonts, colors and all other appearance config from it.
+Defined in "src/libs/beGUI/beTheme.lua". Widget classes will lookup for image resources, client area, content offset, fonts, colors and all other appearance preferences from it.
 
 </details>
 

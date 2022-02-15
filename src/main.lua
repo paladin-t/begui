@@ -110,6 +110,9 @@ function setup()
 					if value then
 						local lbl = widgets:get(1, 'label')
 						lbl:setValue('Changed ' .. tostring(sender) .. '1, ' ..  tostring(value))
+
+						local multilinelabel = widgets:find('multilinelabel')
+						multilinelabel:setAlignment('left')
 					end
 				end)
 		)
@@ -123,6 +126,9 @@ function setup()
 					if value then
 						local lbl = widgets:get(1, 'label')
 						lbl:setValue('Changed ' .. tostring(sender) .. '2, ' ..  tostring(value))
+
+						local multilinelabel = widgets:find('multilinelabel')
+						multilinelabel:setAlignment('center')
 					end
 				end)
 		)
@@ -136,6 +142,9 @@ function setup()
 					if value then
 						local lbl = widgets:get(1, 'label')
 						lbl:setValue('Changed ' .. tostring(sender) .. '3, ' ..  tostring(value))
+
+						local multilinelabel = widgets:find('multilinelabel')
+						multilinelabel:setAlignment('right')
 					end
 				end)
 		)
