@@ -380,10 +380,6 @@ local MultilineLabel = beClass.class({
 					elseif posX + w_ - spaceW < sizeW then
 						pos = Vec2.new(posX, posY)
 						posX = posX + w_
-						if i == #words then
-							adjust = { lineBeginIndex - lineOffset, i - lineOffset, initPos.x, posX }
-							lineBeginIndex = i + 1
-						end
 					else
 						adjust = { lineBeginIndex - lineOffset, i - 1 - lineOffset, initPos.x, posX }
 						lineBeginIndex = i
@@ -407,6 +403,7 @@ local MultilineLabel = beClass.class({
 					adjustAlignment(table.unpack(adjust))
 				end
 			end
+			adjustAlignment(table.unpack({ lineBeginIndex - lineOffset, #words - lineOffset, initPos.x, posX }))
 			if flexHeight then
 				if lines == 1 then
 					self.height = height
