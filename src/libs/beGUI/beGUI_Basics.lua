@@ -2017,10 +2017,12 @@ local Slide = beClass.class({
 			event.context.active = self
 			self._pressed = true
 		elseif down and self._pressed then
-			value = math.floor(self._minValue + (event.mousePosition.x - x) / w * (self._maxValue - self._minValue + 1))
-			value = beUtils.clamp(value, self._minValue, self._maxValue)
-			if value and not beUtils.isNaN(value) then
-				self:setValue(value)
+			if not event.canceled then
+				value = math.floor(self._minValue + (event.mousePosition.x - x) / w * (self._maxValue - self._minValue + 1))
+				value = beUtils.clamp(value, self._minValue, self._maxValue)
+				if value and not beUtils.isNaN(value) then
+					self:setValue(value)
+				end
 			end
 		elseif not down and self._pressed then
 			event.context.active = nil
