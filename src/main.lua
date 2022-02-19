@@ -511,7 +511,7 @@ function setup()
 				:put(0, 210)
 				:resize(-1, 12)
 				:on('clicked', function (sender)
-					Platform.surf('https://github.com/paladin-t/bitty/discussions/2')
+					Platform.surf('https://github.com/paladin-t/begui')
 				end)
 		)
 		:addChild(

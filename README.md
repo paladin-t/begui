@@ -1,6 +1,6 @@
 ![](imgs/logo.png)
 
-beGUI is a tiny customizable GUI system for Lua, it's fully written in Lua. It is originally created to run within the [Bitty Engine](https://github.com/paladin-t/bitty/), but it's possible to port it to other Lua-based environments with some twists.
+beGUI is a minimal customizable GUI system for Lua, and fully written in Lua.
 
 Try it [in browser](https://paladin-t.github.io/begui/).
 
@@ -74,6 +74,8 @@ Try it [in browser](https://paladin-t.github.io/begui/).
 Play live demo [in browser](https://paladin-t.github.io/begui/).
 
 # Setup
+
+beGUI is originally created to run within the [Bitty Engine](https://github.com/paladin-t/bitty/). The graphics primitives and input API is quite straightforward in Bitty Engine, it's possible to port it to other Lua-based environments with little twist, if that environment does `rect(...)`, `tex(...)`, `text(...)`, `mouse(...)`, etc.
 
 1. Clone this repository or download from [releases](https://github.com/paladin-t/begui/releases)
 2. Open "src" directly or import it to your own projects with [Bitty Engine](https://github.com/paladin-t/bitty/)

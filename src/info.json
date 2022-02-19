@@ -1,7 +1,7 @@
 {
   "id": 0,
   "title": "beGUI | Bitty Engine",
-  "description": "Tiny customizable GUI system for Bitty Engine",
+  "description": "Minimal customizable GUI system for Bitty Engine",
   "author": "Tony",
   "version": "1.5.2",
   "genre": "LIB",

@@ -1475,7 +1475,7 @@ local ComboBox = beClass.class({
 		local elem = theme['combobox']
 		local img = elem.resource
 		local area = elem.area
-		beUtils.tex3Grid(elem, x - 1, y + (h - area[4]) * 0.5, w + 2, area[4], nil, self.transparency, nil)
+		beUtils.tex3Grid(elem, x - 1, y + (h - area[4]) * 0.5, math.ceil(w + 2), area[4], nil, self.transparency, nil)
 		local item = self:getItemAt(self:getValue())
 		if item ~= nil then
 			local x_, y_, w_, h_ = clip(x, y, w, h)
@@ -1709,7 +1709,7 @@ local NumberBox = beClass.class({
 		local elem = theme['numberbox']
 		local img = elem.resource
 		local area = elem.area
-		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, w + 1, area[4], nil, self.transparency, nil)
+		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, math.ceil(w + 1), area[4], nil, self.transparency, nil)
 		local item = self._format(self._value)
 		local x_, y_, w_, h_ = clip(x, y, w, h)
 		if self._valueTheme and self._valueTheme ~= 'font' then
@@ -1831,7 +1831,7 @@ local ProgressBar = beClass.class({
 			local x1, y1, x2, y2 = 0, 0, 0, 0
 			if self._reversed then
 				x1, y1, x2, y2 =
-					x - elem.content_offset[1] + beUtils.clamp(w - w_, 0, w - 2),
+					x - elem.content_offset[1] + beUtils.clamp(w - w_, 4, w - 2),
 					y + elem.content_offset[2],
 					x - elem.content_offset[1] + w - 2,
 					y + h - (elem.content_offset[2] * 2 - 1)
@@ -1839,7 +1839,7 @@ local ProgressBar = beClass.class({
 				x1, y1, x2, y2 =
 					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + beUtils.clamp(math.floor(w_ - 1), 0, w - 5),
+					x + elem.content_offset[1] + beUtils.clamp(math.floor(w_ - 1), 0, math.floor(w - 5)),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			local showVal = self.content > 0
@@ -1864,7 +1864,7 @@ local ProgressBar = beClass.class({
 			local x1, y1, x2, y2 = 0, 0, 0, 0
 			if self._reversed then
 				x1, y1, x2, y2 =
-					x - elem.content_offset[1] + beUtils.clamp(w - w_, 0, w - 2),
+					x - elem.content_offset[1] + beUtils.clamp(w - w_, 4, w - 2),
 					y + elem.content_offset[2],
 					x - elem.content_offset[1] + w - 2,
 					y + h - (elem.content_offset[2] * 2 - 1)
@@ -1872,7 +1872,7 @@ local ProgressBar = beClass.class({
 				x1, y1, x2, y2 =
 					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + beUtils.clamp(math.floor(w_ - 1), 0, w - 5),
+					x + elem.content_offset[1] + beUtils.clamp(math.floor(w_ - 1), 0, math.floor(w - 5)),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			self._shadowTicks = self._shadowTicks + delta
@@ -1883,7 +1883,7 @@ local ProgressBar = beClass.class({
 			local sx1, sy1, sx2, sy2 = 0, 0, 0, 0
 			if self._reversed then
 				sx1, sy1, sx2, sy2 =
-					x - elem.content_offset[1] + beUtils.clamp(w - sw, 0, w - 2),
+					x - elem.content_offset[1] + beUtils.clamp(w - sw, 4, w - 2),
 					y + elem.content_offset[2],
 					x - elem.content_offset[1] + w - 2,
 					y + h - (elem.content_offset[2] * 2 - 1)
@@ -1891,7 +1891,7 @@ local ProgressBar = beClass.class({
 				sx1, sy1, sx2, sy2 =
 					x + elem.content_offset[1],
 					y + elem.content_offset[2],
-					x + elem.content_offset[1] + beUtils.clamp(math.floor(sw - 1), 0, w - 5),
+					x + elem.content_offset[1] + beUtils.clamp(math.floor(sw - 1), 0, math.floor(w - 5)),
 					y + h - (elem.content_offset[2] * 2 - 1)
 			end
 			local showVal, showShadow = self.content > 0, self._shadow > 0
