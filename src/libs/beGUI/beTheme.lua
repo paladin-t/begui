@@ -182,6 +182,7 @@ local function default()
 
 		['slide'] = {
 			resource = Resources.load('imgs/slide.png'),
+			color = Color.new(0, 0, 0),
 			area = { 0, 0, 13, 17 },
 			content_offset = nil
 		},
@@ -205,6 +206,7 @@ local function default()
 
 		['tab'] = {
 			resource = nil,
+			color = Color.new(0, 0, 0),
 			area = nil,
 			content_offset = { 3, 3 }
 		},

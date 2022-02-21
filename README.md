@@ -212,6 +212,8 @@ Shortcut to create `Percent` object.
   * returns `self`
 * `widget:position()`: gets the position of the `Widget`
   * returns position `x`, `y` in local space
+* `widget:worldPosition()`: gets the position of the `Widget` in world space
+  * returns position `x`, `y` in world space
 * `widget:resize(width, height)`: sets the size of the `Widget`
   * `width`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`
   * `height`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`

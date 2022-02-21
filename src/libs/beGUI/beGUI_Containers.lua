@@ -209,15 +209,17 @@ local List = beClass.class({
 			if self._scrollDirectionalTimestamp ~= nil then
 				local diff = DateTime.toSeconds(now - self._scrollDirectionalTimestamp)
 				if diff < 0.3 and self._pressedPosition ~= self._pressingPosition then
+					local diff = self._pressedPosition - self._pressingPosition
 					if self._scrollableHorizontally and w < self._maxX then
-						local diff = self._pressedPosition - self._pressingPosition
 						if math.abs(diff.x) < math.abs(diff.y) then
 							self._scrolling = 'y'
 						else
 							self._scrolling = 'x'
 						end
 					else
-						self._scrolling = 'y'
+						if math.abs(diff.x) < math.abs(diff.y) then
+							self._scrolling = 'y'
+						end
 					end
 					self._scrollDirectionalTimestamp = nil
 				end
@@ -810,7 +812,7 @@ local Tab = beClass.class({
 					self:setValue(val)
 				end
 			end
-			local black = Color.new(0, 0, 0, self.transparency or 255)
+			local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
 			if i == self._value then
 				self._focusArea[1], self._focusArea[2], self._focusArea[3], self._focusArea[4] =
 					x_ + 1, y + 1, x_ + w_ - 2, y + h_ - 1

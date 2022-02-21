@@ -249,6 +249,13 @@ local MultilineLabel = beClass.class({
 		return self
 	end,
 
+	resize = function (self, width, height)
+		beWidget.Widget.resize(self, width, height)
+		self._words = nil
+
+		return self
+	end,
+
 	-- Gets whether to calculate Widget width automatically.
 	flexWidth = function (self)
 		return self._flexWidth
@@ -2052,7 +2059,7 @@ local Slide = beClass.class({
 		local contentX = x + area[3] * 0.5
 		local contentWidth = w - area[3]
 		local handleX = contentX + (value - self._minValue) / (self._maxValue - self._minValue) * contentWidth
-		local black = Color.new(0, 0, 0, self.transparency or 255)
+		local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
 		line(x, y + h * 0.5, x + w - 1, y + h * 0.5, black)
 		rect(x, y, x + 2, y + h - 1, true, black)
 		rect(x + w - 3, y, x + w - 1, y + h - 1, true, black)

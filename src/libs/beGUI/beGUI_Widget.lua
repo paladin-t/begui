@@ -188,6 +188,11 @@ Widget = beClass.class({
 
 		return x, y
 	end,
+	-- Gets the position of the Widget in world space.
+	-- returns position x, y in world space
+	worldPosition = function (self)
+		return self.worldX, self.worldY
+	end,
 	-- Sets the size of the Widget.
 	-- `width`: number for absolute size, or Percent for relative size
 	-- `height`: number for absolute size, or Percent for relative size
