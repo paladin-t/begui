@@ -41,7 +41,7 @@ end
 beGUI = beUtils.merge(
 	beGUI,
 	{
-		version = '1.5.3',
+		version = '1.5.4',
 	
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,
@@ -127,7 +127,7 @@ beGUI = beUtils.merge(
 		QuestionBox = bePopups.QuestionBox,
 		-- Custom widget.
 		-- Events:
-		--   'updated': function (sender, x, y, w, h, delta) end
+		--   'updated': function (sender, x, y, w, h, delta, event) end
 		Custom = beCustom.Custom,
 		-- Tweening helper.
 		Tween = beTween.Tween
