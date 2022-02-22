@@ -39,6 +39,28 @@ local function clamp(x, min, max)
 	return math.max(math.min(x, max), min)
 end
 
+--[[ Math. ]]
+
+local function intersected(rect1, rect2)
+	if not rect1 then
+		return nil
+	end
+	if not rect2 then
+		return rect1
+	end
+
+	local x1, y1, x2, y2 =
+		math.max(rect1:xMin(), rect2:xMin()),
+		math.max(rect1:yMin(), rect2:yMin()),
+		math.min(rect1:xMax(), rect2:xMax()),
+		math.min(rect1:yMax(), rect2:yMax())
+	if x1 >= x2 or y1 >= y2 then
+		return nil
+	end
+
+	return Rect.new(x1, y1, x2, y2)
+end
+
 --[[ String. ]]
 
 local function startsWith(txt, part)
@@ -237,7 +259,7 @@ local function merge(first, second)
 	return result
 end
 
---[[ Text rendering. ]]
+--[[ Text drawing. ]]
 
 local function tex3Grid(elem, x, y, w, h, permeation, alpha, color_)
 	local img = elem.resource
@@ -408,6 +430,7 @@ return {
 	NaN = NaN,
 	isNaN = isNaN,
 	clamp = clamp,
+	intersected = intersected,
 	startsWith = startsWith,
 	endsWith = endsWith,
 	split = split,
