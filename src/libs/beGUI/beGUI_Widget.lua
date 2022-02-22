@@ -52,6 +52,7 @@ Widget = beClass.class({
 	focused = nil,                         -- Used to reserve focused Widget before popup.
 	focusIfHovering = false,
 	focusTicks = 0,
+	clipping = nil,
 	context = nil,
 	tweens = nil,
 	events = nil,
@@ -601,13 +602,17 @@ Widget = beClass.class({
 
 		local once = not event
 		if once then
+			if self.clipping == nil then
+				self.clipping = { }
+			end
 			if self.context == nil then
 				self.context = {
 					navigated = nil,
 					focus = nil,
 					active = nil,
 					dragging = nil,
-					popup = nil
+					popup = nil,
+					clipping = self.clipping
 				}
 			end
 
@@ -731,28 +736,63 @@ Widget = beClass.class({
 		rect(x, y, x + w - 1, y + h - 1, false, col)
 	end,
 
-	_trigger = function (self, event, ...)
-		if not event then
-			return nil
+	_beginClip = function (self, event, x, y, w, h)
+		local clipping = event.context and event.context.clipping or nil
+		if not clipping then
+			return false
 		end
-		if self.events == nil then
-			return nil
+		if #clipping >= 5 then -- Change this limit if you really need more than that.
+			error('Clipping stack overflow.')
 		end
-		if self.events[event] == nil then
-			return nil
-		end
-		if #self.events[event] == 1 then
-			local ret = self.events[event][1](...)
 
-			return ret
+		if #clipping == 0 then
+			local x_, y_, w_, h_ = clip(x, y, w, h)
+			table.insert(
+				clipping,
+				{
+					previous = x_ and Rect.byXYWH(x_, y_, w_, h_) or nil,
+					active = Rect.byXYWH(x, y, w, h)
+				}
+			)
+
+			return true
 		else
-			local ret = { }
-			for i, h in ipairs(self.events[event]) do
-				table.insert(ret, h(...) or false)
+			local rect0 = clipping[#clipping].active
+			local rect1 = Rect.byXYWH(x, y, w, h)
+			local rect2 = beUtils.intersected(rect0, rect1)
+			if not rect2 then
+				return false
 			end
+			local x_, y_, w_, h_ = clip(rect2:xMin(), rect2:yMin(), rect2:width(), rect2:height())
+			table.insert(
+				clipping,
+				{
+					previous = x_ and Rect.byXYWH(x_, y_, w_, h_) or nil,
+					active = rect1
+				}
+			)
 
-			return table.unpack(ret)
+			return true
 		end
+	end,
+	_endClip = function (self, event)
+		local clipping = event.context and event.context.clipping or nil
+		if not clipping then
+			return false
+		end
+		if #clipping == 0 then
+			error('Empty clipping stack.')
+		end
+
+		local rect0 = clipping[#clipping].previous
+		if rect0 then
+			clip(rect0:xMin(), rect0:yMin(), rect0:width(), rect0:height())
+		else
+			clip()
+		end
+		table.remove(clipping)
+
+		return true
 	end,
 
 	_navigate = function (self)
@@ -830,6 +870,30 @@ Widget = beClass.class({
 	_cancelNavigation = function (self)
 		self.context.focus = nil
 		self.context.navigated = false
+	end,
+
+	_trigger = function (self, event, ...)
+		if not event then
+			return nil
+		end
+		if self.events == nil then
+			return nil
+		end
+		if self.events[event] == nil then
+			return nil
+		end
+		if #self.events[event] == 1 then
+			local ret = self.events[event][1](...)
+
+			return ret
+		else
+			local ret = { }
+			for i, h in ipairs(self.events[event]) do
+				table.insert(ret, h(...) or false)
+			end
+
+			return table.unpack(ret)
+		end
 	end
 })
 

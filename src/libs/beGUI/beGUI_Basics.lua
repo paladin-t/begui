@@ -121,9 +121,9 @@ local Label = beClass.class({
 
 		local elem = theme['label']
 		local shadow = self._shadow and theme[self._shadow] or nil
-		local x_, y_, w_, h_ = nil, nil, nil, nil
+		local clipped = false
 		if self._clip then
-			x_, y_, w_, h_ = clip(x, y, w, h)
+			clipped = self:_beginClip(event, x, y, w, h)
 		end
 		local _1, _2, fw, _4
 		if self._theme and self._theme ~= 'font' then
@@ -163,10 +163,8 @@ local Label = beClass.class({
 			end
 		end
 		if self._clip then
-			if x_ then
-				clip(x_, y_, w_, h_)
-			else
-				clip()
+			if clipped then
+				self:_endClip(event)
 			end
 		end
 
@@ -549,9 +547,9 @@ local Url = beClass.class({
 		end
 
 		local elem = down and theme['url_down'] or theme['url']
-		local x_, y_, w_, h_ = nil, nil, nil, nil
+		local clipped = false
 		if self._clip then
-			x_, y_, w_, h_ = clip(x, y, w, h)
+			clipped = self:_beginClip(event, x, y, w, h)
 		end
 		local theme_ = theme[self._theme or intersects and 'font_url_hover' or 'font_url']
 		local _, fy, fw, fh
@@ -583,10 +581,8 @@ local Url = beClass.class({
 			end
 		end
 		if self._clip then
-			if x_ then
-				clip(x_, y_, w_, h_)
-			else
-				clip()
+			if clipped then
+				self:_endClip(event)
 			end
 		end
 
@@ -703,7 +699,7 @@ local InputBox = beClass.class({
 
 		local elem = theme['inputbox']
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
-		local x_, y_, w_, h_ = clip(x, y, w - elem.content_offset[1], h)
+		local clipped = self:_beginClip(event, x, y, w - elem.content_offset[1], h)
 		local caretX = x + self._size.x
 		if #self.content ~= 0 then
 			local txtW = self._size.x + elem.content_offset[1] * 2 + 14
@@ -720,10 +716,8 @@ local InputBox = beClass.class({
 		if self._ticks < 0.4 then
 			beUtils.textLeft('_', font_, caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
 		end
-		if x_ then
-			clip(x_, y_, w_, h_)
-		else
-			clip()
+		if clipped then
+			self:_endClip(event)
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
@@ -1485,7 +1479,7 @@ local ComboBox = beClass.class({
 		beUtils.tex3Grid(elem, x - 1, y + (h - area[4]) * 0.5, math.ceil(w + 2), area[4], nil, self.transparency, nil)
 		local item = self:getItemAt(self:getValue())
 		if item ~= nil then
-			local x_, y_, w_, h_ = clip(x, y, w, h)
+			local clipped = self:_beginClip(event, x, y, w, h)
 			if type(item) == 'string' then
 				beUtils.textLeft(item, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 			else
@@ -1497,10 +1491,8 @@ local ComboBox = beClass.class({
 					tex(item.resource, x, y + 1, area[3], area[4], area[1], area[2], area[3], area[4])
 				end
 			end
-			if x_ then
-				clip(x_, y_, w_, h_)
-			else
-				clip()
+			if clipped then
+				self:_endClip(event)
 			end
 		end
 
@@ -1718,7 +1710,7 @@ local NumberBox = beClass.class({
 		local area = elem.area
 		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, math.ceil(w + 1), area[4], nil, self.transparency, nil)
 		local item = self._format(self._value)
-		local x_, y_, w_, h_ = clip(x, y, w, h)
+		local clipped = self:_beginClip(event, x, y, w, h)
 		if self._valueTheme and self._valueTheme ~= 'font' then
 			font(theme[self._valueTheme].resource)
 		end
@@ -1727,10 +1719,8 @@ local NumberBox = beClass.class({
 		if self._valueTheme and self._valueTheme ~= 'font' then
 			font(theme['font'].resource)
 		end
-		if x_ then
-			clip(x_, y_, w_, h_)
-		else
-			clip()
+		if clipped then
+			self:_endClip(event)
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)

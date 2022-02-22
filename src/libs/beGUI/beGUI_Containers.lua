@@ -323,7 +323,7 @@ local List = beClass.class({
 		end
 
 		self._clippingX, self._clippingY, self._clippingWidth, self._clippingHeight = x + 1, y + 1, w - 2, h - 2
-		local x_, y_, w_, h_ = clip(self._clippingX, self._clippingY, self._clippingWidth, self._clippingHeight)
+		local clipped = self:_beginClip(event, self._clippingX, self._clippingY, self._clippingWidth, self._clippingHeight)
 		beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
 		local count = self:getChildrenCount()
 		if count ~= self._childrenCount then
@@ -358,10 +358,8 @@ local List = beClass.class({
 				rect(widgetPos + offset, y + h - 4, widgetPos + offset + barSize + 1, y + h - 1, true, col)
 			end
 		end
-		if x_ then
-			clip(x_, y_, w_, h_)
-		else
-			clip()
+		if clipped then
+			self:_endClip(event)
 		end
 	end,
 	_updateChildren = function (self, theme, delta, dx, dy, event)
@@ -506,7 +504,8 @@ local Draggable = beClass.class({
 					focus = nil,
 					active = nil,
 					dragging = nil,
-					popup = nil
+					popup = nil,
+					clipping = event.clipping
 				}
 			}
 		elseif not down and event.context.dragging == self then -- Dropped the current widget.
