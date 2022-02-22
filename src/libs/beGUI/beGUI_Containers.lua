@@ -92,6 +92,7 @@ local List = beClass.class({
 	_scrollX = 0, _scrollY = 0,
 	_scrollSpeed = 16,
 	_maxX = 0, _maxY = 0,
+	_clippingX = nil, _clippingY = nil, _clippingWidth = nil, _clippingHeight = nil,
 	_scrollDirectionalTimestamp = nil,
 	_scrollableHorizontally = false,
 	_inertance = nil,
@@ -133,6 +134,11 @@ local List = beClass.class({
 		self._scrollSpeed = val
 
 		return self
+	end,
+
+	-- Gets the current clipping area.
+	clipping = function (self)
+		return self._clippingX, self._clippingY, self._clippingWidth, self._clippingHeight
 	end,
 
 	setTheme = function (self, theme)
@@ -316,7 +322,8 @@ local List = beClass.class({
 			self._scrollY = beUtils.clamp(self._scrollY, h - self._maxY, 0)
 		end
 
-		local x_, y_, w_, h_ = clip(x + 1, y + 1, w - 2, h - 2)
+		self._clippingX, self._clippingY, self._clippingWidth, self._clippingHeight = x + 1, y + 1, w - 2, h - 2
+		local x_, y_, w_, h_ = clip(self._clippingX, self._clippingY, self._clippingWidth, self._clippingHeight)
 		beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
 		local count = self:getChildrenCount()
 		if count ~= self._childrenCount then
