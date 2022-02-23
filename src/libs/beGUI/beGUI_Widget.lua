@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 local beClass = require 'libs/beGUI/beClass'
 local beUtils = require 'libs/beGUI/beGUI_Utils'
+local beStack = require 'libs/beGUI/beStack'
 local beStructures = require 'libs/beGUI/beGUI_Structures'
 
 --[[
@@ -603,7 +604,7 @@ Widget = beClass.class({
 		local once = not event
 		if once then
 			if self.clipping == nil then
-				self.clipping = { }
+				self.clipping = beStack.NonShrinkStack.new(5) -- Change this limit if you really need more than that.
 			end
 			if self.context == nil then
 				self.context = {
@@ -741,35 +742,28 @@ Widget = beClass.class({
 		if not clipping then
 			return false
 		end
-		if #clipping >= 5 then -- Change this limit if you really need more than that.
-			error('Clipping stack overflow.')
-		end
 
-		if #clipping == 0 then
+		if clipping:empty() then
 			local x_, y_, w_, h_ = clip(x, y, w, h)
-			table.insert(
-				clipping,
-				{
-					previous = x_ and Rect.byXYWH(x_, y_, w_, h_) or nil,
-					active = Rect.byXYWH(x, y, w, h)
-				}
+			clipping:push
+			(
+				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
+				Rect.byXYWH(x, y, w, h)
 			)
 
 			return true
 		else
-			local rect0 = clipping[#clipping].active
+			local _, rect0 = clipping:top()
 			local rect1 = Rect.byXYWH(x, y, w, h)
 			local rect2 = beUtils.intersected(rect0, rect1)
 			if not rect2 then
 				return false
 			end
 			local x_, y_, w_, h_ = clip(rect2:xMin(), rect2:yMin(), rect2:width(), rect2:height())
-			table.insert(
-				clipping,
-				{
-					previous = x_ and Rect.byXYWH(x_, y_, w_, h_) or nil,
-					active = rect1
-				}
+			clipping:push
+			(
+				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
+				rect1
 			)
 
 			return true
@@ -780,17 +774,13 @@ Widget = beClass.class({
 		if not clipping then
 			return false
 		end
-		if #clipping == 0 then
-			error('Empty clipping stack.')
-		end
 
-		local rect0 = clipping[#clipping].previous
+		local rect0, _ = clipping:pop()
 		if rect0 then
 			clip(rect0:xMin(), rect0:yMin(), rect0:width(), rect0:height())
 		else
 			clip()
 		end
-		table.remove(clipping)
 
 		return true
 	end,
