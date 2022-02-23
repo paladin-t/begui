@@ -691,8 +691,6 @@ Shortcut to create `Percent` object.
 * `list:setScrollSpeed(val)`: sets the scroll speed
   * `val`: the specific scroll speed
   * returns `self`
-* `list:clipping()`: gets the current clipping area
-  * returns the current clipping `x`, `y`, `w`, `h`
 * `list:setTheme(theme)`: sets the theme
   * `theme`: the custom theme
   * returns `self`

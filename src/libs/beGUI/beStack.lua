@@ -67,8 +67,10 @@ local NonShrinkStack = beClass.class({
 		end
 		local result = self._stack[self._count]
 		self._count = self._count - 1
+		local ret1, ret2 = result[1], result[2]
+		result[1], result[2] = false, false
 
-		return result[1], result[2]
+		return ret1, ret2
 	end,
 	top = function (self)
 		if self._count == 0 then

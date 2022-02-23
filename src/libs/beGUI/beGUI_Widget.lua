@@ -53,7 +53,7 @@ Widget = beClass.class({
 	focused = nil,                         -- Used to reserve focused Widget before popup.
 	focusIfHovering = false,
 	focusTicks = 0,
-	clipping = nil,
+	clippingStack = nil,
 	context = nil,
 	tweens = nil,
 	events = nil,
@@ -603,8 +603,8 @@ Widget = beClass.class({
 
 		local once = not event
 		if once then
-			if self.clipping == nil then
-				self.clipping = beStack.NonShrinkStack.new(5) -- Change this limit if you really need more than that.
+			if self.clippingStack == nil then
+				self.clippingStack = beStack.NonShrinkStack.new(5) -- Change this limit if you really need more than that.
 			end
 			if self.context == nil then
 				self.context = {
@@ -613,7 +613,7 @@ Widget = beClass.class({
 					active = nil,
 					dragging = nil,
 					popup = nil,
-					clipping = self.clipping
+					clippingStack = self.clippingStack
 				}
 			end
 
@@ -738,14 +738,14 @@ Widget = beClass.class({
 	end,
 
 	_beginClip = function (self, event, x, y, w, h)
-		local clipping = event.context and event.context.clipping or nil
-		if not clipping then
+		local clippingStack = event.context and event.context.clippingStack or nil
+		if not clippingStack then
 			return false
 		end
 
-		if clipping:empty() then
+		if clippingStack:empty() then
 			local x_, y_, w_, h_ = clip(x, y, w, h)
-			clipping:push
+			clippingStack:push
 			(
 				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
 				Rect.byXYWH(x, y, w, h)
@@ -753,14 +753,14 @@ Widget = beClass.class({
 
 			return true
 		else
-			local _, rect0 = clipping:top()
+			local _, rect0 = clippingStack:top()
 			local rect1 = Rect.byXYWH(x, y, w, h)
 			local rect2 = beUtils.intersected(rect0, rect1)
 			if not rect2 then
 				return false
 			end
 			local x_, y_, w_, h_ = clip(rect2:xMin(), rect2:yMin(), rect2:width(), rect2:height())
-			clipping:push
+			clippingStack:push
 			(
 				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
 				rect1
@@ -770,12 +770,12 @@ Widget = beClass.class({
 		end
 	end,
 	_endClip = function (self, event)
-		local clipping = event.context and event.context.clipping or nil
-		if not clipping then
+		local clippingStack = event.context and event.context.clippingStack or nil
+		if not clippingStack then
 			return false
 		end
 
-		local rect0, _ = clipping:pop()
+		local rect0, _ = clippingStack:pop()
 		if rect0 then
 			clip(rect0:xMin(), rect0:yMin(), rect0:width(), rect0:height())
 		else
