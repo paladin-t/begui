@@ -243,6 +243,7 @@ local MultilineLabel = beClass.class({
 
 	setTheme = function (self, theme)
 		self._theme = theme
+		self._words = nil
 
 		return self
 	end,
@@ -1057,6 +1058,7 @@ local PictureButton = beClass.class({
 }, beWidget.Widget)
 
 local CheckBox = beClass.class({
+	_enabled = true,
 	_pressed = false,
 	_value = false,
 
@@ -1096,6 +1098,15 @@ local CheckBox = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1127,20 +1138,31 @@ local CheckBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			self:setValue(not self._value)
+			if self._enabled then
+				self:setValue(not self._value)
+			end
 		elseif event.context.focus == self and event.context.navigated == 'press' then
-			self:setValue(not self._value)
+			if self._enabled then
+				self:setValue(not self._value)
+			end
 			event.context.navigated = false
 		elseif event.context.focus == self and event.context.navigated == 'press' then
-			self:setValue(not self._value)
+			if self._enabled then
+				self:setValue(not self._value)
+			end
 			event.context.navigated = false
 		end
 
-		local normal, pressed = theme['checkbox'], theme['checkbox_selected']
+		local normal, pressed = nil, nil
+		if self._enabled then
+			normal, pressed = theme['checkbox'], theme['checkbox_selected']
+		else
+			normal, pressed = theme['checkbox_disabled'], theme['checkbox_selected_disabled']
+		end
 		if self._value then
 			normal, pressed = pressed, normal
 		end
-		local elem = down and pressed or normal
+		local elem = (self._enabled and down) and pressed or normal
 		local img = elem.resource
 		local area = elem.area
 		if self.transparency then

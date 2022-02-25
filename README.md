@@ -498,6 +498,14 @@ Shortcut to create `Percent` object.
 * `checkbox:setValue(val)`: sets whether this `Widget` is checked
   * `val`: `true` for checked, otherwise `false`
   * returns `self`
+* `checkbox:setContent(val)`: sets the text content of this `Widget`
+  * `val`: the content string
+  * returns `self`
+* `checkbox:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `checkbox:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 * `checkbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` checked state has been changed
   * returns `self`
@@ -514,6 +522,9 @@ Shortcut to create `Percent` object.
   * returns `true` for checked, otherwise `false`
 * `radiobox:setValue(val)`: sets whether this `Widget` is checked; not recommended to call this manually
   * `val`: `true` for checked, otherwise `false`
+* `radiobox:setContent(val)`: sets the text content of this `Widget`
+  * `val`: the content string
+  * returns `self`
 
 * `radiobox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` checked state has been changed
   * returns `self`

@@ -110,6 +110,16 @@ local function default()
 			area = { 0, 13, 13, 13 },
 			content_offset = { 16, 1 }
 		},
+		['checkbox_disabled'] = {
+			resource = Resources.load('imgs/checkbox.png'),
+			area = { 13, 0, 13, 13 },
+			content_offset = { 16, 1 }
+		},
+		['checkbox_selected_disabled'] = {
+			resource = Resources.load('imgs/checkbox.png'),
+			area = { 13, 13, 13, 13 },
+			content_offset = { 16, 1 }
+		},
 
 		['radiobox'] = {
 			resource = Resources.load('imgs/radiobox.png'),
