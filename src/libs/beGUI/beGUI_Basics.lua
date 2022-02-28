@@ -242,6 +242,9 @@ local MultilineLabel = beClass.class({
 	end,
 
 	setTheme = function (self, theme)
+		if self._theme == theme then
+			return self
+		end
 		self._theme = theme
 		self._words = nil
 
@@ -915,7 +918,7 @@ local Button = beClass.class({
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 		beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 
-		beWidget.Widget._update(self, theme, delta, dx, dy + (down and 1 or 0), event)
+		beWidget.Widget._update(self, theme, delta, dx, dy + (down and self._enabled and 1 or 0), event)
 	end
 }, beWidget.Widget)
 

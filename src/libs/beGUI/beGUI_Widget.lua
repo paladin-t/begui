@@ -763,7 +763,7 @@ Widget = beClass.class({
 			clippingStack:push
 			(
 				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
-				rect1
+				rect2
 			)
 
 			return true
