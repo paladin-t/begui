@@ -737,6 +737,19 @@ Widget = beClass.class({
 		rect(x, y, x + w - 1, y + h - 1, false, col)
 	end,
 
+	_getClip = function (self)
+		local clippingStack = event.context and event.context.clippingStack or nil
+		if not clippingStack then
+			return nil, nil
+		end
+		if clippingStack:empty() then
+			return nil, nil
+		end
+
+		local ret1, ret2 = clippingStack:top()
+
+		return ret1, ret2
+	end,
 	_beginClip = function (self, event, x, y, w, h)
 		local clippingStack = event.context and event.context.clippingStack or nil
 		if not clippingStack then
