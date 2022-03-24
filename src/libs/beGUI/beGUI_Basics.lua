@@ -34,7 +34,7 @@ local Label = beClass.class({
 	_alignment = 'left',
 	_clip = false,
 	_theme = nil,
-	_shadow = nil,
+	_shadowTheme = nil,
 
 	-- Constructs a Label with the specific content.
 	-- `content`: the content string
@@ -46,7 +46,7 @@ local Label = beClass.class({
 		self._alignment = alignment or 'left'
 		self._clip = clip_
 		self._theme = theme
-		self._shadow = shadow
+		self._shadowTheme = shadow
 	end,
 
 	__tostring = function (self)
@@ -87,7 +87,7 @@ local Label = beClass.class({
 
 	setTheme = function (self, theme, shadow)
 		self._theme = theme
-		self._shadow = shadow
+		self._shadowTheme = shadow
 
 		return self
 	end,
@@ -120,7 +120,7 @@ local Label = beClass.class({
 		local w, h = self:size()
 
 		local elem = theme['label']
-		local shadow = self._shadow and theme[self._shadow] or nil
+		local shadow = self._shadowTheme and theme[self._shadowTheme] or nil
 		local clipped = false
 		if self._clip then
 			clipped = self:_beginClip(event, x, y, w, h)
@@ -177,6 +177,7 @@ local MultilineLabel = beClass.class({
 	_alignment = 'left',
 	_flexWidth = false, _flexHeight = true,
 	_words = nil,
+	_widgetTheme = nil,
 	_theme = nil,
 
 	-- Constructs a MultilineLabel with the specific content.
@@ -241,11 +242,12 @@ local MultilineLabel = beClass.class({
 		return self
 	end,
 
-	setTheme = function (self, theme)
+	setTheme = function (self, theme, widgetTheme)
 		if self._theme == theme then
 			return self
 		end
 		self._theme = theme
+		self._widgetTheme = widgetTheme
 		self._words = nil
 
 		return self
@@ -315,9 +317,9 @@ local MultilineLabel = beClass.class({
 		if self._lineHeight ~= nil then
 			height = self._lineHeight
 		else
-			_, height = measure('X', font_.resource) -- Estimate safe height.
+			_, height = measure('X', font_.resource, font_.margin or 1, font_.scale or 1) -- Estimate safe height.
 		end
-		local elem = theme['multilinelabel']
+		local elem = theme[self._widgetTheme or 'multilinelabel']
 		if self._theme and self._theme ~= 'font' then
 			font(theme[self._theme].resource)
 		end
@@ -343,7 +345,7 @@ local MultilineLabel = beClass.class({
 			end
 			local initPos = Vec2.new(posX, posY)
 			local lineMargin = 1
-			local spaceW, _ = measure(' ', font_.resource)
+			local spaceW, _ = measure(' ', font_.resource, font_.margin or 1, font_.scale or 1)
 			local lineBeginIndex, lineOffset = 1, 0
 			local adjustAlignment = function (beginIndex, endIndex, beginX, endX)
 				if not flexWidth then
@@ -366,7 +368,7 @@ local MultilineLabel = beClass.class({
 				end
 			end
 			for i, v in ipairs(words) do
-				local w_, h_ = measure(v.text, font_.resource)
+				local w_, h_ = measure(v.text, font_.resource, font_.margin or 1, font_.scale or 1)
 				if self._lineHeight ~= nil then
 					h_ = self._lineHeight
 				end
@@ -404,7 +406,9 @@ local MultilineLabel = beClass.class({
 							resource = font_.resource,
 							text = v.text,
 							color = v.color or color_,
-							position = pos
+							position = pos,
+							margin = font_.margin,
+							scale = font_.scale
 						}
 					)
 				end
@@ -599,6 +603,8 @@ local InputBox = beClass.class({
 	_pressed = false,
 	_size = nil,
 	_ticks = 0,
+	_theme = nil,
+	_placeholderTheme = nil,
 
 	-- Constructs an InputBox with the specific content.
 	-- `content`: the content string
@@ -627,6 +633,13 @@ local InputBox = beClass.class({
 		self.content = val
 		self._size = nil
 		self:_trigger('changed', self, self.content)
+
+		return self
+	end,
+
+	setTheme = function (self, theme, placeholder)
+		self._theme = theme
+		self._placeholderTheme = placeholder
 
 		return self
 	end,
@@ -691,16 +704,19 @@ local InputBox = beClass.class({
 			event.context.navigated = false
 		end
 
-		local font_ = theme['font']
+		if self._theme and self._theme ~= 'font' then
+			font(theme[self._theme].resource)
+		end
+		local font_ = theme[self._theme or 'font']
+		local placeholder = theme[self._placeholderTheme or 'font_placeholder']
 		if self._size == nil then
-			local w_, h_ = measure(self.content, font_.resource)
+			local w_, h_ = measure(self.content, font_.resource, font_.margin or 1, font_.scale or 1)
 			self._size = Vec2.new(w_, h_)
 		end
 		self._ticks = self._ticks + delta
 		if self._ticks > 0.8 then
 			self._ticks = self._ticks - 0.8
 		end
-
 		local elem = theme['inputbox']
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 		local clipped = self:_beginClip(event, x, y, w - elem.content_offset[1], h)
@@ -711,17 +727,20 @@ local InputBox = beClass.class({
 				beUtils.textLeft(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
 			else
 				beUtils.textLeft(self.content, font_, x + (w - txtW), y, w, h, elem.content_offset, self.transparency)
-				local caretW = measure('_', font_.resource)
+				local caretW = measure('_', font_.resource, font_.margin or 1, font_.scale or 1)
 				caretX = x + w - caretW - 10
 			end
 		else
-			beUtils.textLeft(self._placeholder, theme['font_placeholder'], x, y, w, h, elem.content_offset, self.transparency)
+			beUtils.textLeft(self._placeholder, placeholder, x, y, w, h, elem.content_offset, self.transparency)
 		end
 		if self._ticks < 0.4 then
 			beUtils.textLeft('_', font_, caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
 		end
 		if clipped then
 			self:_endClip(event)
+		end
+		if self._theme and self._theme ~= 'font' then
+			font(theme['font'].resource)
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)

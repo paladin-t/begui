@@ -348,8 +348,9 @@ Shortcut to create `Percent` object.
 * `multilinelabel:setAlignment(val)`: sets the alignment preference, the preference falls to `'left'` if had set flex width to `true`
   * `val`: the specific alignment preference string
   * returns `self`
-* `multilinelabel:setTheme(theme)`: sets the theme
-  * `theme`: the custom theme
+* `multilinelabel:setTheme(theme, widgetTheme)`: sets the theme
+  * `theme`: the custom font theme
+  * `widgetTheme`: the custom widget theme
   * returns `self`
 * `multilinelabel:flexWidth()`: gets whether to calculate `Widget` width automatically
   * returns `true` for calculating automatically, otherwise `false`
@@ -406,6 +407,10 @@ Shortcut to create `Percent` object.
   * returns the content string
 * `inputbox:setValue(val)`: sets the content text
   * `val`: the specific content string
+* `inputbox:setTheme(theme, placeholderTheme)`: sets the theme
+  * `theme`: the custom font theme
+  * `placeholderTheme`: the custom placeholder theme
+  * returns `self`
 * `inputbox:placeholder()`: gets the placeholder text
   * returns the placeholder string
 * `inputbox:setPlaceholder(val)`: sets the placeholder text

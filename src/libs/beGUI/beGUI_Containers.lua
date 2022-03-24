@@ -68,7 +68,7 @@ local Group = beClass.class({
 		local font_ = theme['font']
 		local elem = theme['group']
 		local x_ = x + elem.content_offset[1]
-		local w_, h_ = measure(self.content, font_.resource)
+		local w_, h_ = measure(self.content, font_.resource, font_.margin or 1, font_.scale or 1)
 		local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
 		line(x, y + h_ * 0.5, x, y + h - 1, black)
 		line(x, y + h - 1, x + w - 1, y + h - 1, black)
@@ -793,7 +793,7 @@ local Tab = beClass.class({
 			local w_, h_ = nil, nil
 			if self._tabSize == nil then
 				if type(v) == 'string' then
-					w_, h_ = measure(v, font_.resource)
+					w_, h_ = measure(v, font_.resource, font_.margin or 1, font_.scale or 1)
 				else
 					w_, h_ = v.area[3], v.area[4]
 				end

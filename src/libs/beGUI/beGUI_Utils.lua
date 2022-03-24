@@ -381,10 +381,11 @@ end
 local function textLeftSameLine(txt, font_, x, y, w, h, offset_, alpha)
 	local dx = offset_ and offset_[1] or 0
 	local dy = offset_ and offset_[2] or 0
-	local textWidth, textHeight = measure(txt, font_.resource)
+	local margin, scale = font_.margin or 1, font_.scale or 1
+	local textWidth, textHeight = measure(txt, font_.resource, margin, scale)
 	local fx, fy = x + dx, y + dy
 	local col = alpha and Color.new(font_.color.r, font_.color.g, font_.color.b, alpha) or font_.color
-	text(txt, fx, fy, col)
+	text(txt, fx, fy, col, margin, scale)
 
 	return fx, fy, textWidth, textHeight
 end
@@ -392,10 +393,11 @@ end
 local function textLeft(txt, font_, x, y, w, h, offset_, alpha)
 	local dx = offset_ and offset_[1] or 0
 	local dy = offset_ and offset_[2] or 0
-	local textWidth, textHeight = measure(txt, font_.resource)
+	local margin, scale = font_.margin or 1, font_.scale or 1
+	local textWidth, textHeight = measure(txt, font_.resource, margin, scale)
 	local fx, fy = x + dx, y + (h - textHeight) * 0.5 + dy
 	local col = alpha and Color.new(font_.color.r, font_.color.g, font_.color.b, alpha) or font_.color
-	text(txt, fx, fy, col)
+	text(txt, fx, fy, col, margin, scale)
 
 	return fx, fy, textWidth, textHeight
 end
@@ -403,10 +405,11 @@ end
 local function textCenter(txt, font_, x, y, w, h, offset_, alpha)
 	local dx = offset_ and offset_[1] or 0
 	local dy = offset_ and offset_[2] or 0
-	local textWidth, textHeight = measure(txt, font_.resource)
+	local margin, scale = font_.margin or 1, font_.scale or 1
+	local textWidth, textHeight = measure(txt, font_.resource, margin, scale)
 	local fx, fy = x + (w - textWidth) * 0.5 + dx, y + (h - textHeight) * 0.5 + dy
 	local col = alpha and Color.new(font_.color.r, font_.color.g, font_.color.b, alpha) or font_.color
-	text(txt, fx, fy, col)
+	text(txt, fx, fy, col, margin, scale)
 
 	return fx, fy, textWidth, textHeight
 end
@@ -414,10 +417,11 @@ end
 local function textRight(txt, font_, x, y, w, h, offset_, alpha)
 	local dx = offset_ and offset_[1] or 0
 	local dy = offset_ and offset_[2] or 0
-	local textWidth, textHeight = measure(txt, font_.resource)
+	local margin, scale = font_.margin or 1, font_.scale or 1
+	local textWidth, textHeight = measure(txt, font_.resource, margin, scale)
 	local fx, fy = x + (w - textWidth) + dx, y + (h - textHeight) * 0.5 + dy
 	local col = alpha and Color.new(font_.color.r, font_.color.g, font_.color.b, alpha) or font_.color
-	text(txt, fx, fy, col)
+	text(txt, fx, fy, col, margin, scale)
 
 	return fx, fy, textWidth, textHeight
 end
