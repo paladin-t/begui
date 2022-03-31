@@ -566,6 +566,10 @@ local Url = beClass.class({
 				rect(x, y, x + w, y + h, true, theme['font_url'].color)
 			end
 		end
+		if w <= 0 and h <= 0 then
+			local w_, h_ = measure(self.content, theme_.resource, theme_.margin or 1, theme_.scale or 1)
+			self:resize(w_, h_)
+		end
 		if self._alignment == 'left' then
 			_, fy, fw, fh = beUtils.textLeft(self.content, theme_, x, y, w, h, elem.content_offset, self.transparency)
 		elseif self._alignment == 'center' then
