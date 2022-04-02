@@ -371,6 +371,12 @@ Widget = beClass.class({
 	end,
 	-- Clears all children.
 	clearChildren = function (self)
+		if self.children == nil then
+			return self
+		end
+		for i, c in ipairs(self.children) do
+			c.parent = nil
+		end
 		self.children = nil
 
 		return self
