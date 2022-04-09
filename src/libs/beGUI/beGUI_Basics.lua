@@ -176,6 +176,7 @@ local MultilineLabel = beClass.class({
 	_lineHeight = nil,
 	_alignment = 'left',
 	_flexWidth = false, _flexHeight = true,
+	_pattern = nil,
 	_words = nil,
 	_widgetTheme = nil,
 	_theme = nil,
@@ -292,6 +293,17 @@ local MultilineLabel = beClass.class({
 		return self
 	end,
 
+	-- Gets the word split pattern.
+	pattern = function (self)
+		return self._pattern
+	end,
+	-- Sets the word split pattern.
+	setPattern = function (self, val)
+		self._pattern = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'children'
 	end,
@@ -336,7 +348,7 @@ local MultilineLabel = beClass.class({
 			if flexHeight then
 				self.height = 0
 			end
-			local words = beUtils.escape(self.content, font_.color, true)
+			local words = beUtils.escape(self.content, font_.color, true, self._pattern)
 			local posX, posY = 0, 0
 			local sizeW, sizeH = w, h
 			if elem.content_offset then

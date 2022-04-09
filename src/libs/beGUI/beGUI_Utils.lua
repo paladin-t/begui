@@ -71,11 +71,11 @@ local function endsWith(str, part)
 	return part == '' or string.sub(str, -#part) == part
 end
 
-local function split(txt, sep)
+local function split(txt, sep, pattern)
 	local result = { }
 	for line in string.gmatch(txt, '[^\n]*') do
 		if sep == nil then
-			for str in string.gmatch(line, '[\33-\127\192-\255]+[\128-\191]*') do
+			for str in string.gmatch(line, pattern or '[\33-\127\192-\255]+[\128-\191]*') do
 				local codes = { }
 				for _, v in utf8.codes(str) do
 					table.insert(codes, v)
@@ -117,10 +117,10 @@ local function split(txt, sep)
 	return result
 end
 
-local function escape(txt, defaultColor, tokenize)
+local function escape(txt, defaultColor, tokenize, pattern)
 	local fill = function (result, txt, col)
 		if tokenize then
-			local chars = split(txt, nil)
+			local chars = split(txt, nil, pattern)
 			for i, c in ipairs(chars) do
 				local code = utf8.codepoint(c)
 				if code <= 255 then

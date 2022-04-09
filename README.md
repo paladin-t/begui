@@ -362,6 +362,11 @@ Shortcut to create `Percent` object.
 * `multilinelabel:setFlexHeight(val)`: sets whether to calculate `Widget` height automatically
   * `val`: `true` to calculate automatically
   * returns `self`
+* `multilinelabel:pattern()`: gets the word split pattern
+  * returns the word split pattern string
+* `multilinelabel:setPattern(val)`: sets the word split pattern
+  * `val`: the specific word split pattern
+  * returns `self`
 
 ### beGUI.Url
 
