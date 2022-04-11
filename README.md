@@ -367,6 +367,11 @@ Shortcut to create `Percent` object.
 * `multilinelabel:setPattern(val)`: sets the word split pattern
   * `val`: the specific word split pattern
   * returns `self`
+* `multilinelabel:translator()`: gets the word translator
+  * returns the word translator
+* `multilinelabel:setTranslator(val)`: sets the word translator
+  * `val`: the specific word translator
+  * returns `self`
 
 ### beGUI.Url
 
