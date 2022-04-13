@@ -78,7 +78,7 @@ Play live demo [in browser](https://paladin-t.github.io/begui/).
 beGUI is originally created to run within the [Bitty Engine](https://github.com/paladin-t/bitty/). The graphics primitives and input API is quite straightforward in Bitty Engine, it's possible to port it to other Lua-based environments with little twist, if that environment does `rect(...)`, `tex(...)`, `text(...)`, `mouse(...)`, etc.
 
 1. Clone this repository or download from [releases](https://github.com/paladin-t/begui/releases)
-2. Open "src" directly or import it to your own projects with [Bitty Engine](https://github.com/paladin-t/bitty/)
+2. Open "src" directly to run or copy everything under "src" to your own projects for [Bitty Engine](https://github.com/paladin-t/bitty/)
 
 # Reference
 
