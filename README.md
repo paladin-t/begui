@@ -707,6 +707,11 @@ Shortcut to create `Percent` object.
 * beGUI.`List.new(withScrollBar = false)`: constructs a `List`
   * `withScrollBar`: whether to draw scroll bar(s)
 
+* `list:scrollableVertically()`: gets whether to allow scrolling vertically
+  * returns `true` for allowing scrolling vertically, otherwise `false`
+* `list:setScrollableVertically(val)`: sets whether to allow scrolling vertically
+  * `val`: `true` for allowing scrolling vertically, otherwise `false`
+  * returns `self`
 * `list:scrollableHorizontally()`: gets whether to allow scrolling horizontally
   * returns `true` for allowing scrolling horizontally, otherwise `false`
 * `list:setScrollableHorizontally(val)`: sets whether to allow scrolling horizontally

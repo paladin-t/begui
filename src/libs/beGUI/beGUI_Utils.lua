@@ -35,6 +35,14 @@ local function isNaN(val)
 	return val ~= val
 end
 
+local function round(val)
+	if val >= 0 then
+		return math.floor(val + 0.5)
+	else
+		return math.ceil(val - 0.5)
+	end
+end
+
 local function clamp(x, min, max)
 	return math.max(math.min(x, max), min)
 end
@@ -443,6 +451,7 @@ Exporting.
 return {
 	NaN = NaN,
 	isNaN = isNaN,
+	round = round,
 	clamp = clamp,
 	intersected = intersected,
 	startsWith = startsWith,

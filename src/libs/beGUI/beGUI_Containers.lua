@@ -93,6 +93,7 @@ local List = beClass.class({
 	_scrollSpeed = 16,
 	_maxX = 0, _maxY = 0,
 	_scrollDirectionalTimestamp = nil,
+	_scrollableVertically = true,
 	_scrollableHorizontally = false,
 	_inertance = nil,
 	_inertanceTimestamp = nil,
@@ -113,6 +114,16 @@ local List = beClass.class({
 		return 'List'
 	end,
 
+	-- Gets whether to allow scrolling vertically.
+	scrollableVertically = function (self)
+		return self._scrollableVertically
+	end,
+	-- Sets whether to allow scrolling vertically.
+	setScrollableVertically = function (self, val)
+		self._scrollableVertically = val
+
+		return self
+	end,
 	-- Gets whether to allow scrolling horizontally.
 	scrollableHorizontally = function (self)
 		return self._scrollableHorizontally
@@ -189,7 +200,7 @@ local List = beClass.class({
 							self._inertance = dist.x * force
 							self._inertanceDirection = 'x'
 						end
-					else
+					elseif self._scrollableVertically then
 						self._inertance = dist.y * force
 						self._inertanceDirection = 'y'
 					end
@@ -216,7 +227,7 @@ local List = beClass.class({
 						else
 							self._scrolling = 'x'
 						end
-					else
+					elseif self._scrollableVertically then
 						if math.abs(diff.x) < math.abs(diff.y) then
 							self._scrolling = 'y'
 						end
@@ -323,32 +334,40 @@ local List = beClass.class({
 			self._childrenCount = count
 		end
 		if elem.color and scrollBarTransparency then
-			local widgetPos = y + 1
-			local widgetSize = h - 2
-			local limit = 0
-			if self._scrollableHorizontally then
-				limit = 3
-			end
-			local contentSize = self._maxY
-			local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize - limit), 8)
-			local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
-			if self._scrollableHorizontally then
-				widgetSize = widgetSize - 4
-			end
-			local slide = widgetSize - barSize
-			local offset = slide * percent;
 			local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
-			rect(x + w - 4, widgetPos + offset, x + w - 1, widgetPos + offset + barSize + 1, true, col)
+			if self._scrollableVertically then
+				local widgetPos = y + 1
+				local widgetSize = h - 2
+				local clientSize = widgetSize
+				if self._scrollableHorizontally then
+					clientSize = clientSize - 4
+				end
+				local contentSize = self._maxY
+				local barSize = math.ceil(math.max(math.min((widgetSize / contentSize) * widgetSize, clientSize), 8))
+				local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
+				local slide = clientSize - barSize
+				local offset = slide * percent
+				local x_, y_, w_, h_ =
+					math.floor(x + w - 4), beUtils.round(widgetPos + offset),
+					math.floor(x + w - 1), math.min(beUtils.round(widgetPos + offset + barSize + 1), widgetPos + clientSize)
+				rect(x_, y_, w_, h_, true, col)
+			end
 			if self._scrollableHorizontally then
 				local widgetPos = x + 1
-				local widgetSize = w - 2 - 2
+				local widgetSize = w - 2
+				local clientSize = widgetSize
+				if self._scrollableVertically then
+					clientSize = clientSize - 4
+				end
 				local contentSize = self._maxX
-				local barSize = math.max(math.min((widgetSize / contentSize) * widgetSize, widgetSize - 3), 8)
+				local barSize = math.ceil(math.max(math.min((widgetSize / contentSize) * widgetSize, clientSize), 8))
 				local percent = beUtils.clamp(-self._scrollX / (contentSize - widgetSize), 0, 1)
-				local slide = widgetSize - barSize
-				local offset = slide * percent;
-				local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
-				rect(widgetPos + offset, y + h - 4, widgetPos + offset + barSize + 1, y + h - 1, true, col)
+				local slide = clientSize - barSize
+				local offset = slide * percent
+				local x_, y_, w_, h_ =
+					beUtils.round(widgetPos + offset), math.floor(y + h - 4),
+					math.min(beUtils.round(widgetPos + offset + barSize + 1), widgetPos + clientSize), math.floor(y + h - 1)
+				rect(x_, y_, w_, h_, true, col)
 			end
 		end
 		if clipped then
