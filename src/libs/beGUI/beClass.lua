@@ -44,6 +44,10 @@ local function class(kls, base)
 end
 
 local function is(obj, kls)
+	if kls == nil then
+		error('Invalid class.')
+	end
+
 	repeat
 		if obj == kls then
 			return true
