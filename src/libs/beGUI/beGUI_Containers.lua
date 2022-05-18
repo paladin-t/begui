@@ -328,46 +328,48 @@ local List = beClass.class({
 		end
 
 		local clipped = self:_beginClip(event, x + 1, y + 1, w - 2, h - 2)
-		beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
-		local count = self:getChildrenCount()
-		if count ~= self._childrenCount then
-			self._childrenCount = count
-		end
-		if elem.color and scrollBarTransparency then
-			local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
-			if self._scrollableVertically then
-				local widgetPos = y + 1
-				local widgetSize = h - 2
-				local clientSize = widgetSize
-				if self._scrollableHorizontally then
-					clientSize = clientSize - 4
-				end
-				local contentSize = self._maxY
-				local barSize = math.ceil(math.max(math.min((widgetSize / contentSize) * widgetSize, clientSize), 8))
-				local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
-				local slide = clientSize - barSize
-				local offset = slide * percent
-				local x_, y_, w_, h_ =
-					math.floor(x + w - 4), beUtils.round(widgetPos + offset),
-					math.floor(x + w - 1), math.min(beUtils.round(widgetPos + offset + barSize + 1), widgetPos + clientSize)
-				rect(x_, y_, w_, h_, true, col)
+		if clipped then
+			beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
+			local count = self:getChildrenCount()
+			if count ~= self._childrenCount then
+				self._childrenCount = count
 			end
-			if self._scrollableHorizontally then
-				local widgetPos = x + 1
-				local widgetSize = w - 2
-				local clientSize = widgetSize
+			if elem.color and scrollBarTransparency then
+				local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
 				if self._scrollableVertically then
-					clientSize = clientSize - 4
+					local widgetPos = y + 1
+					local widgetSize = h - 2
+					local clientSize = widgetSize
+					if self._scrollableHorizontally then
+						clientSize = clientSize - 4
+					end
+					local contentSize = self._maxY
+					local barSize = math.ceil(math.max(math.min((widgetSize / contentSize) * widgetSize, clientSize), 8))
+					local percent = beUtils.clamp(-self._scrollY / (contentSize - widgetSize), 0, 1)
+					local slide = clientSize - barSize
+					local offset = slide * percent
+					local x_, y_, w_, h_ =
+						math.floor(x + w - 4), beUtils.round(widgetPos + offset),
+						math.floor(x + w - 1), math.min(beUtils.round(widgetPos + offset + barSize + 1), widgetPos + clientSize)
+					rect(x_, y_, w_, h_, true, col)
 				end
-				local contentSize = self._maxX
-				local barSize = math.ceil(math.max(math.min((widgetSize / contentSize) * widgetSize, clientSize), 8))
-				local percent = beUtils.clamp(-self._scrollX / (contentSize - widgetSize), 0, 1)
-				local slide = clientSize - barSize
-				local offset = slide * percent
-				local x_, y_, w_, h_ =
-					beUtils.round(widgetPos + offset), math.floor(y + h - 4),
-					math.min(beUtils.round(widgetPos + offset + barSize + 1), widgetPos + clientSize), math.floor(y + h - 1)
-				rect(x_, y_, w_, h_, true, col)
+				if self._scrollableHorizontally then
+					local widgetPos = x + 1
+					local widgetSize = w - 2
+					local clientSize = widgetSize
+					if self._scrollableVertically then
+						clientSize = clientSize - 4
+					end
+					local contentSize = self._maxX
+					local barSize = math.ceil(math.max(math.min((widgetSize / contentSize) * widgetSize, clientSize), 8))
+					local percent = beUtils.clamp(-self._scrollX / (contentSize - widgetSize), 0, 1)
+					local slide = clientSize - barSize
+					local offset = slide * percent
+					local x_, y_, w_, h_ =
+						beUtils.round(widgetPos + offset), math.floor(y + h - 4),
+						math.min(beUtils.round(widgetPos + offset + barSize + 1), widgetPos + clientSize), math.floor(y + h - 1)
+					rect(x_, y_, w_, h_, true, col)
+				end
 			end
 		end
 		if clipped then

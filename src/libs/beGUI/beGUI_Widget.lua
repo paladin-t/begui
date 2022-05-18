@@ -764,8 +764,7 @@ Widget = beClass.class({
 
 		if clippingStack:empty() then
 			local x_, y_, w_, h_ = clip(x, y, w, h)
-			clippingStack:push
-			(
+			clippingStack:push(
 				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
 				Rect.byXYWH(x, y, w, h)
 			)
@@ -779,8 +778,7 @@ Widget = beClass.class({
 				return false
 			end
 			local x_, y_, w_, h_ = clip(rect2:xMin(), rect2:yMin(), rect2:width(), rect2:height())
-			clippingStack:push
-			(
+			clippingStack:push(
 				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
 				rect2
 			)

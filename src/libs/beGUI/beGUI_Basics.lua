@@ -121,44 +121,48 @@ local Label = beClass.class({
 
 		local elem = theme['label']
 		local shadow = self._shadowTheme and theme[self._shadowTheme] or nil
+		local visible = true
 		local clipped = false
 		if self._clip then
 			clipped = self:_beginClip(event, x, y, w, h)
+			visible = clipped
 		end
-		local _1, _2, fw, _4
-		if self._theme and self._theme ~= 'font' then
-			font(theme[self._theme].resource)
-		end
-		local font_ = theme[self._theme or 'font']
-		if self._alignment == 'left' then
-			if shadow then
-				local elem_ = theme['label_shadow']
-				beUtils.textLeft(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
+		if visible then
+			local _1, _2, fw, _4
+			if self._theme and self._theme ~= 'font' then
+				font(theme[self._theme].resource)
 			end
-			_1, _2, fw, _4 = beUtils.textLeft(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
-		elseif self._alignment == 'center' then
-			if shadow then
-				local elem_ = theme['label_shadow']
-				beUtils.textCenter(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
+			local font_ = theme[self._theme or 'font']
+			if self._alignment == 'left' then
+				if shadow then
+					local elem_ = theme['label_shadow']
+					beUtils.textLeft(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
+				end
+				_1, _2, fw, _4 = beUtils.textLeft(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
+			elseif self._alignment == 'center' then
+				if shadow then
+					local elem_ = theme['label_shadow']
+					beUtils.textCenter(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
+				end
+				_1, _2, fw, _4 = beUtils.textCenter(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
+			else
+				if shadow then
+					local elem_ = theme['label_shadow']
+					beUtils.textRight(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
+				end
+				_1, _2, fw, _4 = beUtils.textRight(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
 			end
-			_1, _2, fw, _4 = beUtils.textCenter(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
-		else
-			if shadow then
-				local elem_ = theme['label_shadow']
-				beUtils.textRight(self.content, shadow, x, y, w, h, elem_.content_offset or { 1, 1 }, self.transparency)
+			if self._theme and self._theme ~= 'font' then
+				font(theme['font'].resource)
 			end
-			_1, _2, fw, _4 = beUtils.textRight(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
-		end
-		if self._theme and self._theme ~= 'font' then
-			font(theme['font'].resource)
-		end
-		if self.width == -1 or self._requestedWidth == -1 then
-			self.width = fw
-			self._requestedWidth = fw
-			local w, h = self:size()
-			if self.children ~= nil then
-				for _, c in ipairs(self.children) do
-					c:_updateLayout(w, h)
+			if self.width == -1 or self._requestedWidth == -1 then
+				self.width = fw
+				self._requestedWidth = fw
+				local w, h = self:size()
+				if self.children ~= nil then
+					for _, c in ipairs(self.children) do
+						c:_updateLayout(w, h)
+					end
 				end
 			end
 		end
@@ -579,40 +583,44 @@ local Url = beClass.class({
 
 		local elem = down and theme['url_down'] or theme['url']
 		local clipped = false
+		local visible = true
 		if self._clip then
 			clipped = self:_beginClip(event, x, y, w, h)
+			visible = clipped
 		end
-		local theme_ = theme[self._theme or intersects and 'font_url_hover' or 'font_url']
-		local _, fy, fw, fh
-		if down and intersects then
-			if not self.transparency then
-				rect(x, y, x + w, y + h, true, theme['font_url'].color)
-			end
-		end
-		if w <= 0 and h <= 0 then
-			local w_, h_ = measure(self.content, theme_.resource, theme_.margin or 1, theme_.scale or 1)
-			self:resize(w_, h_)
-		end
-		if self._alignment == 'left' then
-			_, fy, fw, fh = beUtils.textLeft(self.content, theme_, x, y, w, h, elem.content_offset, self.transparency)
-		elseif self._alignment == 'center' then
-			_, fy, fw, fh = beUtils.textCenter(self.content, theme_, x, y, w, h, elem.content_offset, self.transparency)
-		else
-			_, fy, fw, fh = beUtils.textRight(self.content, theme_, x, y, w, h, elem.content_offset, self.transparency)
-		end
-		if self.width == -1 or self._requestedWidth == -1 then
-			self.width = fw
-			self._requestedWidth = fw
-			local w, h = self:size()
-			if self.children ~= nil then
-				for _, c in ipairs(self.children) do
-					c:_updateLayout(w, h)
+		if visible then
+			local theme_ = theme[self._theme or intersects and 'font_url_hover' or 'font_url']
+			local _, fy, fw, fh
+			if down and intersects then
+				if not self.transparency then
+					rect(x, y, x + w, y + h, true, theme['font_url'].color)
 				end
 			end
-		end
-		if intersects then
-			if not self.transparency then
-				line(x, fy + fh, x + w, fy + fh, theme_.color)
+			if w <= 0 and h <= 0 then
+				local w_, h_ = measure(self.content, theme_.resource, theme_.margin or 1, theme_.scale or 1)
+				self:resize(w_, h_)
+			end
+			if self._alignment == 'left' then
+				_, fy, fw, fh = beUtils.textLeft(self.content, theme_, x, y, w, h, elem.content_offset, self.transparency)
+			elseif self._alignment == 'center' then
+				_, fy, fw, fh = beUtils.textCenter(self.content, theme_, x, y, w, h, elem.content_offset, self.transparency)
+			else
+				_, fy, fw, fh = beUtils.textRight(self.content, theme_, x, y, w, h, elem.content_offset, self.transparency)
+			end
+			if self.width == -1 or self._requestedWidth == -1 then
+				self.width = fw
+				self._requestedWidth = fw
+				local w, h = self:size()
+				if self.children ~= nil then
+					for _, c in ipairs(self.children) do
+						c:_updateLayout(w, h)
+					end
+				end
+			end
+			if intersects then
+				if not self.transparency then
+					line(x, fy + fh, x + w, fy + fh, theme_.color)
+				end
 			end
 		end
 		if self._clip then
@@ -747,21 +755,23 @@ local InputBox = beClass.class({
 		local elem = theme['inputbox']
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
 		local clipped = self:_beginClip(event, x, y, w - elem.content_offset[1], h)
-		local caretX = x + self._size.x
-		if #self.content ~= 0 then
-			local txtW = self._size.x + elem.content_offset[1] * 2 + 14
-			if txtW <= w then
-				beUtils.textLeft(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
+		if clipped then
+			local caretX = x + self._size.x
+			if #self.content ~= 0 then
+				local txtW = self._size.x + elem.content_offset[1] * 2 + 14
+				if txtW <= w then
+					beUtils.textLeft(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
+				else
+					beUtils.textLeft(self.content, font_, x + (w - txtW), y, w, h, elem.content_offset, self.transparency)
+					local caretW = measure('_', font_.resource, font_.margin or 1, font_.scale or 1)
+					caretX = x + w - caretW - 10
+				end
 			else
-				beUtils.textLeft(self.content, font_, x + (w - txtW), y, w, h, elem.content_offset, self.transparency)
-				local caretW = measure('_', font_.resource, font_.margin or 1, font_.scale or 1)
-				caretX = x + w - caretW - 10
+				beUtils.textLeft(self._placeholder, placeholder, x, y, w, h, elem.content_offset, self.transparency)
 			end
-		else
-			beUtils.textLeft(self._placeholder, placeholder, x, y, w, h, elem.content_offset, self.transparency)
-		end
-		if self._ticks < 0.4 then
-			beUtils.textLeft('_', font_, caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
+			if self._ticks < 0.4 then
+				beUtils.textLeft('_', font_, caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
+			end
 		end
 		if clipped then
 			self:_endClip(event)
@@ -1551,15 +1561,17 @@ local ComboBox = beClass.class({
 		local item = self:getItemAt(self:getValue())
 		if item ~= nil then
 			local clipped = self:_beginClip(event, x, y, w, h)
-			if type(item) == 'string' then
-				beUtils.textLeft(item, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
-			else
-				local area = item.area
-				if self.transparency then
-					local col = Color.new(255, 255, 255, self.transparency)
-					tex(item.resource, x, y + 1, area[3], area[4], area[1], area[2], area[3], area[4], 0, Vec2.new(0.5, 0.5), false, false, col)
+			if clipped then
+				if type(item) == 'string' then
+					beUtils.textLeft(item, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
 				else
-					tex(item.resource, x, y + 1, area[3], area[4], area[1], area[2], area[3], area[4])
+					local area = item.area
+					if self.transparency then
+						local col = Color.new(255, 255, 255, self.transparency)
+						tex(item.resource, x, y + 1, area[3], area[4], area[1], area[2], area[3], area[4], 0, Vec2.new(0.5, 0.5), false, false, col)
+					else
+						tex(item.resource, x, y + 1, area[3], area[4], area[1], area[2], area[3], area[4])
+					end
 				end
 			end
 			if clipped then
@@ -1782,13 +1794,15 @@ local NumberBox = beClass.class({
 		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, math.ceil(w + 1), area[4], nil, self.transparency, nil)
 		local item = self._format(self._value)
 		local clipped = self:_beginClip(event, x, y, w, h)
-		if self._valueTheme and self._valueTheme ~= 'font' then
-			font(theme[self._valueTheme].resource)
-		end
-		local font_ = theme[self._valueTheme or 'font']
-		beUtils.textLeft(item, font_, x + 1, y, w, h, elem.content_offset, self.transparency)
-		if self._valueTheme and self._valueTheme ~= 'font' then
-			font(theme['font'].resource)
+		if clipped then
+			if self._valueTheme and self._valueTheme ~= 'font' then
+				font(theme[self._valueTheme].resource)
+			end
+			local font_ = theme[self._valueTheme or 'font']
+			beUtils.textLeft(item, font_, x + 1, y, w, h, elem.content_offset, self.transparency)
+			if self._valueTheme and self._valueTheme ~= 'font' then
+				font(theme['font'].resource)
+			end
 		end
 		if clipped then
 			self:_endClip(event)
