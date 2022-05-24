@@ -328,12 +328,12 @@ local List = beClass.class({
 		end
 
 		local clipped = self:_beginClip(event, x + 1, y + 1, w - 2, h - 2)
+		beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
+		local count = self:getChildrenCount()
+		if count ~= self._childrenCount then
+			self._childrenCount = count
+		end
 		if clipped then
-			beWidget.Widget._update(self, theme, delta, dx + self._scrollX, dy + self._scrollY, event)
-			local count = self:getChildrenCount()
-			if count ~= self._childrenCount then
-				self._childrenCount = count
-			end
 			if elem.color and scrollBarTransparency then
 				local col = Color.new(elem.color.r, elem.color.g, elem.color.b, elem.color.a * scrollBarTransparency)
 				if self._scrollableVertically then
