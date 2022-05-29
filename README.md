@@ -568,6 +568,11 @@ Shortcut to create `Percent` object.
 * `combobox:setValue(val)`: sets the selected index
   * `val`: the specific selected index
   * returns `self`
+* `combobox:scrollable()`: gets whether can scroll the widget by mouse wheel
+  * returns `true` for scrollable, otherwise `false`
+* `combobox:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
+  * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
 
 * `combobox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` selection state has been changed
   * returns `self`
@@ -616,6 +621,11 @@ Shortcut to create `Percent` object.
   * returns `self`
 * `numberbox:setValueTheme(val)`: sets the value theme
   * `val`: the specific theme
+  * returns `self`
+* `numberbox:scrollable()`: gets whether can scroll the widget by mouse wheel
+  * returns `true` for scrollable, otherwise `false`
+* `numberbox:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
+  * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
 
 * `numberbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
@@ -676,6 +686,11 @@ Shortcut to create `Percent` object.
 * `slide:setMaxValue(val)`: sets the maximum limit number
   * `val`: the specific maximum limit number
   * returns `self`
+* `slide:scrollable()`: gets whether can scroll the widget by mouse wheel
+  * returns `true` for scrollable, otherwise `false`
+* `slide:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
+  * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
 
 * `slide:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`
@@ -725,6 +740,11 @@ Shortcut to create `Percent` object.
 * `list:setTheme(theme)`: sets the theme
   * `theme`: the custom theme
   * returns `self`
+* `list:scrollable()`: gets whether can scroll the widget by mouse wheel
+  * returns `true` for scrollable, otherwise `false`
+* `list:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
+  * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
 
 ### beGUI.Draggable
 
@@ -769,6 +789,11 @@ Shortcut to create `Percent` object.
   * returns the specified `Tab` size
 * `tab:setTabSize(val)`: sets the specified `Tab` size
   * `val`: the specified `Tab` size
+  * returns `self`
+* `tab:scrollable()`: gets whether can scroll the widget by mouse wheel
+  * returns `true` for scrollable, otherwise `false`
+* `tab:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
+  * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
 
 * `tab:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` page has been switched

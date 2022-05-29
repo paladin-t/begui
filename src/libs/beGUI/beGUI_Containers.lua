@@ -101,6 +101,7 @@ local List = beClass.class({
 	_inertanceDirection = nil,
 	_childrenCount = 0,
 	_theme = nil,
+	_scrollable = true,
 
 	-- Constructs a List.
 	-- `withScrollBar`: whether to draw scroll bar(s)
@@ -148,6 +149,17 @@ local List = beClass.class({
 
 	setTheme = function (self, theme)
 		self._theme = theme
+
+		return self
+	end,
+
+	-- Gets whether can scroll the widget by mouse wheel.
+	scrollable = function (self)
+		return self._scrollable
+	end,
+	-- Sets whether can scroll the widget by mouse wheel.
+	setScrollable = function (self, val)
+		self._scrollable = val
 
 		return self
 	end,
@@ -275,12 +287,12 @@ local List = beClass.class({
 				end
 			end
 			self._pressingPosition = event.mousePosition
-		elseif intersects and event.mouseWheel < 0 then
+		elseif intersects and event.mouseWheel < 0 and self._scrollable then
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
 			end
 			self._scrollY = beUtils.clamp(self._scrollY - self._scrollSpeed, h - self._maxY, 0)
-		elseif intersects and event.mouseWheel > 0 then
+		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
 			end
@@ -672,6 +684,7 @@ local Tab = beClass.class({
 	_focusArea = nil,
 	_headHeight = nil,
 	_pressed = false,
+	_scrollable = true,
 
 	-- Constructs a Tab.
 	ctor = function (self)
@@ -749,6 +762,17 @@ local Tab = beClass.class({
 		return result
 	end,
 
+	-- Gets whether can scroll the widget by mouse wheel.
+	scrollable = function (self)
+		return self._scrollable
+	end,
+	-- Sets whether can scroll the widget by mouse wheel.
+	setScrollable = function (self, val)
+		self._scrollable = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -780,7 +804,7 @@ local Tab = beClass.class({
 			self._pressed = false
 			event.context.focus = self
 			pressed = true
-		elseif intersectsHead and event.mouseWheel < 0 then
+		elseif intersectsHead and event.mouseWheel < 0 and self._scrollable then
 			if #self.content ~= 0 then
 				local val = self._value - 1
 				if val < 1 then
@@ -788,7 +812,7 @@ local Tab = beClass.class({
 				end
 				self:setValue(val)
 			end
-		elseif intersectsHead and event.mouseWheel > 0 then
+		elseif intersectsHead and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
 				local val = self._value + 1
 				if val > #self.content then

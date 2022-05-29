@@ -1357,6 +1357,7 @@ local RadioBox = beClass.class({
 local ComboBox = beClass.class({
 	_pressed = false,
 	_value = -1,
+	_scrollable = true,
 
 	_buttonLeft = nil,
 	_buttonRight = nil,
@@ -1479,6 +1480,17 @@ local ComboBox = beClass.class({
 		return self
 	end,
 
+	-- Gets whether can scroll the widget by mouse wheel.
+	scrollable = function (self)
+		return self._scrollable
+	end,
+	-- Sets whether can scroll the widget by mouse wheel.
+	setScrollable = function (self, val)
+		self._scrollable = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1530,7 +1542,7 @@ local ComboBox = beClass.class({
 				end
 				self:setValue(val)
 			end
-		elseif intersects and event.mouseWheel < 0 then
+		elseif intersects and event.mouseWheel < 0 and self._scrollable then
 			if #self.content ~= 0 then
 				local val = self._value - 1
 				if val < 1 then
@@ -1538,7 +1550,7 @@ local ComboBox = beClass.class({
 				end
 				self:setValue(val)
 			end
-		elseif intersects and event.mouseWheel > 0 then
+		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
 				local val = self._value + 1
 				if val > #self.content then
@@ -1592,6 +1604,7 @@ local NumberBox = beClass.class({
 	_trim = nil,
 	_format = nil,
 	_valueTheme = nil,
+	_scrollable = true,
 
 	_buttonUp = nil,
 	_buttonDown = nil,
@@ -1729,6 +1742,17 @@ local NumberBox = beClass.class({
 		return self
 	end,
 
+	-- Gets whether can scroll the widget by mouse wheel.
+	scrollable = function (self)
+		return self._scrollable
+	end,
+	-- Sets whether can scroll the widget by mouse wheel.
+	setScrollable = function (self, val)
+		self._scrollable = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1774,10 +1798,10 @@ local NumberBox = beClass.class({
 			event.context.focus = self
 			local val = self._value + self._step
 			self:setValue(val)
-		elseif intersects and event.mouseWheel < 0 then
+		elseif intersects and event.mouseWheel < 0 and self._scrollable then
 			local val = self._value - self._step
 			self:setValue(val)
-		elseif intersects and event.mouseWheel > 0 then
+		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			local val = self._value + self._step
 			self:setValue(val)
 		elseif event.context.focus == self and event.context.navigated == 'dec' then
@@ -2010,6 +2034,7 @@ local Slide = beClass.class({
 	_value = -1,
 	_minValue = nil,
 	_maxValue = nil,
+	_scrollable = true,
 
 	-- Constructs a Slide with the specific value.
 	-- `value`: the initial value number
@@ -2066,6 +2091,17 @@ local Slide = beClass.class({
 		return self
 	end,
 
+	-- Gets whether can scroll the widget by mouse wheel.
+	scrollable = function (self)
+		return self._scrollable
+	end,
+	-- Sets whether can scroll the widget by mouse wheel.
+	setScrollable = function (self, val)
+		self._scrollable = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -2112,10 +2148,10 @@ local Slide = beClass.class({
 			if value and not beUtils.isNaN(value) then
 				self:setValue(value)
 			end
-		elseif intersects and event.mouseWheel < 0 then
+		elseif intersects and event.mouseWheel < 0 and self._scrollable then
 			local val = self._value - 1
 			self:setValue(val)
-		elseif intersects and event.mouseWheel > 0 then
+		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			local val = self._value + 1
 			self:setValue(val)
 		elseif event.context.focus == self and event.context.navigated == 'dec' then
