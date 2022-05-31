@@ -291,12 +291,20 @@ local List = beClass.class({
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
 			end
-			self._scrollY = beUtils.clamp(self._scrollY - self._scrollSpeed, h - self._maxY, 0)
+			if self._scrollableVertically then
+				self._scrollY = beUtils.clamp(self._scrollY - self._scrollSpeed, h - self._maxY, 0)
+			elseif self._scrollableHorizontally then
+				self._scrollX = beUtils.clamp(self._scrollX - self._scrollSpeed, h - self._maxX, 0)
+			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
 			end
-			self._scrollY = beUtils.clamp(self._scrollY + self._scrollSpeed, h - self._maxY, 0)
+			if self._scrollableVertically then
+				self._scrollY = beUtils.clamp(self._scrollY + self._scrollSpeed, h - self._maxY, 0)
+			elseif self._scrollableHorizontally then
+				self._scrollX = beUtils.clamp(self._scrollX + self._scrollSpeed, h - self._maxX, 0)
+			end
 		end
 		if not intersects then
 			event = {
