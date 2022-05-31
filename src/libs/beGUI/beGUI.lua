@@ -41,7 +41,7 @@ end
 beGUI = beUtils.merge(
 	beGUI,
 	{
-		version = '1.5.6',
+		version = '1.5.7',
 	
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,

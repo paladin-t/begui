@@ -467,7 +467,8 @@ Shortcut to create `Percent` object.
 
 * `button:setValue(content)`: sets the content text
   * `val`: the specific content string
-* `button:setTheme(themeNormal, themeDown, themeDisabled)`: sets the theme
+* `button:setTheme(theme, themeNormal, themeDown, themeDisabled)`: sets the theme
+  * `theme`: the custom font theme
   * `themeNormal`: the custom theme for normal state
   * `themeDown`: the custom theme for pressed state
   * `themeDisabled`: the custom theme for disabled state
@@ -491,6 +492,10 @@ Shortcut to create `Percent` object.
   * `theme`: the custom theme
   * `background`: optional, the custom background `Texture`
 
+* `picturebutton:setTheme(theme, widgetTheme)`: sets the theme
+  * `theme`: the custom font theme
+  * `widgetTheme`: the custom widget theme
+  * returns `self`
 * `picturebutton:enabled()`: gets whether this `Widget` is enabled
   * returns `true` for enabled, otherwise `false`
 * `picturebutton:setEnabled(val)`: sets whether this `Widget` is enabled

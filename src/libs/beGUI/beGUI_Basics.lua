@@ -129,10 +129,10 @@ local Label = beClass.class({
 		end
 		if visible then
 			local _1, _2, fw, _4
+			local font_ = theme[self._theme or 'font']
 			if self._theme and self._theme ~= 'font' then
 				font(theme[self._theme].resource)
 			end
-			local font_ = theme[self._theme or 'font']
 			if self._alignment == 'left' then
 				if shadow then
 					local elem_ = theme['label_shadow']
@@ -739,10 +739,10 @@ local InputBox = beClass.class({
 			event.context.navigated = false
 		end
 
+		local font_ = theme[self._theme or 'font']
 		if self._theme and self._theme ~= 'font' then
 			font(theme[self._theme].resource)
 		end
-		local font_ = theme[self._theme or 'font']
 		local placeholder = theme[self._placeholderTheme or 'font_placeholder']
 		if self._size == nil then
 			local w_, h_ = measure(self.content, font_.resource, font_.margin or 1, font_.scale or 1)
@@ -887,6 +887,7 @@ local Picture = beClass.class({
 }, beWidget.Widget)
 
 local Button = beClass.class({
+	_theme = nil,
 	_themeNormal = nil, _themeDown = nil, _themeDisabled = nil,
 	_enabled = true,
 	_pressed = false,
@@ -909,7 +910,8 @@ local Button = beClass.class({
 		return self
 	end,
 
-	setTheme = function (self, themeNormal, themeDown, themeDisabled)
+	setTheme = function (self, theme, themeNormal, themeDown, themeDisabled)
+		self._theme = theme
 		self._themeNormal, self._themeDown, self._themeDisabled = themeNormal, themeDown, themeDisabled
 
 		return self
@@ -965,6 +967,7 @@ local Button = beClass.class({
 			event.context.navigated = false
 		end
 
+		local font_ = theme[self._theme or 'font']
 		local elem = nil
 		if self._enabled then
 			elem = down and theme[self._themeDown or 'button_down'] or theme[self._themeNormal or 'button']
@@ -972,7 +975,13 @@ local Button = beClass.class({
 			elem = theme[self._themeDisabled or 'button_disabled']
 		end
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
-		beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
+		if self._theme and self._theme ~= 'font' then
+			font(theme[self._theme].resource)
+		end
+		beUtils.textCenter(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
+		if self._theme and self._theme ~= 'font' then
+			font(theme['font'].resource)
+		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy + (down and self._enabled and 1 or 0), event)
 	end
@@ -985,6 +994,7 @@ local PictureButton = beClass.class({
 	_repeat = false,
 	_background = false,
 
+	_theme = nil,
 	_themeBackgroundNormal = nil,
 	_themeBackgroundPressed = nil,
 	_themeBackgroundDisabled = nil,
@@ -1013,6 +1023,18 @@ local PictureButton = beClass.class({
 
 	__tostring = function (self)
 		return 'PictureButton'
+	end,
+
+	setTheme = function (self, theme, widgetTheme)
+		self._theme = theme
+		self._themeBackgroundNormal = widgetTheme.background_normal
+		self._themeBackgroundPressed = widgetTheme.background_pressed
+		self._themeBackgroundDisabled = widgetTheme.background_disabled
+		self._themeNormal = widgetTheme.normal
+		self._themePressed = widgetTheme.pressed
+		self._themeDisabled = widgetTheme.disabled
+
+		return self
 	end,
 
 	enabled = function (self)
@@ -1109,7 +1131,14 @@ local PictureButton = beClass.class({
 			tex(img, x + (w - area[3]) * 0.5 + offsetX, y + (h - area[4]) * 0.5 + offsetY, area[3], area[4], area[1], area[2], area[3], area[4])
 		end
 		if self.content then
-			beUtils.textCenter(self.content, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
+			local font_ = theme[self._theme or 'font']
+			if self._theme and self._theme ~= 'font' then
+				font(theme[self._theme].resource)
+			end
+			beUtils.textCenter(self.content, font_, x, y, w, h, elem.content_offset, self.transparency)
+			if self._theme and self._theme ~= 'font' then
+				font(theme['font'].resource)
+			end
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
