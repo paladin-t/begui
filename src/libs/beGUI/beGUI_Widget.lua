@@ -609,9 +609,7 @@ Widget = beClass.class({
 
 		local once = not event
 		if once then
-			if self.clippingStack == nil then
-				self.clippingStack = beStack.NonShrinkStack.new(5) -- Change this limit if you really need more than that.
-			end
+			self:_touchClip()
 			if self.context == nil then
 				self.context = {
 					navigated = nil,
@@ -743,6 +741,13 @@ Widget = beClass.class({
 		rect(x, y, x + w - 1, y + h - 1, false, col)
 	end,
 
+	_touchClip = function (self)
+		if self.clippingStack == nil then
+			self.clippingStack = beStack.NonShrinkStack.new(5) -- Change this limit if you really need more than that.
+		end
+
+		return self
+	end,
 	_getClip = function (self)
 		local clippingStack = event.context and event.context.clippingStack or nil
 		if not clippingStack then
