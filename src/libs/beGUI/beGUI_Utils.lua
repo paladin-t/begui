@@ -22,6 +22,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
 --[[
+Constants.
+]]
+
+local function toKeycode(k)
+	return (1 << 30) | k
+end
+
+local KeyCodeLShift = toKeycode(225)
+local KeyCodeRShift = toKeycode(229)
+
+--[[
 Helper functions.
 ]]
 
@@ -449,6 +460,8 @@ Exporting.
 ]]
 
 return {
+	KeyCodeLShift = KeyCodeLShift,
+	KeyCodeRShift = KeyCodeRShift,
 	NaN = NaN,
 	isNaN = isNaN,
 	round = round,
