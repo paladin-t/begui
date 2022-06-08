@@ -768,6 +768,28 @@ Widget = beClass.class({
 		end
 
 		if clippingStack:empty() then
+			local canvasWidth, canvasHeight = Canvas.main:size()
+			if canvasWidth <= 0 or canvasHeight <= 0 then
+				return false
+			end
+			local rect0 = Rect.byXYWH(0, 0, canvasWidth, canvasHeight)
+			local rect1 = Rect.byXYWH(x, y, w, h)
+			local rect2 = beUtils.intersected(rect0, rect1)
+			if not rect2 then
+				return false
+			end
+			local x_, y_, w_, h_ = clip(rect2:xMin(), rect2:yMin(), rect2:width(), rect2:height())
+			clippingStack:push(
+				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
+				rect2
+			)
+
+			return true
+
+			-- It is not allowed to clip when an area's border is outside the drawing surface
+			-- with some graphics backends. If beGUI would never run on those platforms, use
+			-- the following code to simplify it.
+			--[[
 			local x_, y_, w_, h_ = clip(x, y, w, h)
 			clippingStack:push(
 				x_ and Rect.byXYWH(x_, y_, w_, h_) or false,
@@ -775,6 +797,7 @@ Widget = beClass.class({
 			)
 
 			return true
+			]]
 		else
 			local _, rect0 = clippingStack:top()
 			local rect1 = Rect.byXYWH(x, y, w, h)
