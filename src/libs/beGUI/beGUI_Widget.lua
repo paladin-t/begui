@@ -749,7 +749,7 @@ Widget = beClass.class({
 		return self
 	end,
 	_getClip = function (self)
-		local clippingStack = event.context and event.context.clippingStack or nil
+		local clippingStack = self.clippingStack
 		if not clippingStack then
 			return nil, nil
 		end
