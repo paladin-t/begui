@@ -96,7 +96,7 @@ local List = beClass.class({
 	_scrollableVertically = true,
 	_scrollableHorizontally = false,
 	_inertance = nil,
-	_inertanceTimestamp = nil,
+	_inertanceSpeed = nil,
 	_inertancePosition = nil,
 	_inertanceDirection = nil,
 	_childrenCount = 0,
@@ -197,12 +197,12 @@ local List = beClass.class({
 			self._scrolling = nil
 			self._scrollDirectionalTimestamp = now
 			self._inertancePosition = event.mousePosition
-			self._inertanceTimestamp = now
+			self._inertanceSpeed = 0
 		elseif not down and self._pressed then
-			if self._inertanceTimestamp ~= nil then
-				local diff = DateTime.toSeconds(now - self._inertanceTimestamp)
-				if diff < 0.05 then
-					local force = beUtils.clamp(1 - diff / 0.05, 0, 1) * 20 + 4
+			if self._inertanceSpeed ~= nil then
+				local speed = self._inertanceSpeed
+				if speed > 5 then
+					local force = beUtils.clamp(1 - speed / 40, 0, 6) * 20 + 4
 					local dist = self._pressingPosition - self._pressedPosition
 					if self._scrollableHorizontally and w < self._maxX then
 						if math.abs(dist.x) < math.abs(dist.y) then
@@ -224,7 +224,7 @@ local List = beClass.class({
 			self._scrolling = nil
 			self._scrollDirectionalTimestamp = nil
 			self._inertancePosition = nil
-			self._inertanceTimestamp = nil
+			self._inertanceSpeed = nil
 		elseif down and self._pressed then
 			if self._withScrollBar then
 				self._scrolledTimestamp = now
@@ -248,8 +248,11 @@ local List = beClass.class({
 				end
 			end
 			if self._inertancePosition ~= event.mousePosition then
+				if self._inertancePosition then
+					local diff = event.mousePosition - self._inertancePosition
+					self._inertanceSpeed = diff.length
+				end
 				self._inertancePosition = event.mousePosition
-				self._inertanceTimestamp = now
 			end
 		end
 
@@ -335,7 +338,7 @@ local List = beClass.class({
 			self._inertance = self._inertance * 0.9
 			if math.abs(self._inertance) < 0.1 then
 				self._inertance = nil
-				self._inertanceTimestamp = nil
+				self._inertanceSpeed = nil
 				self._inertancePosition = nil
 				self._inertanceDirection = nil
 			end
