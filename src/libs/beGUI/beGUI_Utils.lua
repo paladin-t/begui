@@ -313,11 +313,19 @@ local function tex3Grid(elem, x, y, w, h, permeation, alpha, color_)
 			end
 		end
 	end
-	if not area and srcw == w and srch == h then
-		if col then
-			tex(res, x, y, w, h, x, y, w, h, 0, Vec2.new(0.5, 0.5), false, false, col)
+	if srcw == w and srch == h then
+		if area then
+			if col then
+				tex(res, x, y, w, h, srcx, srcy, srcw, srch, 0, Vec2.new(0.5, 0.5), false, false, col)
+			else
+				tex(img, x, y, w, h, srcx, srcy, srcw, srch)
+			end
 		else
-			tex(img, x, y, w, h)
+			if col then
+				tex(res, x, y, w, h, x, y, w, h, 0, Vec2.new(0.5, 0.5), false, false, col)
+			else
+				tex(img, x, y, w, h)
+			end
 		end
 	else
 		if col then
@@ -364,11 +372,19 @@ local function tex9Grid(elem, x, y, w, h, permeation, alpha, color_)
 			end
 		end
 	end
-	if not area and srcw == w and srch == h then
-		if col then
-			tex(res, x, y, w, h, x, y, w, h, 0, Vec2.new(0.5, 0.5), false, false, col)
+	if srcw == w and srch == h then
+		if area then
+			if col then
+				tex(res, x, y, w, h, srcx, srcy, srcw, srch, 0, Vec2.new(0.5, 0.5), false, false, col)
+			else
+				tex(img, x, y, w, h, srcx, srcy, srcw, srch)
+			end
 		else
-			tex(img, x, y, w, h)
+			if col then
+				tex(res, x, y, w, h, x, y, w, h, 0, Vec2.new(0.5, 0.5), false, false, col)
+			else
+				tex(img, x, y, w, h)
+			end
 		end
 	else
 		if col then
