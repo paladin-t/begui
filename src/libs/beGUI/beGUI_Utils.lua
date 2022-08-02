@@ -334,7 +334,8 @@ local function tex3Grid(elem, x, y, w, h, permeation, alpha, color_)
 			permeation = 1
 		end
 		x, y, w, h = math.floor(x), math.floor(y), math.floor(w), math.floor(h)
-		local srcx1, srcx2, srcx3, srcx4 = srcx, srcx + math.floor(srcw * 1 / 3), srcx + math.floor(srcw * 2 / 3), srcx + srcw - 1
+		local w_1_3 = math.floor(srcw * 1 / 3)
+		local srcx1, srcx2, srcx3, srcx4 = srcx, srcx + w_1_3, srcx + srcw - w_1_3 - 1, srcx + srcw - 1
 		local srcwBorder, srcwMiddle = srcx2 - srcx1 + 1, srcx3 - srcx2 + 1
 		local dstx1, dstx2, dstx3, dstx4 = x, x + srcwBorder, x + w - srcwBorder, x + w - 1
 		if col then
@@ -393,8 +394,9 @@ local function tex9Grid(elem, x, y, w, h, permeation, alpha, color_)
 			permeation = 1
 		end
 		x, y, w, h = math.floor(x), math.floor(y), math.floor(w), math.floor(h)
-		local srcx1, srcx2, srcx3, srcx4 = srcx, srcx + math.floor(srcw * 1 / 3), srcx + math.floor(srcw * 2 / 3), srcx + srcw - 1
-		local srcy1, srcy2, srcy3, srcy4 = srcy, srcy + math.floor(srch * 1 / 3), srcy + math.floor(srch * 2 / 3), srcy + srch - 1
+		local w_1_3, h_1_3 = math.floor(srcw * 1 / 3), math.floor(srch * 1 / 3)
+		local srcx1, srcx2, srcx3, srcx4 = srcx, srcx + w_1_3, srcx + srcw - w_1_3 - 1, srcx + srcw - 1
+		local srcy1, srcy2, srcy3, srcy4 = srcy, srcy + h_1_3, srcy + srch - h_1_3 - 1, srcy + srch - 1
 		local srcwBorder, srcwMiddle = srcx2 - srcx1 + 1, srcx3 - srcx2 + 1
 		local srchBorder, srchMiddle = srcy2 - srcy1 + 1, srcy3 - srcy2 + 1
 		local dstx1, dstx2, dstx3, dstx4 = x, x + srcwBorder, x + w - srcwBorder, x + w - 1
