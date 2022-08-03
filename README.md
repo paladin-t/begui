@@ -90,6 +90,7 @@ Most of the member functions return the widget object itself, it makes it easier
 
 ```lua
 require 'libs/beGUI/beGUI'
+require 'libs/beGUI/beTheme'
 
 local widgets = nil
 local theme = nil

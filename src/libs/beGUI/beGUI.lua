@@ -21,7 +21,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
-require 'libs/beGUI/beTheme'
 local beUtils = require 'libs/beGUI/beGUI_Utils'
 local beStructures = require 'libs/beGUI/beGUI_Structures'
 local beWidget = require 'libs/beGUI/beGUI_Widget'
@@ -41,7 +40,7 @@ end
 beGUI = beUtils.merge(
 	beGUI,
 	{
-		version = '1.5.8',
+		version = '1.5.9',
 	
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,

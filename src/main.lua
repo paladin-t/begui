@@ -22,6 +22,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
 require 'libs/beGUI/beGUI'
+require 'libs/beGUI/beTheme'
 require 'keycode'
 
 local DEBUG = false
