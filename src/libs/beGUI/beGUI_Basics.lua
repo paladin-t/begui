@@ -591,6 +591,9 @@ local Url = beClass.class({
 		if visible then
 			local theme_ = theme[self._theme or intersects and 'font_url_hover' or 'font_url']
 			local _, fy, fw, fh
+			if theme_.resource ~= theme['font'].resource then
+				font(theme_.resource)
+			end
 			if down and intersects then
 				if not self.transparency then
 					rect(x, y, x + w, y + h, true, theme['font_url'].color)
@@ -621,6 +624,9 @@ local Url = beClass.class({
 				if not self.transparency then
 					line(x, fy + fh, x + w, fy + fh, theme_.color)
 				end
+			end
+			if theme_.resource ~= theme['font'].resource then
+				font(theme['font'].resource)
 			end
 		end
 		if self._clip then
