@@ -1,7 +1,7 @@
 --[[
 The MIT License
 
-Copyright (C) 2021 - 2022 Tony Wang
+Copyright (C) 2021 - 2026 Tony Wang
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -96,11 +96,12 @@ local function split(txt, sep, pattern, translate)
 		if sep == nil then
 			local i = 1
 			for str in string.gmatch(line, pattern or '[\33-\127\192-\255]+[\128-\191]*') do
+				local str_ = str
 				if translate then
-					str = translate(str, i)
+					str_ = translate(str, i)
 				end
 				local codes = { }
-				for _, v in utf8.codes(str) do
+				for _, v in utf8.codes(str_) do
 					table.insert(codes, v)
 				end
 				local j = nil
@@ -111,7 +112,7 @@ local function split(txt, sep, pattern, translate)
 					j = i
 				end
 				if j == nil then
-					table.insert(result, str)
+					table.insert(result, str_)
 				else
 					local first, second = '', ''
 					for k = 1, j - 1, 1 do
@@ -132,10 +133,11 @@ local function split(txt, sep, pattern, translate)
 		else
 			local i = 1
 			for str in string.gmatch(line, '([^' .. sep .. ']+)') do
+				local str_ = str
 				if translate then
-					str = translate(str, i)
+					str_ = translate(str, i)
 				end
-				table.insert(result, str)
+				table.insert(result, str_)
 				i = i + 1
 			end
 		end
