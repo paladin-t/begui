@@ -790,6 +790,89 @@ local InputBox = beClass.class({
 	end
 }, beWidget.Widget)
 
+local TextEditBox = beClass.class({
+	-- _theme = nil, -- TODO
+
+	-- Constructs a TextEditBox with the specific content.
+	-- `content`: the content string
+	ctor = function (self, content)
+		beWidget.Widget.ctor(self)
+
+		self.content = TextBox.new()
+		self.content.text = content or ''
+	end,
+
+	__tostring = function (self)
+		return 'TextEditBox'
+	end,
+
+	-- Gets the content text.
+	getValue = function (self)
+		return self.content.text
+	end,
+	-- Sets the content text.
+	setValue = function (self, val)
+		if type(val) ~= 'string' then
+			val = tostring(val)
+		end
+		self.content.text = val
+
+		return self
+	end,
+
+	-- setTheme = function (self, theme)
+	-- 	self._theme = theme
+
+	-- 	return self
+	-- end,
+
+	setOption = function (self, key, val)
+		if not self.content then
+			return self
+		end
+
+		self.content:setOption(key, val)
+
+		return self
+	end,
+	loadFont = function (self, asset)
+		if not self.content then
+			return self
+		end
+
+		local bytes = Project.main:read(asset)
+		local json = Json.new()
+		json:fromBytes(bytes)
+		self.content:loadFont(json)
+
+		return self
+	end,
+
+	navigatable = function (self)
+		return 'all'
+	end,
+
+	-- _updateLayout = function (self, ...)
+	-- 	beWidget.Widget._updateLayout(self, ...)
+	-- end,
+	_update = function (self, theme, delta, dx, dy, event)
+		if not self.visibility then
+			return
+		end
+
+		local ox, oy = self:offset()
+		local px, py = self:position()
+		local x, y = dx + px + ox, dy + py + oy
+		local w, h = self:size()
+
+		if self.content then
+			self.content:update(x, y, w, h)
+		end
+
+		beWidget.Widget._update(self, theme, delta, dx, dy, event)
+	end
+}, beWidget.Widget)
+
 local Picture = beClass.class({
 	_stretched = false,
 	_permeation = nil,
@@ -2233,6 +2316,7 @@ return {
 	MultilineLabel = MultilineLabel,
 	Url = Url,
 	InputBox = InputBox,
+	TextEditBox = TextEditBox,
 	Picture = Picture,
 	Button = Button,
 	PictureButton = PictureButton,
