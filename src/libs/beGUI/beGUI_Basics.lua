@@ -790,10 +790,10 @@ local InputBox = beClass.class({
 	end
 }, beWidget.Widget)
 
-local TextEditBox = beClass.class({
+local TextBox = beClass.class({
 	-- _theme = nil, -- TODO
 
-	-- Constructs a TextEditBox with the specific content.
+	-- Constructs a TextBox with the specific content.
 	-- `content`: the content string
 	ctor = function (self, content)
 		beWidget.Widget.ctor(self)
@@ -803,7 +803,7 @@ local TextEditBox = beClass.class({
 	end,
 
 	__tostring = function (self)
-		return 'TextEditBox'
+		return 'TextBox'
 	end,
 
 	-- Gets the content text.
@@ -820,7 +820,7 @@ local TextEditBox = beClass.class({
 		return self
 	end,
 
-	-- setTheme = function (self, theme)
+	-- setTheme = function (self, theme) -- TODO
 	-- 	self._theme = theme
 
 	-- 	return self
@@ -852,9 +852,6 @@ local TextEditBox = beClass.class({
 		return 'all'
 	end,
 
-	-- _updateLayout = function (self, ...)
-	-- 	beWidget.Widget._updateLayout(self, ...)
-	-- end,
 	_update = function (self, theme, delta, dx, dy, event)
 		if not self.visibility then
 			return
@@ -866,7 +863,7 @@ local TextEditBox = beClass.class({
 		local w, h = self:size()
 
 		if self.content then
-			self.content:update(x, y, w, h)
+			self.content:update(x, y, x + w, y + h)
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)
@@ -2316,7 +2313,7 @@ return {
 	MultilineLabel = MultilineLabel,
 	Url = Url,
 	InputBox = InputBox,
-	TextEditBox = TextEditBox,
+	TextBox = TextBox,
 	Picture = Picture,
 	Button = Button,
 	PictureButton = PictureButton,

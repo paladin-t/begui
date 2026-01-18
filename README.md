@@ -6,45 +6,47 @@ Try it [in browser](https://paladin-t.github.io/begui/).
 
 **Index**
 
-* [Features](#features)
-* [Setup](#setup)
-* [Reference](#reference)
-  * [1. Principles](#1-principles)
-  * [2. Structures](#2-structures)
-    * [beStructures.Percent](#bestructurespercent)
-    * [beGUI.percent](#beguipercent)
-  * [3. Widget](#3-widget)
-    * [beGUI.Widget](#beguiwidget)
-  * [4. Basic Widgets](#4-basic-widgets)
-    * [beGUI.Label](#beguilabel)
-    * [beGUI.MultilineLabel](#beguimultilinelabel)
-    * [beGUI.Url](#beguiurl)
-    * [beGUI.InputBox](#beguiinputbox)
-    * [beGUI.Picture](#beguipicture)
-    * [beGUI.Button](#beguibutton)
-    * [beGUI.PictureButton](#beguipicturebutton)
-    * [beGUI.CheckBox](#beguicheckbox)
-    * [beGUI.RadioBox](#beguiradiobox)
-    * [beGUI.ComboBox](#beguicombobox)
-    * [beGUI.NumberBox](#beguinumberbox)
-    * [beGUI.ProgressBar](#beguiprogressbar)
-    * [beGUI.Slide](#beguislide)
-    * [beGUI.Group](#beguigroup)
-  * [5. Container Widgets](#5-container-widgets)
-    * [beGUI.List](#beguilist)
-    * [beGUI.Draggable](#beguidraggable)
-    * [beGUI.Droppable](#beguidroppable)
-    * [beGUI.Tab](#beguitab)
-    * [beGUI.Popup](#beguipopup)
-    * [beGUI.MessageBox](#beguimessagebox)
-    * [beGUI.QuestionBox](#beguiquestionbox)
-  * [6. Custom Widget](#6-custom-widget)
-    * [beGUI.Custom](#beguicustom)
-    * [Writing Your Own Widget](#writing-your-own-widget)
-  * [7. Theme](#7-theme)
-  * [8. Tweening](#8-tweening)
-    * [beGUI.Tween](#beguitween)
-* [License](#license)
+- [Features](#features)
+- [Setup](#setup)
+- [Reference](#reference)
+  - [1. Principles](#1-principles)
+  - [2. Structures](#2-structures)
+    - [beStructures.Percent](#bestructurespercent)
+    - [beGUI.percent](#beguipercent)
+  - [3. Widget](#3-widget)
+    - [beGUI.Widget](#beguiwidget)
+  - [4. Basic Widgets](#4-basic-widgets)
+    - [beGUI.Label](#beguilabel)
+    - [beGUI.MultilineLabel](#beguimultilinelabel)
+    - [beGUI.Url](#beguiurl)
+    - [beGUI.InputBox](#beguiinputbox)
+    - [beGUI.TextBox](#beguitextbox)
+    - [beGUI.Picture](#beguipicture)
+    - [beGUI.Button](#beguibutton)
+    - [beGUI.PictureButton](#beguipicturebutton)
+    - [beGUI.CheckBox](#beguicheckbox)
+    - [beGUI.RadioBox](#beguiradiobox)
+    - [beGUI.ComboBox](#beguicombobox)
+    - [beGUI.NumberBox](#beguinumberbox)
+    - [beGUI.ProgressBar](#beguiprogressbar)
+    - [beGUI.Slide](#beguislide)
+    - [beGUI.Group](#beguigroup)
+  - [5. Container Widgets](#5-container-widgets)
+    - [beGUI.List](#beguilist)
+    - [beGUI.Draggable](#beguidraggable)
+    - [beGUI.Droppable](#beguidroppable)
+    - [beGUI.Tab](#beguitab)
+    - [beGUI.Popup](#beguipopup)
+    - [beGUI.MessageBox](#beguimessagebox)
+    - [beGUI.QuestionBox](#beguiquestionbox)
+    - [beGUI.TextEditBox](#beguitexteditbox)
+  - [6. Custom Widget](#6-custom-widget)
+    - [beGUI.Custom](#beguicustom)
+    - [Writing Your Own Widget](#writing-your-own-widget)
+  - [7. Theme](#7-theme)
+  - [8. Tweening](#8-tweening)
+    - [beGUI.Tween](#beguitween)
+- [License](#license)
 
 # Features
 
@@ -410,7 +412,7 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
-* beGUI.`InputBox.new(content placeholder)`: constructs an InputBox with the specific content
+* beGUI.`InputBox.new(content, placeholder)`: constructs an InputBox with the specific content
   * `content`: the content string
   * `placeholder`: the placeholder string when there's no input yet
 
@@ -429,6 +431,25 @@ Shortcut to create `Percent` object.
   * returns `self`
 
 * `inputbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` content text has been changed
+  * returns `self`
+
+### beGUI.TextBox
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+* beGUI.`TextBox.new(content)`: constructs a TextBox with the specific content
+  * `content`: the content string
+
+* `textBox:getValue()`: gets the content text
+  * returns the content string
+* `textBox:setValue(val)`: sets the content text
+  * `val`: the specific content string
+* `textBox:setOption(key, val)`: sets the options of the `TextBox`
+  * `key`: the option key
+  * `val`: the option value
+  * returns `self`
+* `textBox:loadFont(asset)`: loads the specific font config to the `TextBox`
+  * `asset`: the JSON asset path of the font config
   * returns `self`
 
 ### beGUI.Picture
@@ -830,7 +851,7 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Popup`**
 
-* beGUI.`QuestionBox.new(closable, title, messsage, confirm, deny)`: constructs a `QuestionBox`
+* beGUI.`QuestionBox.new(closable, title, message, confirm, deny)`: constructs a `QuestionBox`
   * `closable`: `true` to enable the close button, `false` to disable
   * `title`: the title text
   * `message`: the message text
@@ -842,6 +863,24 @@ Shortcut to create `Percent` object.
 * `questionbox:on('confirmed', function (sender) end)`: registers an event which will be triggered when the `Popup` has been confirmed
   * returns `self`
 * `questionbox:on('denied', function (sender) end)`: registers an event which will be triggered when the `Popup` has been denied
+  * returns `self`
+
+### beGUI.TextEditBox
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Popup`**
+
+* beGUI.`TextEditBox.new(closable, title, content, confirm, deny)`: constructs a `TextEditBox`
+  * `closable`: `true` to enable the close button, `false` to disable
+  * `title`: the title text
+  * `content`: the content text
+  * `confirm`: the text for the confirm button
+  * `deny`: the text for the deny button
+
+* `textEditBox:on('canceled', function (sender) end)`: registers an event which will be triggered when the `Popup` has been canceled
+  * returns `self`
+* `textEditBox:on('confirmed', function (sender) end)`: registers an event which will be triggered when the `Popup` has been confirmed
+  * returns `self`
+* `textEditBox:on('denied', function (sender) end)`: registers an event which will be triggered when the `Popup` has been denied
   * returns `self`
 
 </details>

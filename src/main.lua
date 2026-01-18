@@ -57,8 +57,12 @@ function setup()
 				:put(P(50), 0)     -- X: 50%, Y: 0.
 				:resize(P(48), 23) -- W: 48%, H: 23.
 				:on('clicked', function (sender)
-					widgets:openPopup( -- Open popup.
-						beGUI.QuestionBox.new(true, 'Message', 'Hi there!')
+					local rb1 = widgets:get(1, 'radiobox1'):getValue()
+					local rb2 = widgets:get(1, 'radiobox2'):getValue()
+					local rb3 = widgets:get(1, 'radiobox3'):getValue()
+					local popup = nil
+					if rb1 then
+						popup = beGUI.MessageBox.new(true, 'Message', 'Try the radio boxes.')
 							:on('canceled', function (sender)
 								widgets:closePopup()
 
@@ -77,7 +81,48 @@ function setup()
 								local lbl = widgets:get(1, 'label')
 								lbl:setValue('Popup denied')
 							end)
-					)
+					elseif rb2 then
+						popup = beGUI.QuestionBox.new(true, 'Message', 'How about it?')
+							:on('canceled', function (sender)
+								widgets:closePopup()
+
+								local lbl = widgets:get(1, 'label')
+								lbl:setValue('Popup canceled')
+							end)
+							:on('confirmed', function (sender)
+								widgets:closePopup()
+
+								local lbl = widgets:get(1, 'label')
+								lbl:setValue('Popup confirmed')
+							end)
+							:on('denied', function (sender)
+								widgets:closePopup()
+
+								local lbl = widgets:get(1, 'label')
+								lbl:setValue('Popup denied')
+							end)
+					elseif rb3 then
+						popup = beGUI.TextEditBox.new(true, 'Message', 'Edit me...')
+							:on('canceled', function (sender)
+								widgets:closePopup()
+
+								local lbl = widgets:get(1, 'label')
+								lbl:setValue('Popup canceled')
+							end)
+							:on('confirmed', function (sender)
+								widgets:closePopup()
+
+								local lbl = widgets:get(1, 'label')
+								lbl:setValue('Popup confirmed')
+							end)
+							:on('denied', function (sender)
+								widgets:closePopup()
+
+								local lbl = widgets:get(1, 'label')
+								lbl:setValue('Popup denied')
+							end)
+					end
+					widgets:openPopup(popup) -- Open popup.
 
 					local lbl = widgets:get(1, 'label')
 					lbl:setValue('Popup opened')

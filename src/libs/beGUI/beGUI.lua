@@ -40,7 +40,7 @@ end
 beGUI = beUtils.merge(
 	beGUI,
 	{
-		version = '1.5.9',
+		version = '1.5.10',
 	
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,
@@ -59,6 +59,8 @@ beGUI = beUtils.merge(
 		-- Events:
 		--   'changed': function (sender, value) end
 		InputBox = beBasics.InputBox,
+		-- TextBox widget.
+		TextBox = beBasics.TextBox,
 		-- Picture widget.
 		Picture = beBasics.Picture,
 		-- Button widget.
@@ -124,6 +126,12 @@ beGUI = beUtils.merge(
 		--   'confirmed': function (sender) end
 		--   'denied': function (sender) end
 		QuestionBox = bePopups.QuestionBox,
+		-- TextEditBox widget.
+		-- Events:
+		--   'canceled': function (sender) end
+		--   'confirmed': function (sender) end
+		--   'denied': function (sender) end
+		TextEditBox = bePopups.TextEditBox,
 		-- Custom widget.
 		-- Events:
 		--   'updated': function (sender, x, y, w, h, delta, event) end

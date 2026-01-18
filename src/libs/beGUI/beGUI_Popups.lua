@@ -292,6 +292,122 @@ local QuestionBox = beClass.class({
 	end
 }, Popup)
 
+local TextEditBox = beClass.class({
+	_closable = true,
+	_title = nil,
+	_content = nil,
+	_confirm = 'Ok',
+	_deny = 'Cancel',
+	_initialized = false,
+
+	-- Constructs a TextEditBox.
+	-- `closable`: `true` to enable the close button, `false` to disable
+	-- `title`: the title text
+	-- `content`: the content text
+	-- `confirm`: the text for the confirm button
+	-- `deny`: the text for the deny button
+	ctor = function (self, closable, title, content, confirm, deny)
+		Popup.ctor(self)
+
+		self._closable = closable
+		self._title = title or 'Bitty Engine'
+		self._content = content
+		if confirm then
+			self._confirm = confirm
+		end
+		if deny then
+			self._deny = deny
+		end
+
+		local P = beStructures.percent
+		self
+			:setId('popup')
+			:anchor(0, 0)
+			:put(0, 0)
+			:resize(P(100), P(100))
+	end,
+
+	__tostring = function (self)
+		return 'TextEditBox'
+	end,
+
+	_update = function (self, theme, delta, dx, dy, event)
+		if not self._initialized then
+			self._initialized = true
+
+			local width = 256
+			local P = beStructures.percent
+			local child = beGUI.Picture.new(theme['window'], true)
+				:setId('picture')
+				:anchor(0.5, 0.5)
+				:put(P(50), P(50))
+				:resize(width, 128)
+				:addChild(
+					beGUI.Label.new(self._title, 'center', true, 'font_title')
+						:setId('label_title')
+						:anchor(0.5, 0)
+						:put(P(50), 3)
+						:resize(P(100), 23)
+				)
+				:addChild(
+					beGUI.TextBox.new(self._content or '')
+						:setId('text_box')
+						:anchor(0.5, 1)
+						:put(P(50), P(68))
+						:resize(P(90), 60)
+				)
+				:addChild(
+					beGUI.Button.new(self._confirm)
+						:setId('button_confirm')
+						:anchor(1.1, 1)
+						:put(P(50), P(90))
+						:resize(P(24), 23)
+						:on('clicked', function (sender)
+							self:_trigger('confirmed', self)
+						end)
+				)
+				:addChild(
+					beGUI.Button.new(self._deny)
+						:setId('button_deny')
+						:anchor(-0.1, 1)
+						:put(P(50), P(90))
+						:resize(P(24), 23)
+						:on('clicked', function (sender)
+							self:_trigger('denied', self)
+						end)
+				)
+			if self._closable then
+				child
+					:addChild(
+						beGUI.PictureButton.new('', false, { normal = 'button_close', pressed = 'button_close_down' })
+							:setId('button_close')
+							:anchor(1, 0)
+							:put(width - 6, 5)
+							:resize(19, 19)
+							:on('clicked', function (sender)
+								self:_trigger('canceled', self)
+							end)
+					)
+			end
+			self:addChild(child)
+
+			local w, h = self:size()
+			child:_updateLayout(w, h)
+		end
+
+		Popup._update(self, theme, delta, dx, dy, event)
+	end,
+
+	_cancelNavigation = function (self)
+		if self._closable then
+			self:_trigger('canceled', self)
+		end
+
+		self.context.focus = nil
+		self.context.navigated = false
+	end
+}, Popup)
+
 --[[
 Exporting.
 ]]
@@ -299,5 +415,6 @@ Exporting.
 return {
 	Popup = Popup,
 	MessageBox = MessageBox,
-	QuestionBox = QuestionBox
+	QuestionBox = QuestionBox,
+	TextEditBox = TextEditBox
 }
