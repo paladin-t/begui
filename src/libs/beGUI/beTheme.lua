@@ -72,6 +72,9 @@ local function default()
 			area = { 0, 0, 17, 17 },
 			content_offset = { 2, 0, 2 }
 		},
+		['textbox'] = {
+			style_background = '#f0f0f0ff'
+		},
 
 		['button'] = {
 			resource = Resources.load('imgs/button.png'),

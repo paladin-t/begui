@@ -791,7 +791,9 @@ local InputBox = beClass.class({
 }, beWidget.Widget)
 
 local TextBox = beClass.class({
-	-- _theme = nil, -- TODO
+	_dismissFocus = false,
+	_theme = nil,
+	_themeObject = nil,
 
 	-- Constructs a TextBox with the specific content.
 	-- `content`: the content string
@@ -820,11 +822,32 @@ local TextBox = beClass.class({
 		return self
 	end,
 
-	-- setTheme = function (self, theme) -- TODO
-	-- 	self._theme = theme
+	setTheme = function (self, theme)
+		self._theme = theme
 
-	-- 	return self
-	-- end,
+		self:_refreshTheme()
+
+		return self
+	end,
+	_refreshTheme = function (self)
+		if not self.content then
+			return self
+		end
+		if not self._themeObject then
+			return self
+		end
+
+		local textBox = self._themeObject[self._theme or 'textbox']
+		if not textBox then
+			return self
+		end
+
+		for k, v in pairs(textBox) do
+			self.content:setOption(k, v)
+		end
+
+		return self
+	end,
 
 	setOption = function (self, key, val)
 		if not self.content then
@@ -835,7 +858,7 @@ local TextBox = beClass.class({
 
 		return self
 	end,
-	loadFont = function (self, asset)
+	useFont = function (self, asset)
 		if not self.content then
 			return self
 		end
@@ -843,12 +866,21 @@ local TextBox = beClass.class({
 		local bytes = Project.main:read(asset)
 		local json = Json.new()
 		json:fromBytes(bytes)
-		self.content:loadFont(json)
+		self.content:useFont(json)
 
 		return self
 	end,
 
 	navigatable = function (self)
+		if not self.content then
+			return nil
+		end
+		if self.content.focused then
+			self._dismissFocus = true
+
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -857,10 +889,27 @@ local TextBox = beClass.class({
 			return
 		end
 
+		if self._themeObject ~= theme then
+			self._themeObject = theme
+			self:_refreshTheme() -- Refresh the theme options.
+		end
+
 		local ox, oy = self:offset()
 		local px, py = self:position()
 		local x, y = dx + px + ox, dy + py + oy
 		local w, h = self:size()
+		if self._dismissFocus then
+			self._dismissFocus = false
+			event.context.focus = nil
+			event.context.navigated = false
+		elseif event.context.focus == self and event.context.navigated == 'press' then
+			if self.content then
+				self.content:selectAll()
+				self.content:focus()
+			end
+			event.context.focus = nil
+			event.context.navigated = false
+		end
 
 		if self.content then
 			self.content:update(x, y, x + w, y + h)

@@ -444,11 +444,14 @@ Shortcut to create `Percent` object.
   * returns the content string
 * `textBox:setValue(val)`: sets the content text
   * `val`: the specific content string
+* `textBox:setTheme(theme)`: sets the theme
+  * `theme`: the custom font theme
+  * returns `self`
 * `textBox:setOption(key, val)`: sets the options of the `TextBox`
   * `key`: the option key
   * `val`: the option value
   * returns `self`
-* `textBox:loadFont(asset)`: loads the specific font config to the `TextBox`
+* `textBox:useFont(asset)`: uses the specific font config to the `TextBox`
   * `asset`: the JSON asset path of the font config
   * returns `self`
 
