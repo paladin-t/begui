@@ -451,6 +451,13 @@ Shortcut to create `Percent` object.
   * `key`: the option key
   * `val`: the option value
   * returns `self`
+* `textBox:cursorPosition()`: gets the current cursor position of the `TextBox`
+	* returns two values for line and column respectively
+* `textBox:selectionPositions()`: gets the current selection positions of the `TextBox`
+	* returns four values for line 1 and column 1, line 2 and column 2 respectively
+* `textBox:hasUnsavedChanges()`: gets whether the `TextBox` has unsaved changes
+	* returns `true` if there are unsaved changes; otherwise `false`
+* `textBox:markChangesSaved()`: marks the `TextBox`'s changes as saved
 * `textBox:useFont(asset)`: uses the specific font config to the `TextBox`
   * `asset`: the JSON asset path of the font config
   * returns `self`

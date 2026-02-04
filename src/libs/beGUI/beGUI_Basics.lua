@@ -822,6 +822,25 @@ local TextBox = beClass.class({
 		return self
 	end,
 
+	cursorPosition = function (self)
+		local a, b = self.content:cursorPosition()
+
+		return a, b
+	end,
+	selectionPositions = function (self)
+		local a, b, c, d = self.content:selectionPositions()
+
+		return a, b, c, d
+	end,
+	hasUnsavedChanges = function (self)
+		return self.content:hasUnsavedChanges()
+	end,
+	markChangesSaved = function (self)
+		self.content:markChangesSaved()
+
+		return self
+	end,
+
 	setTheme = function (self, theme)
 		self._theme = theme
 
