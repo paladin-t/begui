@@ -451,15 +451,56 @@ Shortcut to create `Percent` object.
   * `key`: the option key
   * `val`: the option value
   * returns `self`
-* `textBox:cursorPosition()`: gets the current cursor position of the `TextBox`
+* `textBox:useFont(asset)`: uses the specific font config to the `TextBox`
+  * `asset`: the JSON asset path of the font config
+  * returns `self`
+* `textBox:focused()`: gets whether the `TextBox` is focused
+  * returns `true` for focused, otherwise `false`
+* `textBox:focus()`: focuses the `TextBox`
+  * returns `self`
+* `textBox:location()`: gets the current cursor position of the `TextBox`
 	* returns two values for line and column respectively
-* `textBox:selectionPositions()`: gets the current selection positions of the `TextBox`
+* `textBox:locate(ln, col)`: sets the current cursor position of the `TextBox`
+  * `ln`: the cursor line
+  * `col`: the cursor column
+  * returns `self`
+* `textBox:selection()`: gets the current selection positions of the `TextBox`
 	* returns four values for line 1 and column 1, line 2 and column 2 respectively
+* `textBox:selectRange(ln1, col1, ln2, col2)`: sets the current selection of the `TextBox`
+  * `ln1`: the first cursor line
+  * `col1`: the first cursor column
+  * `ln2`: the second cursor line
+  * `col2`: the second cursor column
+  * returns `self`
+* `textBox:lineCount()`: gets the total line of the `TextBox`
+  * returns the total line count
+* `textBox:lineAt(ln)`: gets the text at the specific line
+  * returns the line text
+* `textBox:clear()`: clears all content of the `TextBox`
+  * returns `self`
+* `textBox:copy()`: copys the selected text of the `TextBox`
+  * returns `self`
+* `textBox:cut()`: cuts the selected text of the `TextBox`
+  * returns `self`
+* `textBox:paste()`: pastes text from the clipboard to the `TextBox`
+  * returns `self`
+* `textBox:delete()`: deletes the selected text of the `TextBox`
+  * returns `self`
+* `textBox:indent()`: performs an indent operation
+  * returns `self`
+* `textBox:unindent()`: performs an unindent operation
+  * returns `self`
+* `textBox:undoable()`: gets whether there are undoable records
+  * returns `true` for undoable, otherwise `false`
+* `textBox:undo()`: performs an undo operation
+  * returns `self`
+* `textBox:redoable()`: gets whether there are redoable records
+  * returns `true` for redoable, otherwise `false`
+* `textBox:redo()`: performs a redo operation
+  * returns `self`
 * `textBox:hasUnsavedChanges()`: gets whether the `TextBox` has unsaved changes
 	* returns `true` if there are unsaved changes; otherwise `false`
 * `textBox:markChangesSaved()`: marks the `TextBox`'s changes as saved
-* `textBox:useFont(asset)`: uses the specific font config to the `TextBox`
-  * `asset`: the JSON asset path of the font config
   * returns `self`
 
 ### beGUI.Picture

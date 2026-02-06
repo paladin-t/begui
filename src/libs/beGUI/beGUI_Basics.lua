@@ -822,25 +822,6 @@ local TextBox = beClass.class({
 		return self
 	end,
 
-	cursorPosition = function (self)
-		local a, b = self.content:cursorPosition()
-
-		return a, b
-	end,
-	selectionPositions = function (self)
-		local a, b, c, d = self.content:selectionPositions()
-
-		return a, b, c, d
-	end,
-	hasUnsavedChanges = function (self)
-		return self.content:hasUnsavedChanges()
-	end,
-	markChangesSaved = function (self)
-		self.content:markChangesSaved()
-
-		return self
-	end,
-
 	setTheme = function (self, theme)
 		self._theme = theme
 
@@ -886,6 +867,99 @@ local TextBox = beClass.class({
 		local json = Json.new()
 		json:fromBytes(bytes)
 		self.content:useFont(json)
+
+		return self
+	end,
+	focused = function (self)
+		return self.content.focused
+	end,
+	focus = function (self)
+		self.content:focus()
+
+		return self
+	end,
+	location = function (self)
+		local a, b = self.content:location()
+
+		return a, b
+	end,
+	locate = function (self, ln, col)
+		self.content:locate(ln, col)
+
+		return self
+	end,
+	selection = function (self)
+		local a, b, c, d = self.content:selection()
+
+		return a, b, c, d
+	end,
+	selectRange = function (self, ln1, col1, ln2, col2)
+		self.content:selectRange(ln1, col1, ln2, col2)
+
+		return self
+	end,
+	lineCount = function (self)
+		return self.content.lineCount
+	end,
+	lineAt = function (self, ln)
+		return self.content:lineAt(ln)
+	end,
+	clear = function (self)
+		self.content:clear()
+
+		return self
+	end,
+	copy = function (self)
+		self.content:copy()
+
+		return self
+	end,
+	cut = function (self)
+		self.content:cut()
+
+		return self
+	end,
+	paste = function (self)
+		self.content:paste()
+
+		return self
+	end,
+	delete = function (self)
+		self.content:delete()
+
+		return self
+	end,
+	indent = function (self)
+		self.content:indent()
+
+		return self
+	end,
+	unindent = function (self)
+		self.content:unindent()
+
+		return self
+	end,
+	undoable = function (self)
+		return self.content.undoable
+	end,
+	undo = function (self)
+		self.content:undo()
+
+		return self
+	end,
+	redoable = function (self)
+		return self.content.redoable
+	end,
+	redo = function (self)
+		self.content:redo()
+
+		return self
+	end,
+	hasUnsavedChanges = function (self)
+		return self.content.hasUnsavedChanges
+	end,
+	markChangesSaved = function (self)
+		self.content:markChangesSaved()
 
 		return self
 	end,
