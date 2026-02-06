@@ -482,7 +482,8 @@ Shortcut to create `Percent` object.
   * returns `self`
 * `textBox:cut()`: cuts the selected text of the `TextBox`
   * returns `self`
-* `textBox:paste()`: pastes text from the clipboard to the `TextBox`
+* `textBox:paste([txt])`: pastes text from the clipboard to the `TextBox`
+  * `txt`: optional, the text to paste, omit to paste from clipboard
   * returns `self`
 * `textBox:delete()`: deletes the selected text of the `TextBox`
   * returns `self`

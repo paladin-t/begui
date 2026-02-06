@@ -919,8 +919,12 @@ local TextBox = beClass.class({
 
 		return self
 	end,
-	paste = function (self)
-		self.content:paste()
+	paste = function (self, txt)
+		if txt then
+			self.content:paste(txt)
+		else
+			self.content:paste()
+		end
 
 		return self
 	end,
