@@ -904,6 +904,9 @@ local TextBox = beClass.class({
 	lineAt = function (self, ln)
 		return self.content:lineAt(ln)
 	end,
+	columnsAt = function (self, ln)
+		return self.content:columnsAt(ln)
+	end,
 	clear = function (self)
 		self.content:clear()
 
@@ -964,6 +967,11 @@ local TextBox = beClass.class({
 	end,
 	markChangesSaved = function (self)
 		self.content:markChangesSaved()
+
+		return self
+	end,
+	ensureCursorVisible = function (self, forceAbove, slowMode)
+		self.content:ensureCursorVisible(forceAbove, slowMode)
 
 		return self
 	end,

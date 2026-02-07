@@ -475,7 +475,11 @@ Shortcut to create `Percent` object.
 * `textBox:lineCount()`: gets the total line of the `TextBox`
   * returns the total line count
 * `textBox:lineAt(ln)`: gets the text at the specific line
+  * `ln`: the line index
   * returns the line text
+* `textBox:columnsAt(ln)`: gets the column count at the specific line
+  * `ln`: the line index
+  * returns the column count
 * `textBox:clear()`: clears all content of the `TextBox`
   * returns `self`
 * `textBox:copy()`: copys the selected text of the `TextBox`
@@ -503,6 +507,10 @@ Shortcut to create `Percent` object.
 	* returns `true` if there are unsaved changes; otherwise `false`
 * `textBox:markChangesSaved()`: marks the `TextBox`'s changes as saved
   * returns `self`
+* `textBox:ensureCursorVisible(forceAbove = false, slowMode = false)`: ensures the cursor is visible within the `TextBox`
+	* `forceAbove`: if `true`, forces the cursor to be positioned in the upper part of the viewport
+	* `slowMode`: whether to scroll slowly
+	* returns `self`
 
 ### beGUI.Picture
 
