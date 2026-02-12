@@ -434,7 +434,7 @@ Widget = beClass.class({
 	-- Updates the Widget and its children recursively.
 	-- `theme`: the theme to draw with
 	-- `delta`: elapsed time since previous update
-	-- `event`: optional, event passed to this updating cycle
+	-- `event`: optional, omit it for common usage, pass a prefilled event to prevent default event
 	update = function (self, theme, delta, event)
 		return self:_update(theme, delta, 0, 0, event)
 	end,
@@ -573,21 +573,54 @@ Widget = beClass.class({
 	-- not call this unless you really need to.
 	-- `theme`: the theme to draw with
 	-- `delta`: elapsed time since previous update
-	-- `event`: optional, event passed to this touching cycle
+	-- `event`: optional, omit it for common usage, pass a prefilled event to prevent default event
 	touch = function (self, theme, delta, event)
 		local none = function (...) end
 		local plot_, line_, circ_, ellipse_, pie_, rect_, text_, tri_, tex_, spr_, map_ =
 			plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map
 		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
 			none, none, none, none, none, none, none, none, none, none, none
-
 		self:update(theme, delta, event)
 		self:update(theme, delta, event)
-
 		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
 			plot_, line_, circ_, ellipse_, pie_, rect_, text_, tri_, tex_, spr_, map_
 
 		return self
+	end,
+
+	-- Overrides graphics functions for using beGUI within Lua-based programming
+	-- environments other than Bitty Engine.
+	-- `functions`: the table that holds the new functions
+	override = function (self, functions)
+		local result = {
+			plot = plot,
+			line = line,
+			circ = circ,
+			ellipse = ellipse,
+			pie = pie,
+			rect = rect,
+			text = text,
+			tri = tri,
+			tex = tex,
+			spr = spr,
+			map = map
+		}
+		if not functions then
+			return result
+		end
+		if functions.plot    then plot    = functions.plot end
+		if functions.line    then line    = functions.line end
+		if functions.circ    then circ    = functions.circ end
+		if functions.ellipse then ellipse = functions.ellipse end
+		if functions.pie     then pie     = functions.pie end
+		if functions.rect    then rect    = functions.rect end
+		if functions.text    then text    = functions.text end
+		if functions.tri     then tri     = functions.tri end
+		if functions.tex     then tex     = functions.tex end
+		if functions.spr     then spr     = functions.spr end
+		if functions.map     then map     = functions.map end
+
+		return result
 	end,
 
 	-- Schedules a tweening procedure.
