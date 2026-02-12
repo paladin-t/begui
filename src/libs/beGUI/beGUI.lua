@@ -45,7 +45,8 @@ beGUI = beUtils.merge(
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,
 	
-		-- Widget class, base for other widgets, also could be used as container of other widgets.
+		-- Widget class, base for other widgets, also could be used as container
+		-- of other widgets.
 		Widget = beWidget.Widget,
 		-- Label widget.
 		Label = beBasics.Label,

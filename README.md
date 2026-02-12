@@ -182,7 +182,11 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`**
 
+**Constructor**
+
 * beGUI.`Widget.new()`: constructs a `Widget` object
+
+**Methods**
 
 * `widget:setId(id)`: sets the ID of the `Widget`; an ID is used to identify a `Widget` from others for accessing
   * `id`: ID string
@@ -258,7 +262,9 @@ Shortcut to create `Percent` object.
 * `widget:update(theme, delta, event = nil)`: updates the `Widget` and its children recursively
   * `theme`: the theme to draw with
   * `delta`: elapsed time since previous update
-  * `event`: omit it for common usage, pass a prefilled event to prevent default event
+  * `event`: optional, omit it for common usage, pass a prefilled event to prevent default event
+
+**Events**
 
 * `widget:on(event, handler)`: registers the handler of the specific event
   * `event`: event name string
@@ -267,6 +273,8 @@ Shortcut to create `Percent` object.
 * `widget:off(event)`: unregisters the handlers of the specific event
   * `event`: event name string
   * returns `self`
+
+**Other Methods**
 
 * `widget:navigatable()`: gets whether this `Widget` is navigatable
   * returns `'all'` for fully navigatable, `nil` for non-navigatable, `'children'` for children only, `'content'` for content only
@@ -283,6 +291,10 @@ Shortcut to create `Percent` object.
   * returns the queried `Widget` or `nil`
 * `widget:captured()`: gets whether this `Widget` has captured mouse event.
   * returns `true` for captured, otherwise `false`
+* `widget:touch(theme, delta, event)`: touches the `Widget` and its children recursively; this operation calls the `update` to refresh the widgets' layout but doesn't draw anything; used to prepare layout in advance to avoid flicking before tweening, etc. do not call this unless you really need to
+  * `theme`: the theme to draw with
+  * `delta`: elapsed time since previous update
+  * `event`: optional, omit it for common usage, pass a prefilled event to prevent default event
 * `widget:tween(t)`: schedules a tweening procedure
   * `t`: the tweening object
   * returns `self`
@@ -300,12 +312,16 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Label.new(content, alignment = 'left', clip_ = false, theme = nil, shadow = nil)`: constructs a `Label` with the specific content
   * `content`: the content string
   * `alignment`: one in `nil`, `'left'`, `'right'`, `'center'`
   * `clip_`: whether to clip drawing outside this `Widget`'s bounds
   * `theme`: custom theme
   * `shadow`: shadow theme for shadowed drawing
+
+**Methods**
 
 * `label:getValue()`: gets the content text
   * returns the content string
@@ -331,10 +347,14 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`MultilineLabel.new(content, lineHeight = nil, alighment = 'left')`: constructs a `MultilineLabel` with the specific content
   * `content`: the content string
   * `lineHeight`: the custom line height
   * `alignment`: one in `nil`, `'left'`, `'right'`, `'center'`
+
+**Methods**
 
 * `multilinelabel:getValue()`: gets the content text
   * returns the content string
@@ -380,11 +400,15 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Url.new(content, alighment = 'left', clip_ = false, theme = nil)`: constructs a `Url` with the specific content
   * `content`: the content string
   * `alignment`: one in `nil`, `'left'`, `'right'`, `'center'`
   * `clip_`: whether to clip drawing outside this `Widget`'s bounds
   * `theme`: custom theme
+
+**Methods**
 
 * `url:getValue()`: gets the content text
   * returns the content string
@@ -405,6 +429,8 @@ Shortcut to create `Percent` object.
   * `theme`: the custom theme
   * returns `self`
 
+**Events**
+
 * `url:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
   * returns `self`
 
@@ -412,9 +438,13 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`InputBox.new(content, placeholder)`: constructs an InputBox with the specific content
   * `content`: the content string
   * `placeholder`: the placeholder string when there's no input yet
+
+**Methods**
 
 * `inputbox:getValue()`: gets the content text
   * returns the content string
@@ -430,6 +460,8 @@ Shortcut to create `Percent` object.
   * `val`: the specific placeholder string
   * returns `self`
 
+**Events**
+
 * `inputbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` content text has been changed
   * returns `self`
 
@@ -437,8 +469,12 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`TextBox.new(content)`: constructs a TextBox with the specific content
   * `content`: the content string
+
+**Methods**
 
 * `textBox:getValue()`: gets the content text
   * returns the content string
@@ -516,10 +552,14 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Picture.new(content, stretched = false, permeation = false)`: constructs a Picture with the specific content
   * `content`: the content `Texture`
   * `stretched`: whether to use 9-grid-based splitting for stretching
   * `permeation`: whether to use permeation correction
+
+**Methods**
 
 * `picture:setValue(content, stretched = false, permeation = false)`: sets the content `Texture`
   * `content`: the content `Texture`
@@ -544,8 +584,12 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Button.new(content)`: constructs a Button with the specific content
   * `content`: the content string
+
+**Methods**
 
 * `button:setValue(content)`: sets the content text
   * `val`: the specific content string
@@ -561,6 +605,8 @@ Shortcut to create `Percent` object.
   * `val`: `true` for enabled, otherwise `false`
   * returns `self`
 
+**Events**
+
 * `button:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
   * returns `self`
 
@@ -568,11 +614,15 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`PictureButton.new(content, repeat_ = false, theme = nil, background = nil)`: constructs a `PictureButton` with the specific content
   * `content`: the content `Texture`
   * `repeat_`: whether to enable repeating event
   * `theme`: the custom theme
   * `background`: optional, the custom background `Texture`
+
+**Methods**
 
 * `picturebutton:setTheme(theme, widgetTheme)`: sets the theme
   * `theme`: the custom font theme
@@ -584,6 +634,8 @@ Shortcut to create `Percent` object.
   * `val`: `true` for enabled, otherwise `false`
   * returns `self`
 
+**Events**
+
 * `picturebutton:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
   * returns `self`
 
@@ -591,9 +643,13 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`CheckBox.new(content, value = false)`: constructs a `CheckBox` with the specific content
   * `content`: the content string
   * `value`: the initial checked state
+
+**Methods**
 
 * `checkbox:getValue()`: gets whether this `Widget` is checked
   * returns `true` for checked, otherwise `false`
@@ -609,6 +665,8 @@ Shortcut to create `Percent` object.
   * `val`: `true` for enabled, otherwise `false`
   * returns `self`
 
+**Events**
+
 * `checkbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` checked state has been changed
   * returns `self`
 
@@ -616,9 +674,13 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`RadioBox.new(content, value = false)`: constructs a `RadioBox` with the specific content
   * `content`: the content string
   * `value`: the initial checked state
+
+**Methods**
 
 * `radiobox:getValue()`: gets whether this `Widget` is checked
   * returns `true` for checked, otherwise `false`
@@ -628,6 +690,8 @@ Shortcut to create `Percent` object.
   * `val`: the content string
   * returns `self`
 
+**Events**
+
 * `radiobox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` checked state has been changed
   * returns `self`
 
@@ -635,9 +699,13 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`ComboBox.new(content, value = nil)`: constructs a `ComboBox` with the specific content
   * `content`: list of string
   * `value`: the selected index number
+
+**Methods**
 
 * `combobox:getItemAt(index)`: gets the item text at the specific index
   * `index`: the specific index to get
@@ -661,12 +729,16 @@ Shortcut to create `Percent` object.
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
 
+**Events**
+
 * `combobox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` selection state has been changed
   * returns `self`
 
 ### beGUI.NumberBox
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
 
 * beGUI.`NumberBox.new(value, step, min = nil, max = nil, trim = nil, format = nil)`: constructs a `NumberBox` with the specific value
   * `value`: the initial value number
@@ -675,6 +747,8 @@ Shortcut to create `Percent` object.
   * `max`: the maximum limit
   * `trim`: optional, used to trim before value setting
   * `format`: optional, used to format value for output
+
+**Methods**
 
 * `numberbox:getValue()`: gets the value number
   * returns the value number
@@ -715,6 +789,8 @@ Shortcut to create `Percent` object.
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
 
+**Events**
+
 * `numberbox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`
 
@@ -722,10 +798,14 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`ProgressBar.new(max, color, increasing = 'right')`: constructs a `ProgressBar`
   * `max`: the maximum value
   * `color`: the color for the completed bar
   * `increasing`: indicates whether to increase from left to right, or reversed, one in `'left'`, `'right'`
+
+**Methods**
 
 * `progressbar:getValue()`: gets the value number
   * returns the value number
@@ -746,6 +826,8 @@ Shortcut to create `Percent` object.
   * `theme`: the custom theme
   * returns `self`
 
+**Events**
+
 * `progressbar:on('changed', function (sender, value, maxValue, shadowValue) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`
 
@@ -753,10 +835,14 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Slide.new(value, min, max)`: constructs a `Slide` with the specific value
   * `value`: the initial value number
   * `min`: the minimum limit number
   * `max`: the maximum limit number
+
+**Methods**
 
 * `slide:getValue()`: gets the value number
   * returns the value number
@@ -779,6 +865,8 @@ Shortcut to create `Percent` object.
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
 
+**Events**
+
 * `slide:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`
 
@@ -786,8 +874,12 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Group.new(content)`: constructs a `Group`
   * `content`: the content string
+
+**Methods**
 
 * `group:getValue()`: gets the content text
   * returns the content string
@@ -806,8 +898,12 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`List.new(withScrollBar = false)`: constructs a `List`
   * `withScrollBar`: whether to draw scroll bar(s)
+
+**Methods**
 
 * `list:scrollableVertically()`: gets whether to allow scrolling vertically
   * returns `true` for allowing scrolling vertically, otherwise `false`
@@ -837,13 +933,19 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Draggable.new()`: constructs a `Draggable`
 
 ### beGUI.Droppable
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Droppable.new()`: constructs a `Droppable`
+
+**Events**
 
 * `droppable:on('entered', function (sender, draggable) end)`: registers an event which will be triggered when the `Widget` has been entered by a `Draggable`
   * returns `self`
@@ -860,7 +962,11 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Tab.new()`: constructs a `Tab`
+
+**Methods**
 
 * `tab:add(title)`: adds a `Tab` page with the specific title
   * `title`: the `Tab` page title to add
@@ -883,6 +989,8 @@ Shortcut to create `Percent` object.
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
 
+**Events**
+
 * `tab:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` page has been switched
   * returns `self`
 
@@ -890,17 +998,23 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Popup.new()`: constructs a `Popup`
 
 ### beGUI.MessageBox
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Popup`**
 
+**Constructor**
+
 * beGUI.`MessageBox.new(closable, title, message, confirm = 'OK')`: constructs a `MessageBox`
   * `closable`: `true` to enable the close button, `false` to disable
   * `title`: the title text
   * `message`: the message text
   * `confirm`: the text for the confirm button
+
+**Events**
 
 * `messagebox:on('canceled', function (sender) end)`: registers an event which will be triggered when the `Popup` has been canceled
   * returns `self`
@@ -911,12 +1025,16 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Popup`**
 
+**Constructor**
+
 * beGUI.`QuestionBox.new(closable, title, message, confirm, deny)`: constructs a `QuestionBox`
   * `closable`: `true` to enable the close button, `false` to disable
   * `title`: the title text
   * `message`: the message text
   * `confirm`: the text for the confirm button
   * `deny`: the text for the deny button
+
+**Events**
 
 * `questionbox:on('canceled', function (sender) end)`: registers an event which will be triggered when the `Popup` has been canceled
   * returns `self`
@@ -929,12 +1047,16 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Popup`**
 
+**Constructor**
+
 * beGUI.`TextEditBox.new(closable, title, content, confirm, deny)`: constructs a `TextEditBox`
   * `closable`: `true` to enable the close button, `false` to disable
   * `title`: the title text
   * `content`: the content text
   * `confirm`: the text for the confirm button
   * `deny`: the text for the deny button
+
+**Events**
 
 * `textEditBox:on('canceled', function (sender) end)`: registers an event which will be triggered when the `Popup` has been canceled
   * returns `self`
@@ -958,14 +1080,20 @@ The `Custom` `Widget` exposes a `'updated'` event to let you write short customi
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+**Constructor**
+
 * beGUI.`Custom.new(name = 'Custom')`: constructs a `Custom` `Widget`
   * `name`: the custom `Widget` name used to perform `__tostring`
+
+**Methods**
 
 * `custom:name()`: gets the custom `Widget` name
   * returns the custom `Widget` name
 * `custom:setName(val)`: sets the custom `Widget` name
   * `val`: the specific custom `Widget` name
   * returns `self`
+
+**Events**
 
 * `custom:on('updated', function (sender, x, y, w, h, delta, event) end)`: registers an event which will be triggered when the `Widget` has been updated per frame
   * returns `self`
@@ -1081,12 +1209,16 @@ beGUI is integrated with a tweening lib adapted from [kikito/tween.lua](https://
 
 **Model: `require 'libs/beGUI/beGUI'`**
 
+**Constructor**
+
 * beGUI.`Tween.new(duration, subject, target, easing, loop)`: constructs a `Tween` object
   * `duration`: the duration in seconds
   * `subject`: the tweening subject
   * `target`: the tweening target
   * `easing`: the easing function
   * `loop`: whether to loop the tweening
+
+**Methods**
 
 * `tween:reset()`: resets the `Tween` object
   * returns `self`
@@ -1095,6 +1227,8 @@ beGUI is integrated with a tweening lib adapted from [kikito/tween.lua](https://
   * returns `true` for success, otherwise `false`
 * `tween:update(delta)`: updates the `Tween` object with a specific delta time in seconds
   * returns `true` for success, otherwise `false`
+
+**Events**
 
 * `tween:on('changed', function (sender) end)`: registers an event which will be triggered when the `Tween` has been updated
   * returns `self`

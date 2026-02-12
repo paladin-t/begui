@@ -1528,7 +1528,8 @@ local RadioBox = beClass.class({
 	getValue = function (self)
 		return self._value
 	end,
-	-- Sets whether this Widget is checked; not recommended to call this manually.
+	-- Sets whether this Widget is checked; not recommended to call this
+	-- manually.
 	setValue = function (self, val)
 		if self._value == val then
 			return self
@@ -2116,7 +2117,8 @@ local ProgressBar = beClass.class({
 	-- Constructs a ProgressBar.
 	-- `max`: the maximum value
 	-- `color`: the color for the completed bar
-	-- `increasing`: indicates whether to increase from left to right, or reversed, one in `'left'`, `'right'`
+	-- `increasing`: indicates whether to increase from left to right, or
+	-- reversed, one in `'left'`, `'right'`
 	ctor = function (self, max, color, increasing)
 		beWidget.Widget.ctor(self)
 

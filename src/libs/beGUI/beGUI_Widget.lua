@@ -66,7 +66,8 @@ Widget = beClass.class({
 		return 'Widget'
 	end,
 
-	-- Sets the ID of the Widget; an ID is used to identify a Widget from others for accessing.
+	-- Sets the ID of the Widget; an ID is used to identify a Widget from others
+	-- for accessing.
 	-- `id`: ID string
 	setId = function (self, id)
 		if id ~= nil and type(id) ~= 'string' then
@@ -140,9 +141,12 @@ Widget = beClass.class({
 		return self
 	end,
 
-	-- Sets the anchor of the Widget; anchor is used to calculate the offset when placing Widget.
-	-- `x`: x position of the anchor in local space as number, typically [0.0, 1.0] for [left, right]
-	-- `y`: y position of the anchor in local space as number, typically [0.0, 1.0] for [top, bottom]
+	-- Sets the anchor of the Widget; anchor is used to calculate the offset
+	-- when placing Widget.
+	-- `x`: x position of the anchor in local space as number, typically
+	-- [0.0, 1.0] for [left, right]
+	-- `y`: y position of the anchor in local space as number, typically
+	-- [0.0, 1.0] for [top, bottom]
 	anchor = function (self, x, y)
 		self.anchorX = x
 		self.anchorY = y
@@ -430,6 +434,7 @@ Widget = beClass.class({
 	-- Updates the Widget and its children recursively.
 	-- `theme`: the theme to draw with
 	-- `delta`: elapsed time since previous update
+	-- `event`: optional, event passed to this updating cycle
 	update = function (self, theme, delta, event)
 		return self:_update(theme, delta, 0, 0, event)
 	end,
@@ -560,6 +565,29 @@ Widget = beClass.class({
 		end
 
 		return false
+	end,
+
+	-- Touches the Widget and its children recursively. This operation calls the
+	-- `update` to refresh the widgets' layout but doesn't draw anything. Used
+	-- to prepare layout in advance to avoid flicking before tweening, etc. Do
+	-- not call this unless you really need to.
+	-- `theme`: the theme to draw with
+	-- `delta`: elapsed time since previous update
+	-- `event`: optional, event passed to this touching cycle
+	touch = function (self, theme, delta, event)
+		local none = function (...) end
+		local plot_, line_, circ_, ellipse_, pie_, rect_, text_, tri_, tex_, spr_, map_ =
+			plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map
+		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
+			none, none, none, none, none, none, none, none, none, none, none
+
+		self:update(theme, delta, event)
+		self:update(theme, delta, event)
+
+		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
+			plot_, line_, circ_, ellipse_, pie_, rect_, text_, tri_, tex_, spr_, map_
+
+		return self
 	end,
 
 	-- Schedules a tweening procedure.
@@ -786,9 +814,9 @@ Widget = beClass.class({
 
 			return true
 
-			-- It is not allowed to clip when an area's border is outside the drawing surface
-			-- with some graphics backends. If beGUI would never run on those platforms, use
-			-- the following code to simplify it.
+			-- It is not allowed to clip when an area's border is outside the
+			-- drawing surface with some graphics backends. If beGUI would never
+			-- run on those platforms, use the following code to simplify it.
 			--[[
 			local x_, y_, w_, h_ = clip(x, y, w, h)
 			clippingStack:push(
