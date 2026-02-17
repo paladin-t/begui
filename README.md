@@ -472,8 +472,9 @@ Shortcut to create `Percent` object.
 
 **Constructor**
 
-* beGUI.`TextBox.new(content)`: constructs a TextBox with the specific content
+* beGUI.`TextBox.new(content[, tb])`: constructs a TextBox with the specific content
   * `content`: the content string
+  * `tb`: an optional `TextBox` object (created by Bitty API), if omitted, a new `TextBox` is created; if provided, the existing one is reused
 
 **Methods**
 

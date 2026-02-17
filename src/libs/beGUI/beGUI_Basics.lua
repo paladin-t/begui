@@ -797,10 +797,12 @@ local TextBox = beClass.class({
 
 	-- Constructs a TextBox with the specific content.
 	-- `content`: the content string
-	ctor = function (self, content)
+	-- `tb`: an optional `TextBox` object (created by Bitty API), if omitted, a
+	-- new `TextBox` is created; if provided, the existing one is reused
+	ctor = function (self, content, tb)
 		beWidget.Widget.ctor(self)
 
-		self.content = TextBox.new()
+		self.content = tb or TextBox.new()
 		self.content.text = content or ''
 	end,
 
