@@ -296,9 +296,6 @@ Shortcut to create `Percent` object.
   * `delta`: elapsed time since previous update
   * `event`: optional, omit it for common usage, pass a prefilled event to prevent default event
   * returns `self`
-* `widget:override(functions)`: overrides graphics functions for using beGUI within Lua-based programming environments other than Bitty Engine
-  * `functions`: the table that holds the new functions
-  * returns an object which holds the old functions
 * `widget:tween(t)`: schedules a tweening procedure
   * `t`: the tweening object
   * returns `self`

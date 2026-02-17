@@ -588,47 +588,6 @@ Widget = beClass.class({
 		return self
 	end,
 
-	-- Overrides graphics functions for using beGUI within Lua-based programming
-	-- environments other than Bitty Engine.
-	-- `functions`: the table that holds the new functions
-	override = function (self, functions)
-		local result = {
-			plot    = plot,
-			line    = line,
-			circ    = circ,
-			ellipse = ellipse,
-			pie     = pie,
-			rect    = rect,
-			text    = text,
-			tri     = tri,
-			tex     = tex,
-			spr     = spr,
-			map     = map,
-			key     = key,
-			keyp    = keyp,
-			clip    = clip
-		}
-		if not functions then
-			return result
-		end
-		if functions.plot    then plot    = functions.plot    end
-		if functions.line    then line    = functions.line    end
-		if functions.circ    then circ    = functions.circ    end
-		if functions.ellipse then ellipse = functions.ellipse end
-		if functions.pie     then pie     = functions.pie     end
-		if functions.rect    then rect    = functions.rect    end
-		if functions.text    then text    = functions.text    end
-		if functions.tri     then tri     = functions.tri     end
-		if functions.tex     then tex     = functions.tex     end
-		if functions.spr     then spr     = functions.spr     end
-		if functions.map     then map     = functions.map     end
-		if functions.key     then key     = functions.key     end
-		if functions.keyp    then keyp    = functions.keyp    end
-		if functions.clip    then clip    = functions.clip    end
-
-		return result
-	end,
-
 	-- Schedules a tweening procedure.
 	-- `t`: the tweening object
 	tween = function (self, t)
