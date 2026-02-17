@@ -580,8 +580,9 @@ Widget = beClass.class({
 			plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map
 		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
 			none, none, none, none, none, none, none, none, none, none, none
-		self:update(theme, delta, event)
-		self:update(theme, delta, event)
+		for i = 1, 3 do -- Update a few times virtually.
+			self:update(theme, delta, event)
+		end
 		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
 			plot_, line_, circ_, ellipse_, pie_, rect_, text_, tri_, tex_, spr_, map_
 
