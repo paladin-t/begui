@@ -103,7 +103,9 @@ Widget = beClass.class({
 				return widget
 			end
 			if widget.children then
-				for _, c in ipairs(widget.children) do
+				local n = #widget.children
+				for i = 1, n, 1 do
+					local c = widget.children[i]
 					local ret = find_(c, id)
 					if ret then
 						return ret
@@ -242,7 +244,9 @@ Widget = beClass.class({
 		self.transparency = val
 
 		if self.children ~= nil then
-			for _, c in ipairs(self.children) do
+			local n = #self.children
+			for i = 1, n, 1 do
+				local c = self.children[i]
 				c:setAlpha(val)
 			end
 		end
@@ -261,7 +265,9 @@ Widget = beClass.class({
 			return nil
 		end
 		if type(idOrIndex) == 'string' then
-			for _, v in ipairs(self.children) do
+			local n = #self.children
+			for i = 1, n, 1 do
+				local v = self.children[i]
 				if v.id == idOrIndex then
 					return v
 				end
@@ -286,7 +292,9 @@ Widget = beClass.class({
 		if self.children == nil then
 			self.children = { }
 		end
-		for _, v in ipairs(self.children) do
+		local n = #self.children
+		for i = 1, n, 1 do
+			local v = self.children[i]
 			if v == child then
 				return self
 			end
@@ -311,7 +319,9 @@ Widget = beClass.class({
 			return self
 		end
 		if type(childOrIdOrIndex) == 'string' then
-			for i, v in ipairs(self.children) do
+			local n = #self.children
+			for i = 1, n, 1 do
+				local v = self.children[i]
 				if v.id == childOrIdOrIndex then
 					local c = self.children[i]
 					table.remove(self.children, i)
@@ -333,7 +343,9 @@ Widget = beClass.class({
 			if not childOrIdOrIndex.parent then
 				error('This widget is not a child of any other one.')
 			end
-			for i, v in ipairs(self.children) do
+			local n = #self.children
+			for i = 1, n, 1 do
+				local v = self.children[i]
 				if v == childOrIdOrIndex then
 					local c = self.children[i]
 					table.remove(self.children, i)
@@ -352,7 +364,9 @@ Widget = beClass.class({
 		if self.children == nil then
 			return self
 		end
-		for i, c in ipairs(self.children) do
+		local n = #self.children
+		for i = 1, n, 1 do
+			local c = self.children[i]
 			handler(c, i)
 		end
 
@@ -378,7 +392,9 @@ Widget = beClass.class({
 		if self.children == nil then
 			return self
 		end
-		for i, c in ipairs(self.children) do
+		local n = #self.children
+		for i = 1, n, 1 do
+			local c = self.children[i]
 			c.parent = nil
 		end
 		self.children = nil
@@ -557,7 +573,9 @@ Widget = beClass.class({
 			return true
 		end
 		if self.children ~= nil then
-			for _, c in ipairs(self.children) do
+			local n = #self.children
+			for i = 1, n, 1 do
+				local c = self.children[i]
 				if c:captured() then
 					return true
 				end
@@ -625,7 +643,9 @@ Widget = beClass.class({
 		if self.children == nil then
 			return
 		end
-		for _, c in ipairs(self.children) do
+		local n = #self.children
+		for i = 1, n, 1 do
+			local c = self.children[i]
 			c:_updateLayout(w, h)
 		end
 	end,
@@ -678,7 +698,9 @@ Widget = beClass.class({
 
 		if self.tweens then
 			local dead = nil
-			for _, t in ipairs(self.tweens) do
+			local n = #self.tweens
+			for i = 1, n, 1 do
+				local t = self.tweens[i]
 				if t:update(delta) then
 					if dead == nil then
 						dead = { }
@@ -733,7 +755,9 @@ Widget = beClass.class({
 		if self.children == nil then
 			return
 		end
-		for _, c in ipairs(self.children) do
+		local n = #self.children
+		for i = 1, n, 1 do
+			local c = self.children[i]
 			if not self.popup or self.popup == c then
 				c:_update(theme, delta, dx, dy, event)
 			else

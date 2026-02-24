@@ -404,7 +404,9 @@ local List = beClass.class({
 			return
 		end
 		self._maxX, self._maxY = 0, 0
-		for _, c in ipairs(self.children) do
+		local n = #self.children
+		for i = 1, n, 1 do
+			local c = self.children[i]
 			c:_update(theme, delta, dx, dy, event)
 			local px, py = c:position()
 			local w, h = c:size()
@@ -845,7 +847,9 @@ local Tab = beClass.class({
 		local elem = theme['tab']
 		local paddingX, paddingY = elem.content_offset[1] or 2, elem.content_offset[2] or 2
 		local x_ = x
-		for i, v in ipairs(self.content) do
+		local n = #self.content
+		for i = 1, n, 1 do
+			local v = self.content[i]
 			local w_, h_ = nil, nil
 			if self._tabSize == nil then
 				if type(v) == 'string' then
@@ -912,7 +916,9 @@ local Tab = beClass.class({
 		if not page then
 			return
 		end
-		for _, c in ipairs(page) do
+		local n = #page
+		for i = 1, n, 1 do
+			local c = page[i]
 			if not self.popup or self.popup == c then
 				c:_update(theme, delta, dx, dy, event)
 			else
