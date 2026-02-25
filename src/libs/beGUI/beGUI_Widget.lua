@@ -593,16 +593,8 @@ Widget = beClass.class({
 	-- `delta`: elapsed time since previous update
 	-- `event`: optional, omit it for common usage, pass a prefilled event to prevent default event
 	touch = function (self, theme, delta, event)
-		local none = function (...) end
-		local plot_, line_, circ_, ellipse_, pie_, rect_, text_, tri_, tex_, spr_, map_ =
-			plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map
-		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
-			none, none, none, none, none, none, none, none, none, none, none
-		for i = 1, 3 do -- Update a few times virtually.
-			self:update(theme, delta, event)
-		end
-		plot, line, circ, ellipse, pie, rect, text, tri, tex, spr, map =
-			plot_, line_, circ_, ellipse_, pie_, rect_, text_, tri_, tex_, spr_, map_
+		self:update(theme, delta)
+		Application.skipFrame()
 
 		return self
 	end,
