@@ -75,6 +75,9 @@ local function default()
 		['textbox'] = {
 			style_background = '#f0f0f0ff'
 		},
+		['documentviewer'] = {
+			style_background = '#f0f0f0ff'
+		},
 
 		['button'] = {
 			resource = Resources.load('imgs/button.png'),

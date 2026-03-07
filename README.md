@@ -21,6 +21,7 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     - [beGUI.Url](#beguiurl)
     - [beGUI.InputBox](#beguiinputbox)
     - [beGUI.TextBox](#beguitextbox)
+    - [beGUI.DocumentViewer](#beguidocumentviewer)
     - [beGUI.Picture](#beguipicture)
     - [beGUI.Button](#beguibutton)
     - [beGUI.PictureButton](#beguipicturebutton)
@@ -549,6 +550,35 @@ Shortcut to create `Percent` object.
 	* `forceAbove`: if `true`, forces the cursor to be positioned in the upper part of the viewport
 	* `slowMode`: whether to scroll slowly
 	* returns `self`
+
+### beGUI.DocumentViewer
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
+
+* beGUI.`DocumentViewer.new(content[, dv])`: constructs a DocumentViewer with the specific content
+  * `content`: the content string
+  * `dv`: an optional `DocumentViewer` object (created by Bitty API), if omitted, a new `DocumentViewer` is created; if provided, the existing one is reused
+
+**Methods**
+
+* `docViewer:getValue()`: gets the content text
+  * returns the content string
+* `docViewer:setValue(val)`: sets the content text
+  * `val`: the specific content string
+* `docViewer:setTheme(theme)`: sets the theme
+  * `theme`: the custom font theme
+  * returns `self`
+* `docViewer:setOption(key, val)`: sets the options of the `DocumentViewer`
+  * `key`: the option key
+  * `val`: the option value
+  * returns `self`
+* `docViewer:useFont(asset)`: uses the specific font config to the `DocumentViewer`
+  * `asset`: the JSON asset path of the font config
+  * returns `self`
+* `docViewer:load(doc)`: loads a document asset from the current project
+	* `doc`: the path to the document asset
 
 ### beGUI.Picture
 

@@ -1026,6 +1026,142 @@ local TextBox = beClass.class({
 	end
 }, beWidget.Widget)
 
+local DocumentViewer = beClass.class({
+	_dismissFocus = false,
+	_theme = nil,
+	_themeObject = nil,
+
+	-- Constructs a DocumentViewer with the specific content.
+	-- `content`: the content string
+	-- `dv`: an optional `DocumentViewer` object (created by Bitty API), if omitted, a
+	-- new `DocumentViewer` is created; if provided, the existing one is reused
+	ctor = function (self, content, dv)
+		beWidget.Widget.ctor(self)
+
+		self.content = dv or DocumentViewer.new()
+		self.content.text = content or ''
+	end,
+
+	__tostring = function (self)
+		return 'DocumentViewer'
+	end,
+
+	-- Gets the content text.
+	getValue = function (self)
+		return self.content.text
+	end,
+	-- Sets the content text.
+	setValue = function (self, val)
+		if type(val) ~= 'string' then
+			val = tostring(val)
+		end
+		self.content.text = val
+
+		return self
+	end,
+
+	setTheme = function (self, theme)
+		self._theme = theme
+
+		self:_refreshTheme()
+
+		return self
+	end,
+	_refreshTheme = function (self)
+		if not self.content then
+			return self
+		end
+		if not self._themeObject then
+			return self
+		end
+
+		local docViewer = self._themeObject[self._theme or 'documentviewer']
+		if not docViewer then
+			return self
+		end
+
+		for k, v in pairs(docViewer) do
+			self.content:setOption(k, v)
+		end
+
+		return self
+	end,
+
+	setOption = function (self, key, val)
+		if not self.content then
+			return self
+		end
+
+		self.content:setOption(key, val)
+
+		return self
+	end,
+	useFont = function (self, asset)
+		if not self.content then
+			return self
+		end
+
+		local bytes = Project.main:read(asset)
+		local json = Json.new()
+		json:fromBytes(bytes)
+		self.content:useFont(json)
+
+		return self
+	end,
+	load = function (self, doc)
+		self.content:load(doc)
+
+		return self
+	end,
+
+	navigatable = function (self)
+		if not self.content then
+			return nil
+		end
+		if self.content.focused then
+			self._dismissFocus = true
+
+			return nil
+		end
+
+		return 'all'
+	end,
+
+	_update = function (self, theme, delta, dx, dy, event)
+		if not self.visibility then
+			return
+		end
+
+		if self._themeObject ~= theme then
+			self._themeObject = theme
+			self:_refreshTheme() -- Refresh the theme options.
+		end
+
+		local ox, oy = self:offset()
+		local px, py = self:position()
+		local x, y = dx + px + ox, dy + py + oy
+		local w, h = self:size()
+		if self._dismissFocus then
+			self._dismissFocus = false
+			event.context.focus = nil
+			event.context.navigated = false
+		elseif event.context.focus == self and event.context.navigated == 'press' then
+			if self.content then
+				self.content:selectAll()
+				self.content:focus()
+			end
+			event.context.focus = nil
+			event.context.navigated = false
+		end
+
+		if self.content then
+			self.content:update(x, y, x + w, y + h)
+		end
+
+		beWidget.Widget._update(self, theme, delta, dx, dy, event)
+	end
+}, beWidget.Widget)
+
 local Picture = beClass.class({
 	_stretched = false,
 	_permeation = nil,
@@ -2472,6 +2608,7 @@ return {
 	Url = Url,
 	InputBox = InputBox,
 	TextBox = TextBox,
+	DocumentViewer = DocumentViewer,
 	Picture = Picture,
 	Button = Button,
 	PictureButton = PictureButton,

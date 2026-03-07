@@ -40,7 +40,7 @@ end
 beGUI = beUtils.merge(
 	beGUI,
 	{
-		version = '1.6.1',
+		version = '1.7.0',
 	
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,
@@ -62,6 +62,8 @@ beGUI = beUtils.merge(
 		InputBox = beBasics.InputBox,
 		-- TextBox widget.
 		TextBox = beBasics.TextBox,
+		-- DocumentViewer widget.
+		DocumentViewer = beBasics.DocumentViewer,
 		-- Picture widget.
 		Picture = beBasics.Picture,
 		-- Button widget.
