@@ -86,6 +86,10 @@ beGUI = beUtils.merge(
 		-- Events:
 		--   'changed': function (sender, value) end
 		ComboBox = beBasics.ComboBox,
+		-- DropdownComboBox widget.
+		-- Events:
+		--   'changed': function (sender, value) end
+		DropdownComboBox = beBasics.DropdownComboBox,
 		-- NumberBox widget.
 		-- Events:
 		--   'changed': function (sender, value) end

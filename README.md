@@ -28,6 +28,7 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     - [beGUI.CheckBox](#beguicheckbox)
     - [beGUI.RadioBox](#beguiradiobox)
     - [beGUI.ComboBox](#beguicombobox)
+    - [beGUI.DropdownComboBox](#beguidropdowncombobox)
     - [beGUI.NumberBox](#beguinumberbox)
     - [beGUI.ProgressBar](#beguiprogressbar)
     - [beGUI.Slide](#beguislide)
@@ -59,17 +60,18 @@ Try it [in browser](https://paladin-t.github.io/begui/).
 
 * Placable, resizable, anchorable, and nestable `Widget`
 * Textual `Label`, `MultilineLabel`, `Url`, `InputBox`
+* Advanced textual `TextBox`, `DocumentViewer`
 * `Picture`
 * Clickable `Button`, `PictureButton`
 * `CheckBox`, `RadioBox`
-* `ComboBox`
+* `ComboBox`, `DropdownComboBox`
 * `NumberBox`
 * `ProgressBar`, `Slide`
 * `Group`
 * Scrollable `List`
 * `Draggable` and `Droppable`
 * `Tab`
-* `Popup`, `MessageBox`, `QuestionBox`
+* `Popup`, `MessageBox`, `QuestionBox`, `TextEditBox`
 * `Custom` to make your own update function
 * And customizable by writing your own widget
 * Navigation by key (or custom method)
@@ -731,6 +733,8 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+A `ComboBox` provides multiple in-place options for selecting.
+
 **Constructor**
 
 * beGUI.`ComboBox.new(content, value = nil)`: constructs a `ComboBox` with the specific content
@@ -764,6 +768,47 @@ Shortcut to create `Percent` object.
 **Events**
 
 * `combobox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` selection state has been changed
+  * returns `self`
+
+### beGUI.DropdownComboBox
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options for selecting, but in a dropdown list.
+
+**Constructor**
+
+* beGUI.`DropdownComboBox.new(content, value = nil)`: constructs a `DropdownComboBox` with the specific content
+  * `content`: list of string
+  * `value`: the selected index number
+
+**Methods**
+
+* `dropdown:getItemAt(index)`: gets the item text at the specific index
+  * `index`: the specific index to get
+  * returns got item string or `nil`
+* `dropdown:addItem(item)`: adds an item string with the specific content text
+  * `item` the specific item text to add
+  * returns `self`
+* `dropdown:removeItemAt(index)`: removes the item at the specific index
+  * `index` the specific index to remove
+  * returns `true` for success, otherwise `false`
+* `dropdown:clearItems()`: clears all items
+  * returns `self`
+* `dropdown:getValue()`: gets the selected index
+  * returns the selected index number
+* `dropdown:setValue(val)`: sets the selected index
+  * `val`: the specific selected index
+  * returns `self`
+* `dropdown:scrollable()`: gets whether can scroll the widget by mouse wheel
+  * returns `true` for scrollable, otherwise `false`
+* `dropdown:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
+  * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
+
+**Events**
+
+* `dropdown:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` selection state has been changed
   * returns `self`
 
 ### beGUI.NumberBox

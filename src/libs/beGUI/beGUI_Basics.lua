@@ -1997,6 +1997,10 @@ local ComboBox = beClass.class({
 	end
 }, beWidget.Widget)
 
+local DropdownComboBox = beClass.class({
+	-- TODO
+}, beWidget.Widget)
+
 local NumberBox = beClass.class({
 	_pressed = false,
 	_value = -1,
@@ -2609,6 +2613,7 @@ return {
 	CheckBox = CheckBox,
 	RadioBox = RadioBox,
 	ComboBox = ComboBox,
+	DropdownComboBox = DropdownComboBox,
 	NumberBox = NumberBox,
 	ProgressBar = ProgressBar,
 	Slide = Slide
