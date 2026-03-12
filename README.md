@@ -490,8 +490,8 @@ Shortcut to create `Percent` object.
   * `key`: the option key
   * `val`: the option value
   * returns `self`
-* `textBox:useFont(asset)`: uses the specific font config to the `TextBox`
-  * `asset`: the JSON asset path of the font config
+* `textBox:useFont(asset)`: uses the specific font config for the `TextBox`
+  * `asset`: the JSON object or asset path of the font config
   * returns `self`
 * `textBox:focused()`: gets whether the `TextBox` is focused
   * returns `true` for focused, otherwise `false`
@@ -574,8 +574,8 @@ Shortcut to create `Percent` object.
   * `key`: the option key
   * `val`: the option value
   * returns `self`
-* `docViewer:useFont(asset)`: uses the specific font config to the `DocumentViewer`
-  * `asset`: the JSON asset path of the font config
+* `docViewer:useFont(asset)`: uses the specific font config for the `DocumentViewer`
+  * `asset`: the JSON object or asset path of the font config
   * returns `self`
 * `docViewer:load(doc)`: loads a document asset from the current project
 	* `doc`: the path to the document asset

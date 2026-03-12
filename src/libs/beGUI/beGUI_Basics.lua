@@ -865,10 +865,7 @@ local TextBox = beClass.class({
 			return self
 		end
 
-		local bytes = Project.main:read(asset)
-		local json = Json.new()
-		json:fromBytes(bytes)
-		self.content:useFont(json)
+		self.content:useFont(asset)
 
 		return self
 	end,
@@ -1101,10 +1098,7 @@ local DocumentViewer = beClass.class({
 			return self
 		end
 
-		local bytes = Project.main:read(asset)
-		local json = Json.new()
-		json:fromBytes(bytes)
-		self.content:useFont(json)
+		self.content:useFont(asset)
 
 		return self
 	end,
