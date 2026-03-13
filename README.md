@@ -324,6 +324,14 @@ Shortcut to create `Percent` object.
 
 * beGUI.`Clickable.new()`: constructs a `Clickable` with the specific value
 
+**Methods**
+
+* `clickable:getRule()`: sets the click detection rule
+  * returns the click detection rule, can be either `'inside'` or `'outside'`; defaults to `'inside'`
+* `clickable:setRule(val)`: sets the click detection rule
+  * `val`: the click detection rule, can be either `'inside'` or `'outside'`; defaults to `'inside'`
+  * returns `self`
+
 **Events**
 
 * `clickable:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked

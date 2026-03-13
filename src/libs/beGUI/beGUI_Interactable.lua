@@ -30,6 +30,7 @@ Widgets.
 
 local Clickable = beClass.class({
 	_pressed = false,
+	_rule = 'inside',
 
 	ctor = function (self)
 		beWidget.Widget.ctor(self)
@@ -37,6 +38,17 @@ local Clickable = beClass.class({
 
 	__tostring = function (self)
 		return 'Clickable'
+	end,
+
+	-- Gets the click detection rule.
+	getRule = function (self)
+		return self._rule
+	end,
+	-- Sets the click detection rule.
+	setRule = function (self, val)
+		self._rule = val
+
+		return self
 	end,
 
 	setVisible = function (self, val)
@@ -71,7 +83,11 @@ local Clickable = beClass.class({
 		elseif self._pressed then
 			down = event.mouseDown
 		else
-			down = event.mouseDown and not Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			if self._rule == nil or self._rule == 'inside' then
+				down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			else --[[ if self._rule == 'outside' then ]]
+				down = event.mouseDown and not Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self

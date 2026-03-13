@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 local beClass = require 'libs/beGUI/beClass'
 local beUtils = require 'libs/beGUI/beGUI_Utils'
+local beStructures = require 'libs/beGUI/beGUI_Structures'
 local beWidget = require 'libs/beGUI/beGUI_Widget'
 
 --[[
@@ -2008,7 +2009,7 @@ local DropdownComboBox = beClass.class({
 	_maxContentHeight = 0,
 
 	_buttonDropdown = nil,
-	_dropDownList = nil,
+	_dropDownWidget = nil,
 
 	-- Constructs a DropdownComboBox with the specific content.
 	-- `content`: list of string
@@ -2128,8 +2129,12 @@ local DropdownComboBox = beClass.class({
 			return
 		end
 
+		local P = beStructures.percent
 		local lst = beGUI.List.new(true)
 			:setId('list')
+			:anchor(0, 0)
+			:put(0, 0)
+			:resize(P(100), P(100))
 		lst._scheduled = nil
 		lst.schedule = function (this, func)
 			this._scheduled = func
@@ -2143,9 +2148,14 @@ local DropdownComboBox = beClass.class({
 			end
 		end
 
-		self._dropDownList = lst
-		context.root:openPopup(self._dropDownList) -- Open popup.
-		-- TODO: context.root:closePopup()
+		self._dropDownWidget = beGUI.Clickable.new()
+			:setId('closer')
+			:setRule('outside')
+			:on('clicked', function (sender)
+				context.root:closePopup() -- Close popup.
+			end)
+			:addChild(lst)
+		context.root:openPopup(self._dropDownWidget) -- Open popup.
 		-- TODO: add items.
 		-- TODO: event.
 		-- local val = self._value + 1
@@ -2165,7 +2175,7 @@ local DropdownComboBox = beClass.class({
 		local h_ = area[4]
 
 		local n = #self.content
-		self._maxContentWidth = w_
+		self._maxContentWidth = w_ - 1
 		self._maxContentHeight = h_ * n
 		local font_ = theme['font']
 		local margin, scale = font_.margin or 1, font_.scale or 1
@@ -2180,7 +2190,7 @@ local DropdownComboBox = beClass.class({
 		self._toUpdateDropdownList = true
 	end,
 	_updateDropdownList = function (self, theme, x, y, w, h)
-		if not self._dropDownList then
+		if not self._dropDownWidget then
 			return
 		end
 
@@ -2196,14 +2206,17 @@ local DropdownComboBox = beClass.class({
 		print(tostring(dropdownWidth) .. ',' .. tostring(dropdownHeight))
 		-- TODO: above or below? size?
 
-		self._dropDownList
+		self._dropDownWidget
 			:anchor(0, 0)
 			:put(x_, y_ + h_)
 			:resize(dropdownWidth + 1, dropdownHeight)
+		self._dropDownWidget:find('list')
+			:_updateHierarchy()
 	end,
 	_updateLayout = function (self, ...)
 		beWidget.Widget._updateLayout(self, ...)
 
+		self._toUpdateContent = true
 		self._toUpdateDropdownList = true
 	end,
 	_update = function (self, theme, delta, dx, dy, event)
