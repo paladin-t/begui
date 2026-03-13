@@ -17,6 +17,7 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     - [beGUI.Widget](#beguiwidget)
   - [4. Interactable Widgets](#4-interactable-widgets)
     - [beGUI.Clickable](#beguiclickable)
+    - [beGUI.ClickableText](#beguiclickabletext)
   - [5. Basic Widgets](#5-basic-widgets)
     - [beGUI.Label](#beguilabel)
     - [beGUI.MultilineLabel](#beguimultilinelabel)
@@ -62,7 +63,7 @@ Try it [in browser](https://paladin-t.github.io/begui/).
 "beGUI" implements:
 
 * Placable, resizable, anchorable, and nestable `Widget`
-* `Clickable`
+* `Clickable`, `ClickableText`
 * Textual `Label`, `MultilineLabel`, `Url`, `InputBox`
 * Advanced textual `TextBox`, `DocumentViewer`
 * `Picture`
@@ -326,7 +327,7 @@ Shortcut to create `Percent` object.
 
 **Methods**
 
-* `clickable:getRule()`: sets the click detection rule
+* `clickable:getRule()`: gets the click detection rule
   * returns the click detection rule, can be either `'inside'` or `'outside'`; defaults to `'inside'`
 * `clickable:setRule(val)`: sets the click detection rule
   * `val`: the click detection rule, can be either `'inside'` or `'outside'`; defaults to `'inside'`
@@ -335,6 +336,48 @@ Shortcut to create `Percent` object.
 **Events**
 
 * `clickable:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
+  * returns `self`
+
+### beGUI.ClickableText
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
+
+* beGUI.`ClickableText.new(content)`: constructs a `ClickableText` with the specific value
+  * `content`: the content string
+
+**Methods**
+
+* `clickableText:getValue()`: gets the content text
+  * returns the content string
+* `clickableText:setValue(val)`: sets the content text
+  * `val`: the specific content string
+  * returns `self`
+* `clickableText:selected()`: gets whether this widget has been selected
+  * returns `true` for selected, otherwise `false`
+* `clickableText:setSelected(val)`: sets whether this widget has been selected
+  * `val`: `true` for selected, `false` for not selected
+  * returns `self`
+* `clickableText:selectable()`: gets whether this widget is selectable
+  * returns `true` for selectable, otherwise `false`
+* `clickableText:setSelectable(val)`: sets whether this widget is selectable
+  * `val`: `true` for selectable, `false` for not selectable
+  * returns `self`
+* `clickableText:setTheme(theme, normalTheme, selectedTheme, disabledTheme)`: sets the theme
+  * `theme`: the widget theme
+  * `normalTheme`: the normal theme
+  * `selectedTheme`: the selected theme
+  * `disabledTheme`: the not selectable theme
+  * returns `self`
+
+**Events**
+
+* `clickableText:on('selected', function (sender) end)`: registers an event which will be triggered when the `Widget` has been selected
+  * returns `self`
+* `clickableText:on('deselected', function (sender) end)`: registers an event which will be triggered when the `Widget` has been deselected
+  * returns `self`
+* `clickableText:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
   * returns `self`
 
 </details>

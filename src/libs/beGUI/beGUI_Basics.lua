@@ -2031,7 +2031,7 @@ local DropdownComboBox = beClass.class({
 
 		self._buttonDropdown = PictureButton.new(
 			'', false,
-			{ normal = 'dropdowncombobox_button_dropdown', pressed = 'dropdowncombobox_button_dropdown_down' }
+			{ normal = 'dropdown_combobox_button_dropdown', pressed = 'dropdown_combobox_button_dropdown_down' }
 		)
 			:put(0, 0)
 			:on('clicked', function (sender)
@@ -2125,51 +2125,78 @@ local DropdownComboBox = beClass.class({
 	end,
 
 	_openDropdownList = function (self, theme, context)
+		-- Prepare.
 		if #self.content == 0 then
 			return
 		end
 
+		local elem = theme['dropdown_combobox']
+		local area = elem.area
+		local h_ = area[4]
+
+		-- Construct the list and all the items.
 		local P = beStructures.percent
 		local lst = beGUI.List.new(true)
 			:setId('list')
 			:anchor(0, 0)
 			:put(0, 0)
 			:resize(P(100), P(100))
-		lst._scheduled = nil
-		lst.schedule = function (this, func)
+		local n = #self.content
+		for i = 1, n, 1 do
+			local txt = self.content[i]
+			local clickableTxt = beGUI.ClickableText.new(txt)
+				:setId('item_' .. tostring(i))
+				:put(0, (i - 1) * (h_ + 1))
+				:resize(P(100), h_)
+				:on('clicked', function (sender)
+					self:setValue(i)
+					context.root:closePopup() -- Close popup.
+					self._dropDownWidget = nil
+				end)
+			lst:addChild(clickableTxt)
+		end
+
+		-- Construct the dropdown widget (`Clickable`), and mock the functions.
+		self._dropDownWidget = beGUI.Clickable.new()
+			:setId('closer')
+			:setRule('outside')
+			:on('clicked', function (sender)
+				context.root:closePopup() -- Close popup.
+				self._dropDownWidget = nil
+			end)
+			:addChild(lst)
+		self._dropDownWidget._scheduled = nil
+		self._dropDownWidget.schedule = function (this, func)
 			this._scheduled = func
 		end
-		lst._update = function (this, ...)
-			beGUI.List._update(this, ...)
+		self._dropDownWidget._update = function (this, ...)
+			beGUI.Clickable._update(this, ...)
 
 			if this._scheduled then
 				this._scheduled()
 				this._scheduled = nil
 			end
 		end
+		self._dropDownWidget._navigate = function (this)
+			if this.context.navigated == 'cancel' then
+				if self._dropDownWidget then
+					context.root:closePopup() -- Close popup.
+					self._dropDownWidget = nil
+				end
+			end
 
-		self._dropDownWidget = beGUI.Clickable.new()
-			:setId('closer')
-			:setRule('outside')
-			:on('clicked', function (sender)
-				context.root:closePopup() -- Close popup.
-			end)
-			:addChild(lst)
+			beGUI.Clickable._navigate(this)
+		end
+
 		context.root:openPopup(self._dropDownWidget) -- Open popup.
-		-- TODO: add items.
-		-- TODO: event.
-		-- local val = self._value + 1
-		-- if val > #self.content then
-		-- 	val = 1
-		-- end
-		-- self:setValue(val)
 
+		-- Mark for updates.
 		self._toUpdateContent = true
 		self._toUpdateDropdownList = true
 	end,
 
 	_updateContent = function (self, theme, w, h)
-		local elem = theme['dropdowncombobox']
+		local elem = theme['dropdown_combobox']
 		local area = elem.area
 		local w_, _ = self:size()
 		local h_ = area[4]
@@ -2182,6 +2209,7 @@ local DropdownComboBox = beClass.class({
 		for i = 1, n, 1 do
 			local txt = self.content[i]
 			local txtW, _ = measure(txt, font_.resource, margin, scale)
+			txtW = txtW + margin * 2 + 4
 			if txtW > self._maxContentWidth then
 				self._maxContentWidth = txtW
 			end
@@ -2194,7 +2222,7 @@ local DropdownComboBox = beClass.class({
 			return
 		end
 
-		local elem = theme['dropdowncombobox']
+		local elem = theme['dropdown_combobox']
 		local area = elem.area
 		local x_, y_ = x, y + (h - area[4]) * 0.5
 		local w_, h_ = math.ceil(w + 1), area[4]
@@ -2203,8 +2231,7 @@ local DropdownComboBox = beClass.class({
 		local dropdownWidth, dropdownHeight =
 			math.min(self._maxContentWidth, canvasWidth),
 			math.min(self._maxContentHeight, canvasHeight - h_, h_ * 4.5)
-		print(tostring(dropdownWidth) .. ',' .. tostring(dropdownHeight))
-		-- TODO: above or below? size?
+		-- TODO: above or below? left or right? size?
 
 		self._dropDownWidget
 			:anchor(0, 0)
@@ -2228,7 +2255,7 @@ local DropdownComboBox = beClass.class({
 		local px, py = self:position()
 		local x, y = dx + px + ox, dy + py + oy
 		local w, h = self:size()
-		local elemD = theme['dropdowncombobox_button_dropdown']
+		local elemD = theme['dropdown_combobox_button_dropdown']
 		local areaD = elemD.area
 		self._buttonDropdown
 			:put(w - areaD[3], (h - areaD[4]) * 0.5)
@@ -2253,13 +2280,6 @@ local DropdownComboBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			-- if #self.content ~= 0 then
-			-- 	local val = self._value + 1
-			-- 	if val > #self.content then
-			-- 		val = 1
-			-- 	end
-			-- 	self:setValue(val)
-			-- end
 			self._buttonDropdown:_trigger('clicked', self._buttonDropdown)
 		elseif intersects and event.mouseWheel < 0 and self._scrollable then
 			if #self.content ~= 0 then
@@ -2294,7 +2314,7 @@ local DropdownComboBox = beClass.class({
 			self._toUpdateDropdownList = false
 			self:_updateDropdownList(theme, x, y, w, h)
 		end
-		local elem = theme['dropdowncombobox']
+		local elem = theme['dropdown_combobox']
 		local img = elem.resource
 		local area = elem.area
 		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, math.ceil(w + 1), area[4], nil, self.transparency, nil)

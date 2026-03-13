@@ -22,6 +22,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
 local beClass = require 'libs/beGUI/beClass'
+local beUtils = require 'libs/beGUI/beGUI_Utils'
 local beWidget = require 'libs/beGUI/beGUI_Widget'
 
 --[[
@@ -62,7 +63,7 @@ local Clickable = beClass.class({
 	end,
 
 	navigatable = function (self)
-		return nil
+		return 'children'
 	end,
 
 	_update = function (self, theme, delta, dx, dy, event)
@@ -106,10 +107,140 @@ local Clickable = beClass.class({
 	end
 }, beWidget.Widget)
 
+local ClickableText = beClass.class({
+	_selected = false,
+	_selectable = true,
+	_theme = nil,
+	_normalTheme = nil,
+	_selectedTheme = nil,
+	_disabledTheme = nil,
+
+	ctor = function (self, content)
+		beWidget.Widget.ctor(self)
+
+		self.content = content
+	end,
+
+	__tostring = function (self)
+		return 'ClickableText'
+	end,
+
+	getValue = function (self)
+		return self.content
+	end,
+	setValue = function (self, val)
+		if type(val) ~= 'string' then
+			val = tostring(val)
+		end
+		self.content = val
+
+		return self
+	end,
+
+	selected = function (self)
+		return self._selected
+	end,
+	setSelected = function (self, val)
+		if self._selected == val then
+			return self
+		end
+		self._selected = val
+		if val then
+			self:_trigger('selected', self)
+		else
+			self:_trigger('deselected', self)
+		end
+
+		return self
+	end,
+	selectable = function (self)
+		return self._selectable
+	end,
+	setSelectable = function (self, val)
+		self._selectable = val
+
+		return self
+	end,
+
+	setTheme = function (self, theme, normalTheme, selectedTheme, disabledTheme)
+		self._theme = theme
+		self._normalTheme = normalTheme
+		self._selectedTheme = selectedTheme
+		self._disabledTheme = disabledTheme
+
+		return self
+	end,
+
+	navigatable = function (self)
+		return 'all'
+	end,
+
+	_update = function (self, theme, delta, dx, dy, event)
+		if not self.visibility then
+			return
+		end
+
+		local ox, oy = self:offset()
+		local px, py = self:position()
+		local x, y = dx + px + ox, dy + py + oy
+		local w, h = self:size()
+		local down = false
+		local intersects = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+		if event.context.active and event.context.active ~= self then
+			self._pressed = false
+		elseif event.canceled or event.context.dragging then
+			event.context.active = nil
+			self._pressed = false
+		elseif self._pressed then
+			down = event.mouseDown
+		else
+			down = event.mouseDown and intersects
+		end
+		if down and not self._pressed then
+			event.context.active = nil -- DO NOT USE `event.context.active = self`.
+			self._pressed = true
+		elseif not down and self._pressed then
+			event.context.active = nil
+			self._pressed = false
+			event.context.focus = self
+			self:_trigger('clicked', self)
+		end
+		if self._selectable then
+			if not self._selected and intersects then
+				self:setSelected(true)
+			elseif self._selected and not intersects then
+				self:setSelected(false)
+			end
+		end
+
+		local elem = theme[self._theme or 'clickable_text']
+		local normalTheme = self._normalTheme or 'font'
+		local selectedTheme = self._selectedTheme or 'font_white'
+		local disabledTheme = self._disabledTheme or 'font_placeholder'
+		local font = self._selected and selectedTheme or normalTheme
+		if self._selected then
+			if self.transparency then
+				local col = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency)
+				rect(x, y, x + w - 1, y + h - 1, true, col)
+			else
+				rect(x, y, x + w - 1, y + h - 1, true, elem.color)
+			end
+		end
+		if self._selectable then
+			beUtils.textLeft(self.content, theme[font], x + 4, y, w - 8, h, elem.content_offset, self.transparency)
+		else
+			beUtils.textLeft(self.content, theme[disabledTheme], x + 4, y, w - 8, h, elem.content_offset, self.transparency)
+		end
+
+		beWidget.Widget._update(self, theme, delta, dx, dy, event)
+	end
+}, beWidget.Widget)
+
 --[[
 Exporting.
 ]]
 
 return {
-	Clickable = Clickable
+	Clickable = Clickable,
+	ClickableText = ClickableText
 }

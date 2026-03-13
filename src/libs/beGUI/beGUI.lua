@@ -49,10 +49,16 @@ beGUI = beUtils.merge(
 		-- Widget class, base for other widgets, also could be used as container
 		-- of other widgets.
 		Widget = beWidget.Widget,
-		-- Slide widget.
+		-- Clickable widget.
 		-- Events:
+		--   'selected': function (sender) end
+		--   'deselected': function (sender) end
 		--   'clicked': function (sender) end
 		Clickable = beInteractable.Clickable,
+		-- ClickableText widget.
+		-- Events:
+		--   'clicked': function (sender) end
+		ClickableText = beInteractable.ClickableText,
 		-- Label widget.
 		Label = beBasics.Label,
 		-- MultilineLabel widget.
