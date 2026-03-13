@@ -647,6 +647,7 @@ Widget = beClass.class({
 			self:_touchClip()
 			if self.context == nil then
 				self.context = {
+					root = self,
 					navigated = nil,
 					focus = nil,
 					active = nil,
