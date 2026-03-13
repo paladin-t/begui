@@ -2200,12 +2200,12 @@ local DropdownComboBox = beClass.class({
 		local area = elem.area
 		local w_, _ = self:size()
 		local h_ = area[4]
+		local font_ = theme['font']
+		local margin, scale = font_.margin or 1, font_.scale or 1
 
 		local n = #self.content
 		self._maxContentWidth = w_ - 1
-		self._maxContentHeight = h_ * n
-		local font_ = theme['font']
-		local margin, scale = font_.margin or 1, font_.scale or 1
+		self._maxContentHeight = (h_ + margin) * n
 		for i = 1, n, 1 do
 			local txt = self.content[i]
 			local txtW, _ = measure(txt, font_.resource, margin, scale)
@@ -2226,16 +2226,38 @@ local DropdownComboBox = beClass.class({
 		local area = elem.area
 		local x_, y_ = x, y + (h - area[4]) * 0.5
 		local w_, h_ = math.ceil(w + 1), area[4]
+		local elemD = theme['dropdown_combobox_button_dropdown']
+		local areaD = elemD.area
 
 		local canvasWidth, canvasHeight = Canvas.main:size()
 		local dropdownWidth, dropdownHeight =
 			math.min(self._maxContentWidth, canvasWidth),
-			math.min(self._maxContentHeight, canvasHeight - h_, h_ * 4.5)
-		-- TODO: above or below? left or right? size?
+			math.min(self._maxContentHeight, canvasHeight - h_, h_ * 5.8)
+		local right, bottom = x_ + w_ + areaD[3] - 1, y_ + h_
+		local anchorX, anchorY = 1, 0
+		local posX, posY = right, bottom
+		if right < dropdownWidth then
+			if right < canvasWidth - x_ then -- Aligned to left edge.
+				anchorX = 0
+				posX = x_
+				dropdownWidth = math.min(dropdownWidth, canvasWidth - x_)
+			else -- Aligned to right edge.
+				dropdownWidth = math.min(dropdownWidth, right)
+			end
+		end
+		if canvasHeight - bottom < dropdownHeight then
+			if canvasHeight - bottom < y_ then -- Above the widget.
+				anchorY = 1
+				posY = y_
+				dropdownHeight = math.min(dropdownHeight, y_)
+			else -- Below the widget.
+				dropdownHeight = math.min(dropdownHeight, canvasHeight - bottom)
+			end
+		end
 
 		self._dropDownWidget
-			:anchor(0, 0)
-			:put(x_, y_ + h_)
+			:anchor(anchorX, anchorY)
+			:put(posX, posY)
 			:resize(dropdownWidth + 1, dropdownHeight)
 		self._dropDownWidget:find('list')
 			:_updateHierarchy()

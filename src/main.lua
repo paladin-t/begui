@@ -195,7 +195,7 @@ function setup()
 				end)
 		)
 		:addChild(
-			-- beGUI.ComboBox.new({ 'Item 1', 'Item 2', 'Item 3', 'More Items...' })
+			-- To use non-dropdown combobox, replace the following line with: beGUI.ComboBox.new({ 'Item 1', 'Item 2', 'Item 3', 'More Items...' })
 			beGUI.DropdownComboBox.new({ 'Item 1', 'Item 2', 'Item 3', 'More Items...' })
 				:setId('combobox')
 				:anchor(0.5, 0)
