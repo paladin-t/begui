@@ -15,7 +15,10 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     - [beGUI.percent](#beguipercent)
   - [3. Widget](#3-widget)
     - [beGUI.Widget](#beguiwidget)
-  - [4. Basic Widgets](#4-basic-widgets)
+  - [4. Interactable Widgets](#4-interactable-widgets)
+    - [beGUI.Clickable](#beguiclickable)
+    - [beGUI.ClickableText](#beguiclickabletext)
+  - [5. Basic Widgets](#5-basic-widgets)
     - [beGUI.Label](#beguilabel)
     - [beGUI.MultilineLabel](#beguimultilinelabel)
     - [beGUI.Url](#beguiurl)
@@ -28,24 +31,26 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     - [beGUI.CheckBox](#beguicheckbox)
     - [beGUI.RadioBox](#beguiradiobox)
     - [beGUI.ComboBox](#beguicombobox)
+    - [beGUI.DropdownComboBox](#beguidropdowncombobox)
     - [beGUI.NumberBox](#beguinumberbox)
     - [beGUI.ProgressBar](#beguiprogressbar)
     - [beGUI.Slide](#beguislide)
+  - [6. Container Widgets](#6-container-widgets)
     - [beGUI.Group](#beguigroup)
-  - [5. Container Widgets](#5-container-widgets)
     - [beGUI.List](#beguilist)
     - [beGUI.Draggable](#beguidraggable)
     - [beGUI.Droppable](#beguidroppable)
     - [beGUI.Tab](#beguitab)
+  - [7. Popup Widgets](#7-popup-widgets)
     - [beGUI.Popup](#beguipopup)
     - [beGUI.MessageBox](#beguimessagebox)
     - [beGUI.QuestionBox](#beguiquestionbox)
     - [beGUI.TextEditBox](#beguitexteditbox)
-  - [6. Custom Widget](#6-custom-widget)
+  - [8. Custom Widget](#8-custom-widget)
     - [beGUI.Custom](#beguicustom)
     - [Writing Your Own Widget](#writing-your-own-widget)
-  - [7. Theme](#7-theme)
-  - [8. Tweening](#8-tweening)
+  - [9. Theme](#9-theme)
+  - [10. Tweening](#10-tweening)
     - [beGUI.Tween](#beguitween)
 - [License](#license)
 
@@ -58,18 +63,20 @@ Try it [in browser](https://paladin-t.github.io/begui/).
 "beGUI" implements:
 
 * Placable, resizable, anchorable, and nestable `Widget`
+* `Clickable`, `ClickableText`
 * Textual `Label`, `MultilineLabel`, `Url`, `InputBox`
+* Advanced textual `TextBox`, `DocumentViewer`
 * `Picture`
-* Clickable `Button`, `PictureButton`
+* Clickable buttons `Button`, `PictureButton`
 * `CheckBox`, `RadioBox`
-* `ComboBox`
+* `ComboBox`, `DropdownComboBox`
 * `NumberBox`
 * `ProgressBar`, `Slide`
 * `Group`
 * Scrollable `List`
 * `Draggable` and `Droppable`
 * `Tab`
-* `Popup`, `MessageBox`, `QuestionBox`
+* `Popup`, `MessageBox`, `QuestionBox`, `TextEditBox`
 * `Custom` to make your own update function
 * And customizable by writing your own widget
 * Navigation by key (or custom method)
@@ -305,7 +312,77 @@ Shortcut to create `Percent` object.
 
 </details>
 
-## 4. Basic Widgets
+## 4. Interactable Widgets
+
+<details open>
+<summary>Interactable Widgets</summary>
+
+### beGUI.Clickable
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
+
+* beGUI.`Clickable.new()`: constructs a `Clickable` with the specific value
+
+**Methods**
+
+* `clickable:getRule()`: gets the click detection rule
+  * returns the click detection rule, can be either `'inside'` or `'outside'`; defaults to `'inside'`
+* `clickable:setRule(val)`: sets the click detection rule
+  * `val`: the click detection rule, can be either `'inside'` or `'outside'`; defaults to `'inside'`
+  * returns `self`
+
+**Events**
+
+* `clickable:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
+  * returns `self`
+
+### beGUI.ClickableText
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
+
+* beGUI.`ClickableText.new(content)`: constructs a `ClickableText` with the specific value
+  * `content`: the content string
+
+**Methods**
+
+* `clickableText:getValue()`: gets the content text
+  * returns the content string
+* `clickableText:setValue(val)`: sets the content text
+  * `val`: the specific content string
+  * returns `self`
+* `clickableText:selected()`: gets whether this widget has been selected
+  * returns `true` for selected, otherwise `false`
+* `clickableText:setSelected(val)`: sets whether this widget has been selected
+  * `val`: `true` for selected, `false` for not selected
+  * returns `self`
+* `clickableText:selectable()`: gets whether this widget is selectable
+  * returns `true` for selectable, otherwise `false`
+* `clickableText:setSelectable(val)`: sets whether this widget is selectable
+  * `val`: `true` for selectable, `false` for not selectable
+  * returns `self`
+* `clickableText:setTheme(theme, normalTheme, selectedTheme, disabledTheme)`: sets the theme
+  * `theme`: the widget theme
+  * `normalTheme`: the normal theme
+  * `selectedTheme`: the selected theme
+  * `disabledTheme`: the not selectable theme
+  * returns `self`
+
+**Events**
+
+* `clickableText:on('selected', function (sender) end)`: registers an event which will be triggered when the `Widget` has been selected
+  * returns `self`
+* `clickableText:on('deselected', function (sender) end)`: registers an event which will be triggered when the `Widget` has been deselected
+  * returns `self`
+* `clickableText:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
+  * returns `self`
+
+</details>
+
+## 5. Basic Widgets
 
 <details open>
 <summary>Basic Widgets</summary>
@@ -731,6 +808,8 @@ Shortcut to create `Percent` object.
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
 
+A `ComboBox` provides multiple in-place options for selecting.
+
 **Constructor**
 
 * beGUI.`ComboBox.new(content, value = nil)`: constructs a `ComboBox` with the specific content
@@ -764,6 +843,47 @@ Shortcut to create `Percent` object.
 **Events**
 
 * `combobox:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` selection state has been changed
+  * returns `self`
+
+### beGUI.DropdownComboBox
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options for selecting, but in a dropdown list.
+
+**Constructor**
+
+* beGUI.`DropdownComboBox.new(content, value = nil)`: constructs a `DropdownComboBox` with the specific content
+  * `content`: list of string
+  * `value`: the selected index number
+
+**Methods**
+
+* `dropdown:getItemAt(index)`: gets the item text at the specific index
+  * `index`: the specific index to get
+  * returns got item string or `nil`
+* `dropdown:addItem(item)`: adds an item string with the specific content text
+  * `item` the specific item text to add
+  * returns `self`
+* `dropdown:removeItemAt(index)`: removes the item at the specific index
+  * `index` the specific index to remove
+  * returns `true` for success, otherwise `false`
+* `dropdown:clearItems()`: clears all items
+  * returns `self`
+* `dropdown:getValue()`: gets the selected index
+  * returns the selected index number
+* `dropdown:setValue(val)`: sets the selected index
+  * `val`: the specific selected index
+  * returns `self`
+* `dropdown:scrollable()`: gets whether can scroll the widget by mouse wheel
+  * returns `true` for scrollable, otherwise `false`
+* `dropdown:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
+  * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
+
+**Events**
+
+* `dropdown:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` selection state has been changed
   * returns `self`
 
 ### beGUI.NumberBox
@@ -902,6 +1022,13 @@ Shortcut to create `Percent` object.
 * `slide:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`
 
+</details>
+
+## 6. Container Widgets
+
+<details open>
+<summary>Container Widgets</summary>
+
 ### beGUI.Group
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
@@ -918,13 +1045,6 @@ Shortcut to create `Percent` object.
 * `group:setValue(val)`: sets the content text
   * `val`: the specific content string
   * returns `self`
-
-</details>
-
-## 5. Container Widgets
-
-<details open>
-<summary>Container Widgets</summary>
 
 ### beGUI.List
 
@@ -1026,6 +1146,13 @@ Shortcut to create `Percent` object.
 * `tab:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` page has been switched
   * returns `self`
 
+</details>
+
+## 7. Popup Widgets
+
+<details open>
+<summary>Popup Widgets</summary>
+
 ### beGUI.Popup
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
@@ -1099,7 +1226,7 @@ Shortcut to create `Percent` object.
 
 </details>
 
-## 6. Custom Widget
+## 8. Custom Widget
 
 <details open>
 <summary>Custom Widget</summary>
@@ -1221,7 +1348,7 @@ local MyWidget = beClass.class({
 
 </details>
 
-## 7. Theme
+## 9. Theme
 
 <details open>
 <summary>Theme</summary>
@@ -1230,7 +1357,7 @@ Defined in "src/libs/beGUI/beTheme.lua". Widget classes will lookup for image re
 
 </details>
 
-## 8. Tweening
+## 10. Tweening
 
 <details open>
 <summary>Tweening</summary>

@@ -50,6 +50,10 @@ local function default()
 			color = Color.new(0, 162, 255)
 		},
 
+		['clickable_text'] = {
+			color = Color.new(0, 102, 255)
+		},
+
 		['label'] = {
 			content_offset = nil
 		},
@@ -160,6 +164,22 @@ local function default()
 		},
 		['combobox_button_right_down'] = {
 			resource = Resources.load('imgs/button_right.png'),
+			area = { 0, 17, 17, 17 },
+			content_offset = nil
+		},
+
+		['dropdown_combobox'] = {
+			resource = Resources.load('imgs/panel_gray.png'),
+			area = { 0, 0, 17, 17 },
+			content_offset = { 1, 1 }
+		},
+		['dropdown_combobox_button_dropdown'] = {
+			resource = Resources.load('imgs/button_dropdown.png'),
+			area = { 0, 0, 17, 17 },
+			content_offset = nil
+		},
+		['dropdown_combobox_button_dropdown_down'] = {
+			resource = Resources.load('imgs/button_dropdown.png'),
 			area = { 0, 17, 17, 17 },
 			content_offset = nil
 		},
