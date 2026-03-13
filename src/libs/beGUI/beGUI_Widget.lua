@@ -364,9 +364,7 @@ Widget = beClass.class({
 		if self.children == nil then
 			return self
 		end
-		local n = #self.children
-		for i = 1, n, 1 do
-			local c = self.children[i]
+		for i, c in ipairs(self.children) do
 			handler(c, i)
 		end
 
@@ -635,9 +633,7 @@ Widget = beClass.class({
 		if self.children == nil then
 			return
 		end
-		local n = #self.children
-		for i = 1, n, 1 do
-			local c = self.children[i]
+		for i, c in ipairs(self.children) do
 			c:_updateLayout(w, h)
 		end
 	end,
@@ -747,9 +743,7 @@ Widget = beClass.class({
 		if self.children == nil then
 			return
 		end
-		local n = #self.children
-		for i = 1, n, 1 do
-			local c = self.children[i]
+		for i, c in ipairs(self.children) do
 			if not self.popup or self.popup == c then
 				c:_update(theme, delta, dx, dy, event)
 			else

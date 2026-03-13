@@ -404,9 +404,7 @@ local List = beClass.class({
 			return
 		end
 		self._maxX, self._maxY = 0, 0
-		local n = #self.children
-		for i = 1, n, 1 do
-			local c = self.children[i]
+		for i, c in ipairs(self.children) do
 			c:_update(theme, delta, dx, dy, event)
 			local px, py = c:position()
 			local w, h = c:size()
@@ -916,9 +914,7 @@ local Tab = beClass.class({
 		if not page then
 			return
 		end
-		local n = #page
-		for i = 1, n, 1 do
-			local c = page[i]
+		for i, c in ipairs(page) do
 			if not self.popup or self.popup == c then
 				c:_update(theme, delta, dx, dy, event)
 			else
