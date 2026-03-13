@@ -35,11 +35,11 @@ Try it [in browser](https://paladin-t.github.io/begui/).
   - [5. Interactable Widgets](#5-interactable-widgets)
     - [beGUI.Clickable](#beguiclickable)
     - [beGUI.ClickableText](#beguiclickabletext)
+    - [beGUI.Draggable](#beguidraggable)
+    - [beGUI.Droppable](#beguidroppable)
   - [6. Container Widgets](#6-container-widgets)
     - [beGUI.Group](#beguigroup)
     - [beGUI.List](#beguilist)
-    - [beGUI.Draggable](#beguidraggable)
-    - [beGUI.Droppable](#beguidroppable)
     - [beGUI.Tab](#beguitab)
   - [7. Popup Widgets](#7-popup-widgets)
     - [beGUI.Popup](#beguipopup)
@@ -1022,6 +1022,35 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `clickableText:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
   * returns `self`
 
+### beGUI.Draggable
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
+
+* beGUI.`Draggable.new()`: constructs a `Draggable`
+
+### beGUI.Droppable
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
+
+* beGUI.`Droppable.new()`: constructs a `Droppable`
+
+**Events**
+
+* `droppable:on('entered', function (sender, draggable) end)`: registers an event which will be triggered when the `Widget` has been entered by a `Draggable`
+  * returns `self`
+* `droppable:on('left', function (sender, draggable) end)`: registers an event which will be triggered when the `Widget` has been left by a `Draggable`
+  * returns `self`
+* `droppable:on('dropping', function (sender, draggable) return droppable end)`: registers an event which will be triggered when the `Widget` has been hovering by a `Draggable`
+  * returns `self`
+* `droppable:on('dropped', function (sender, draggable) end)`: registers an event which will be triggered when the `Widget` has been dropped by a `Draggable`
+  * returns `self`
+* `droppable:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
+  * returns `self`
+
 </details>
 
 ## 6. Container Widgets
@@ -1079,35 +1108,6 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
   * returns `true` for scrollable, otherwise `false`
 * `list:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
-  * returns `self`
-
-### beGUI.Draggable
-
-**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
-
-**Constructor**
-
-* beGUI.`Draggable.new()`: constructs a `Draggable`
-
-### beGUI.Droppable
-
-**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
-
-**Constructor**
-
-* beGUI.`Droppable.new()`: constructs a `Droppable`
-
-**Events**
-
-* `droppable:on('entered', function (sender, draggable) end)`: registers an event which will be triggered when the `Widget` has been entered by a `Draggable`
-  * returns `self`
-* `droppable:on('left', function (sender, draggable) end)`: registers an event which will be triggered when the `Widget` has been left by a `Draggable`
-  * returns `self`
-* `droppable:on('dropping', function (sender, draggable) return droppable end)`: registers an event which will be triggered when the `Widget` has been hovering by a `Draggable`
-  * returns `self`
-* `droppable:on('dropped', function (sender, draggable) end)`: registers an event which will be triggered when the `Widget` has been dropped by a `Draggable`
-  * returns `self`
-* `droppable:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
   * returns `self`
 
 ### beGUI.Tab

@@ -113,12 +113,8 @@ beGUI = beUtils.merge(
 		-- Events:
 		--   'clicked': function (sender) end
 		ClickableText = beInteractable.ClickableText,
-		-- Group widget.
-		Group = beContainers.Group,
-		-- List widget.
-		List = beContainers.List,
 		-- Draggable widget.
-		Draggable = beContainers.Draggable,
+		Draggable = beInteractable.Draggable,
 		-- Droppable widget.
 		-- Events:
 		--   'entered': function (sender, draggable) end
@@ -126,7 +122,11 @@ beGUI = beUtils.merge(
 		--   'dropping': function (sender, draggable) return droppable end
 		--   'dropped': function (sender, draggable) end
 		--   'clicked': function (sender) end
-		Droppable = beContainers.Droppable,
+		Droppable = beInteractable.Droppable,
+		-- Group widget.
+		Group = beContainers.Group,
+		-- List widget.
+		List = beContainers.List,
 		-- Tab widget.
 		-- Events:
 		--   'changed': function (sender, value) end
