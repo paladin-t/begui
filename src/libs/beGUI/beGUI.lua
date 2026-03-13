@@ -24,8 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 local beUtils = require 'libs/beGUI/beGUI_Utils'
 local beStructures = require 'libs/beGUI/beGUI_Structures'
 local beWidget = require 'libs/beGUI/beGUI_Widget'
-local beInteractable = require 'libs/beGUI/beGUI_Interactable'
 local beBasics = require 'libs/beGUI/beGUI_Basics'
+local beInteractable = require 'libs/beGUI/beGUI_Interactable'
 local beContainers = require 'libs/beGUI/beGUI_Containers'
 local bePopups = require 'libs/beGUI/beGUI_Popups'
 local beCustom = require 'libs/beGUI/beGUI_Custom'
@@ -49,16 +49,6 @@ beGUI = beUtils.merge(
 		-- Widget class, base for other widgets, also could be used as container
 		-- of other widgets.
 		Widget = beWidget.Widget,
-		-- Clickable widget.
-		-- Events:
-		--   'selected': function (sender) end
-		--   'deselected': function (sender) end
-		--   'clicked': function (sender) end
-		Clickable = beInteractable.Clickable,
-		-- ClickableText widget.
-		-- Events:
-		--   'clicked': function (sender) end
-		ClickableText = beInteractable.ClickableText,
 		-- Label widget.
 		Label = beBasics.Label,
 		-- MultilineLabel widget.
@@ -113,6 +103,16 @@ beGUI = beUtils.merge(
 		-- Events:
 		--   'changed': function (sender, value) end
 		Slide = beBasics.Slide,
+		-- Clickable widget.
+		-- Events:
+		--   'selected': function (sender) end
+		--   'deselected': function (sender) end
+		--   'clicked': function (sender) end
+		Clickable = beInteractable.Clickable,
+		-- ClickableText widget.
+		-- Events:
+		--   'clicked': function (sender) end
+		ClickableText = beInteractable.ClickableText,
 		-- Group widget.
 		Group = beContainers.Group,
 		-- List widget.
