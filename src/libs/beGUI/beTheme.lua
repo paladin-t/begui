@@ -164,6 +164,22 @@ local function default()
 			content_offset = nil
 		},
 
+		['dropdowncombobox'] = {
+			resource = Resources.load('imgs/panel_gray.png'),
+			area = { 0, 0, 17, 17 },
+			content_offset = { 1, 1 }
+		},
+		['dropdowncombobox_button_dropdown'] = {
+			resource = Resources.load('imgs/button_dropdown.png'),
+			area = { 0, 0, 17, 17 },
+			content_offset = nil
+		},
+		['dropdowncombobox_button_dropdown_down'] = {
+			resource = Resources.load('imgs/button_dropdown.png'),
+			area = { 0, 17, 17, 17 },
+			content_offset = nil
+		},
+
 		['numberbox'] = {
 			resource = Resources.load('imgs/panel_gray.png'),
 			area = { 0, 0, 17, 17 },
