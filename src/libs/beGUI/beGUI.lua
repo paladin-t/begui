@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 local beUtils = require 'libs/beGUI/beGUI_Utils'
 local beStructures = require 'libs/beGUI/beGUI_Structures'
 local beWidget = require 'libs/beGUI/beGUI_Widget'
+local beInteractable = require 'libs/beGUI/beGUI_Interactable'
 local beBasics = require 'libs/beGUI/beGUI_Basics'
 local beContainers = require 'libs/beGUI/beGUI_Containers'
 local bePopups = require 'libs/beGUI/beGUI_Popups'
@@ -48,6 +49,10 @@ beGUI = beUtils.merge(
 		-- Widget class, base for other widgets, also could be used as container
 		-- of other widgets.
 		Widget = beWidget.Widget,
+		-- Slide widget.
+		-- Events:
+		--   'clicked': function (sender) end
+		Clickable = beInteractable.Clickable,
 		-- Label widget.
 		Label = beBasics.Label,
 		-- MultilineLabel widget.

@@ -2128,11 +2128,22 @@ local DropdownComboBox = beClass.class({
 			return
 		end
 
-		self._dropDownList = beGUI.List.new(true)
+		local lst = beGUI.List.new(true)
 			:setId('list')
-		self._dropDownList.schedule = function (self, func)
-			-- TODO
+		lst._scheduled = nil
+		lst.schedule = function (this, func)
+			this._scheduled = func
 		end
+		lst._update = function (this, ...)
+			beGUI.List._update(this, ...)
+
+			if this._scheduled then
+				this._scheduled()
+				this._scheduled = nil
+			end
+		end
+
+		self._dropDownList = lst
 		context.root:openPopup(self._dropDownList) -- Open popup.
 		-- TODO: context.root:closePopup()
 		-- TODO: add items.

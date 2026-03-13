@@ -15,7 +15,9 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     - [beGUI.percent](#beguipercent)
   - [3. Widget](#3-widget)
     - [beGUI.Widget](#beguiwidget)
-  - [4. Basic Widgets](#4-basic-widgets)
+  - [4. Interactable Widgets](#4-interactable-widgets)
+    - [beGUI.Clickable](#beguiclickable)
+  - [5. Basic Widgets](#5-basic-widgets)
     - [beGUI.Label](#beguilabel)
     - [beGUI.MultilineLabel](#beguimultilinelabel)
     - [beGUI.Url](#beguiurl)
@@ -32,21 +34,22 @@ Try it [in browser](https://paladin-t.github.io/begui/).
     - [beGUI.NumberBox](#beguinumberbox)
     - [beGUI.ProgressBar](#beguiprogressbar)
     - [beGUI.Slide](#beguislide)
+  - [6. Container Widgets](#6-container-widgets)
     - [beGUI.Group](#beguigroup)
-  - [5. Container Widgets](#5-container-widgets)
     - [beGUI.List](#beguilist)
     - [beGUI.Draggable](#beguidraggable)
     - [beGUI.Droppable](#beguidroppable)
     - [beGUI.Tab](#beguitab)
+  - [7. Popup Widgets](#7-popup-widgets)
     - [beGUI.Popup](#beguipopup)
     - [beGUI.MessageBox](#beguimessagebox)
     - [beGUI.QuestionBox](#beguiquestionbox)
     - [beGUI.TextEditBox](#beguitexteditbox)
-  - [6. Custom Widget](#6-custom-widget)
+  - [8. Custom Widget](#8-custom-widget)
     - [beGUI.Custom](#beguicustom)
     - [Writing Your Own Widget](#writing-your-own-widget)
-  - [7. Theme](#7-theme)
-  - [8. Tweening](#8-tweening)
+  - [9. Theme](#9-theme)
+  - [10. Tweening](#10-tweening)
     - [beGUI.Tween](#beguitween)
 - [License](#license)
 
@@ -59,10 +62,11 @@ Try it [in browser](https://paladin-t.github.io/begui/).
 "beGUI" implements:
 
 * Placable, resizable, anchorable, and nestable `Widget`
+* `Clickable`
 * Textual `Label`, `MultilineLabel`, `Url`, `InputBox`
 * Advanced textual `TextBox`, `DocumentViewer`
 * `Picture`
-* Clickable `Button`, `PictureButton`
+* Clickable buttons `Button`, `PictureButton`
 * `CheckBox`, `RadioBox`
 * `ComboBox`, `DropdownComboBox`
 * `NumberBox`
@@ -307,7 +311,27 @@ Shortcut to create `Percent` object.
 
 </details>
 
-## 4. Basic Widgets
+## 4. Interactable Widgets
+
+<details open>
+<summary>Interactable Widgets</summary>
+
+### beGUI.Clickable
+
+**Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
+
+**Constructor**
+
+* beGUI.`Clickable.new()`: constructs a `Clickable` with the specific value
+
+**Events**
+
+* `clickable:on('clicked', function (sender) end)`: registers an event which will be triggered when the `Widget` has been clicked
+  * returns `self`
+
+</details>
+
+## 5. Basic Widgets
 
 <details open>
 <summary>Basic Widgets</summary>
@@ -947,6 +971,13 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `slide:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` value has been changed
   * returns `self`
 
+</details>
+
+## 6. Container Widgets
+
+<details open>
+<summary>Container Widgets</summary>
+
 ### beGUI.Group
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
@@ -963,13 +994,6 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `group:setValue(val)`: sets the content text
   * `val`: the specific content string
   * returns `self`
-
-</details>
-
-## 5. Container Widgets
-
-<details open>
-<summary>Container Widgets</summary>
 
 ### beGUI.List
 
@@ -1071,6 +1095,13 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `tab:on('changed', function (sender, value) end)`: registers an event which will be triggered when the `Widget` page has been switched
   * returns `self`
 
+</details>
+
+## 7. Popup Widgets
+
+<details open>
+<summary>Popup Widgets</summary>
+
 ### beGUI.Popup
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
@@ -1144,7 +1175,7 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 
 </details>
 
-## 6. Custom Widget
+## 8. Custom Widget
 
 <details open>
 <summary>Custom Widget</summary>
@@ -1266,7 +1297,7 @@ local MyWidget = beClass.class({
 
 </details>
 
-## 7. Theme
+## 9. Theme
 
 <details open>
 <summary>Theme</summary>
@@ -1275,7 +1306,7 @@ Defined in "src/libs/beGUI/beTheme.lua". Widget classes will lookup for image re
 
 </details>
 
-## 8. Tweening
+## 10. Tweening
 
 <details open>
 <summary>Tweening</summary>
