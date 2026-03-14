@@ -898,6 +898,11 @@ local TextBox = beClass.class({
 
 		return self
 	end,
+	selectAll = function (self)
+		self.content:selectAll()
+
+		return self
+	end,
 	lineCount = function (self)
 		return self.content.lineCount
 	end,
@@ -2225,14 +2230,14 @@ local DropdownComboBox = beClass.class({
 		local elem = theme['dropdown_combobox']
 		local area = elem.area
 		local x_, y_ = x, y + (h - area[4]) * 0.5
-		local w_, h_ = math.ceil(w + 1), area[4]
+		local w_, h_ = w + 1, area[4]
 		local elemD = theme['dropdown_combobox_button_dropdown']
 		local areaD = elemD.area
 
 		local canvasWidth, canvasHeight = Canvas.main:size()
 		local dropdownWidth, dropdownHeight =
 			math.min(self._maxContentWidth, canvasWidth),
-			math.min(self._maxContentHeight, canvasHeight - h_, h_ * 5.8)
+			math.min(self._maxContentHeight, canvasHeight - h_, h_ * 8.8)
 		local right, bottom = x_ + w_ + areaD[3] - 1, y_ + h_
 		local anchorX, anchorY = 1, 0
 		local posX, posY = right, bottom
@@ -2345,7 +2350,7 @@ local DropdownComboBox = beClass.class({
 			local clipped = self:_beginClip(event, x, y, w, h)
 			if clipped then
 				if type(item) == 'string' then
-					beUtils.textLeft(item, theme['font'], x, y, w, h, elem.content_offset, self.transparency)
+					beUtils.textLeft(item, theme['font'], x + 2, y, w, h, elem.content_offset, self.transparency)
 				else
 					local area = item.area
 					if self.transparency then

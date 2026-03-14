@@ -226,10 +226,14 @@ local ClickableText = beClass.class({
 				rect(x, y, x + w - 1, y + h - 1, true, elem.color)
 			end
 		end
+		local offX, offY = 0, 0
+		if elem.content_offset then
+			offX, offY = elem.content_offset[1], elem.content_offset[2]
+		end
 		if self._selectable then
-			beUtils.textLeft(self.content, theme[font], x + 4, y, w - 8, h, elem.content_offset, self.transparency)
+			beUtils.textLeft(self.content, theme[font], x + 4 + offX, y + offY, w - 8, h, elem.content_offset, self.transparency)
 		else
-			beUtils.textLeft(self.content, theme[disabledTheme], x + 4, y, w - 8, h, elem.content_offset, self.transparency)
+			beUtils.textLeft(self.content, theme[disabledTheme], x + 4 + offX, y + offY, w - 8, h, elem.content_offset, self.transparency)
 		end
 
 		beWidget.Widget._update(self, theme, delta, dx, dy, event)

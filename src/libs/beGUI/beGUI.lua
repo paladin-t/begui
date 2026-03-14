@@ -49,6 +49,7 @@ beGUI = beUtils.merge(
 		-- Widget class, base for other widgets, also could be used as container
 		-- of other widgets.
 		Widget = beWidget.Widget,
+
 		-- Label widget.
 		Label = beBasics.Label,
 		-- MultilineLabel widget.
@@ -103,6 +104,7 @@ beGUI = beUtils.merge(
 		-- Events:
 		--   'changed': function (sender, value) end
 		Slide = beBasics.Slide,
+
 		-- Clickable widget.
 		-- Events:
 		--   'selected': function (sender) end
@@ -123,6 +125,7 @@ beGUI = beUtils.merge(
 		--   'dropped': function (sender, draggable) end
 		--   'clicked': function (sender) end
 		Droppable = beInteractable.Droppable,
+
 		-- Group widget.
 		Group = beContainers.Group,
 		-- List widget.
@@ -131,6 +134,7 @@ beGUI = beUtils.merge(
 		-- Events:
 		--   'changed': function (sender, value) end
 		Tab = beContainers.Tab,
+
 		-- Popup widget.
 		Popup = bePopups.Popup,
 		-- MessageBox widget.
@@ -150,10 +154,12 @@ beGUI = beUtils.merge(
 		--   'confirmed': function (sender) end
 		--   'denied': function (sender) end
 		TextEditBox = bePopups.TextEditBox,
+
 		-- Custom widget.
 		-- Events:
 		--   'updated': function (sender, x, y, w, h, delta, event) end
 		Custom = beCustom.Custom,
+
 		-- Tweening helper.
 		Tween = beTween.Tween
 	}

@@ -355,6 +355,8 @@ local TextEditBox = beClass.class({
 						:anchor(0.5, 1)
 						:put(P(50), P(68))
 						:resize(P(90), 60)
+						:selectAll()
+						:focus()
 				)
 				:addChild(
 					beGUI.Button.new(self._confirm)

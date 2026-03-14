@@ -51,7 +51,8 @@ local function default()
 		},
 
 		['clickable_text'] = {
-			color = Color.new(0, 102, 255)
+			color = Color.new(0, 102, 255),
+			content_offset = { 0, 1 }
 		},
 
 		['label'] = {

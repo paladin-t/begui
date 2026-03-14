@@ -518,6 +518,8 @@ Shortcut to create `Percent` object.
   * `ln2`: the second cursor line
   * `col2`: the second cursor column
   * returns `self`
+* `textBox:selectAll()`: selects all text of the `TextBox`
+  * returns `self`
 * `textBox:lineCount()`: gets the total line of the `TextBox`
   * returns the total line count
 * `textBox:lineAt(ln)`: gets the text at the specific line
