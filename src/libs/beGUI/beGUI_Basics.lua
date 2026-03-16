@@ -1185,8 +1185,8 @@ local Picture = beClass.class({
 	end,
 
 	-- Sets the content Texture.
-	setValue = function (self, content)
-		self.content = content
+	setValue = function (self, val)
+		self.content = val
 
 		return self
 	end,
@@ -1282,8 +1282,8 @@ local Button = beClass.class({
 		return 'Button'
 	end,
 
-	setValue = function (self, content)
-		self.content = content
+	setValue = function (self, val)
+		self.content = val
 
 		return self
 	end,
@@ -1558,7 +1558,7 @@ local CheckBox = beClass.class({
 		return self
 	end,
 
-	setContent = function (self, val)
+	setContent = function (self, content)
 		self.content = content
 
 		return self
@@ -1678,7 +1678,7 @@ local RadioBox = beClass.class({
 		return self
 	end,
 
-	setContent = function (self, val)
+	setContent = function (self, content)
 		self.content = content
 
 		return self
