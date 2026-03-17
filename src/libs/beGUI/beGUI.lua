@@ -42,10 +42,10 @@ beGUI = beUtils.merge(
 	beGUI,
 	{
 		version = '1.7.1',
-	
+
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,
-	
+
 		-- Widget class, base for other widgets, also could be used as container
 		-- of other widgets.
 		Widget = beWidget.Widget,

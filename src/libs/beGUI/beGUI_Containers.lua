@@ -69,12 +69,12 @@ local Group = beClass.class({
 		local elem = theme['group']
 		local x_ = x + elem.content_offset[1]
 		local w_, h_ = measure(self.content, font_.resource, font_.margin or 1, font_.scale or 1)
-		local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
-		line(x, y + h_ * 0.5, x, y + h - 1, black)
-		line(x, y + h - 1, x + w - 1, y + h - 1, black)
-		line(x + w - 1, y + h_ * 0.5, x + w - 1, y + h - 1, black)
-		line(x, y + h_ * 0.5, x_ - 2, y + h_ * 0.5, black)
-		line(x_ + w_ + 2, y + h_ * 0.5, x + w - 1, y + h_ * 0.5, black)
+		local col = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
+		line(x, y + h_ * 0.5, x, y + h - 1, col)
+		line(x, y + h - 1, x + w - 1, y + h - 1, col)
+		line(x + w - 1, y + h_ * 0.5, x + w - 1, y + h - 1, col)
+		line(x, y + h_ * 0.5, x_ - 2, y + h_ * 0.5, col)
+		line(x_ + w_ + 2, y + h_ * 0.5, x + w - 1, y + h_ * 0.5, col)
 		local elem_ = theme['group_title']
 		beUtils.textCenter(self.content, font_, x_, y, w_, h_, elem_.content_offset, self.transparency)
 
@@ -654,22 +654,22 @@ local Tab = beClass.class({
 					self:setValue(val)
 				end
 			end
-			local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
+			local col = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
 			if i == self._value then
 				self._focusArea[1], self._focusArea[2], self._focusArea[3], self._focusArea[4] =
 					x_ + 1, y + 1, x_ + w_ - 2, y + h_ - 1
 				-- Tab itself.
-				line(x_, y, x_ + w_ - 1, y, black)
-				line(x_ + w_ - 1, y, x_ + w_ - 1, y + h_, black)
+				line(x_, y, x_ + w_ - 1, y, col)
+				line(x_ + w_ - 1, y, x_ + w_ - 1, y + h_, col)
 				-- Border.
-				line(x, y + h - 1, x + w - 1, y + h - 1, black)
-				line(x, y, x, y + h - 1, black)
-				line(x + w - 1, y + h_, x + w - 1, y + h - 1, black)
-				line(x_ + w_ - 1, y + h_, x + w - 1, y + h_, black)
-				line(x, y + h_, x_, y + h_, black)
+				line(x, y + h - 1, x + w - 1, y + h - 1, col)
+				line(x, y, x, y + h - 1, col)
+				line(x + w - 1, y + h_, x + w - 1, y + h - 1, col)
+				line(x_ + w_ - 1, y + h_, x + w - 1, y + h_, col)
+				line(x, y + h_, x_, y + h_, col)
 			else
-				line(x_, y, x_ + w_ - 1, y, black)
-				line(x_ + w_ - 1, y, x_ + w_ - 1, y + h_, black)
+				line(x_, y, x_ + w_ - 1, y, col)
+				line(x_ + w_ - 1, y, x_ + w_ - 1, y + h_, col)
 			end
 			if type(v) == 'string' then
 				local elem_ = theme['tab_title']

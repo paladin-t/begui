@@ -223,6 +223,12 @@ local function default()
 			area = { 0, 0, 13, 17 },
 			content_offset = nil
 		},
+		['slide_disabled'] = {
+			resource = Resources.load('imgs/slide.png'),
+			color = Color.new(183, 181, 183),
+			area = { 0, 17, 13, 17 },
+			content_offset = nil
+		},
 
 		['group'] = {
 			resource = nil,

@@ -948,6 +948,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `slide:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
+* `slide:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `slide:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 **Events**
 

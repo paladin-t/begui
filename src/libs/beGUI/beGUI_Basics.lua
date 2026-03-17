@@ -2806,6 +2806,7 @@ local ProgressBar = beClass.class({
 }, beWidget.Widget)
 
 local Slide = beClass.class({
+	_enabled = true,
 	_pressed = false,
 	_value = -1,
 	_minValue = nil,
@@ -2878,6 +2879,15 @@ local Slide = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -2908,7 +2918,7 @@ local Slide = beClass.class({
 			event.context.active = self
 			self._pressed = true
 		elseif down and self._pressed then
-			if not event.canceled then
+			if not event.canceled and self._enabled then
 				value = math.floor(self._minValue + (event.mousePosition.x - x) / w * (self._maxValue - self._minValue + 1))
 				value = beUtils.clamp(value, self._minValue, self._maxValue)
 				if value and not beUtils.isNaN(value) then
@@ -2919,40 +2929,55 @@ local Slide = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			value = math.floor(self._minValue + (event.mousePosition.x - x) / w * (self._maxValue - self._minValue + 1))
-			value = beUtils.clamp(value, self._minValue, self._maxValue)
-			if value and not beUtils.isNaN(value) then
-				self:setValue(value)
+			if self._enabled then
+				value = math.floor(self._minValue + (event.mousePosition.x - x) / w * (self._maxValue - self._minValue + 1))
+				value = beUtils.clamp(value, self._minValue, self._maxValue)
+				if value and not beUtils.isNaN(value) then
+					self:setValue(value)
+				end
 			end
 		elseif intersects and event.mouseWheel < 0 and self._scrollable then
-			local val = self._value - 1
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value - 1
+				self:setValue(val)
+			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
-			local val = self._value + 1
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value + 1
+				self:setValue(val)
+			end
 		elseif event.context.focus == self and event.context.navigated == 'dec' then
-			local val = self._value - 1
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value - 1
+				self:setValue(val)
+			end
 			event.context.navigated = false
 		elseif event.context.focus == self and (event.context.navigated == 'inc' or event.context.navigated == 'press') then
-			local val = self._value + 1
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value + 1
+				self:setValue(val)
+			end
 			event.context.navigated = false
 		end
 
-		local elem = theme['slide']
+		local elem = nil
+		if self._enabled then
+			elem = theme['slide']
+		else
+			elem = theme['slide_disabled']
+		end
 		local img = elem.resource
 		local area = elem.area
 		local contentX = x + area[3] * 0.5
 		local contentWidth = w - area[3]
 		local handleX = contentX + (value - self._minValue) / (self._maxValue - self._minValue) * contentWidth
-		local black = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
-		line(x, y + h * 0.5, x + w - 1, y + h * 0.5, black)
-		rect(x, y, x + 2, y + h - 1, true, black)
-		rect(x + w - 3, y, x + w - 1, y + h - 1, true, black)
+		local col = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)
+		line(x, y + h * 0.5, x + w - 1, y + h * 0.5, col)
+		rect(x, y, x + 2, y + h - 1, true, col)
+		rect(x + w - 3, y, x + w - 1, y + h - 1, true, col)
 		for i = self._minValue + 1, self._maxValue - 1 do
 			local lineX = contentX + (i - self._minValue) / (self._maxValue - self._minValue) * contentWidth
-			line(lineX, y + h * 0.1, lineX, y + h * 0.9, black)
+			line(lineX, y + h * 0.1, lineX, y + h * 0.9, col)
 		end
 		if self.transparency then
 			local col = Color.new(255, 255, 255, self.transparency)
