@@ -475,6 +475,7 @@ local Url = beClass.class({
 	_alignment = 'left',
 	_clip = false,
 	_theme = nil,
+	_enabled = true,
 	_pressed = false,
 
 	-- Constructs a Url with the specific content.
@@ -531,6 +532,15 @@ local Url = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
+	end,
+
 	resize = function (self, width, height)
 		if width == -1 then
 			self.height = height
@@ -576,9 +586,13 @@ local Url = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 		elseif event.context.focus == self and event.context.navigated == 'press' then
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 			event.context.navigated = false
 		end
 
@@ -590,14 +604,16 @@ local Url = beClass.class({
 			visible = clipped
 		end
 		if visible then
-			local theme_ = theme[self._theme or intersects and 'font_url_hover' or 'font_url']
+			local theme_ = self._enabled and
+				theme[self._theme or intersects and 'font_url_hover' or 'font_url'] or
+				theme[self._theme or 'font_placeholder']
 			local _, fy, fw, fh
 			if theme_.resource ~= theme['font'].resource then
 				font(theme_.resource)
 			end
 			if down and intersects then
 				if not self.transparency then
-					rect(x, y, x + w, y + h, true, theme['font_url'].color)
+					rect(x, y, x + w, y + h, true, theme[self._enabled and 'font_url' or 'font_placeholder'].color)
 				end
 			end
 			if w <= 0 and h <= 0 then
@@ -2150,7 +2166,7 @@ local DropdownComboBox = beClass.class({
 		for i = 1, n, 1 do
 			local txt = self.content[i]
 			local clickableTxt = beGUI.ClickableText.new(txt)
-				:setId('item_' .. tostring(i))
+				:setId('#item_' .. tostring(i))
 				:put(0, (i - 1) * (h_ + 1))
 				:resize(P(100), h_)
 				:on('clicked', function (sender)
@@ -2163,7 +2179,7 @@ local DropdownComboBox = beClass.class({
 
 		-- Construct the dropdown widget (`Clickable`), and mock the functions.
 		self._dropDownWidget = beGUI.Clickable.new()
-			:setId('closer')
+			:setId('#closer')
 			:setRule('outside')
 			:on('clicked', function (sender)
 				context.root:closePopup() -- Close popup.

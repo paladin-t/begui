@@ -437,6 +437,11 @@ Shortcut to create `Percent` object.
 * `url:setTheme(theme)`: sets the theme
   * `theme`: the custom theme
   * returns `self`
+* `url:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `url:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 **Events**
 
