@@ -1382,12 +1382,6 @@ local Button = beClass.class({
 }, beWidget.Widget)
 
 local PictureButton = beClass.class({
-	_enabled = true,
-	_pressed = false,
-	_pressedTimestamp = nil,
-	_repeat = false,
-	_background = false,
-
 	_theme = nil,
 	_themeBackgroundNormal = nil,
 	_themeBackgroundPressed = nil,
@@ -1395,6 +1389,11 @@ local PictureButton = beClass.class({
 	_themeNormal = nil,
 	_themePressed = nil,
 	_themeDisabled = nil,
+	_enabled = true,
+	_pressed = false,
+	_pressedTimestamp = nil,
+	_repeat = false,
+	_background = false,
 
 	-- Constructs a PictureButton with the specific content.
 	-- `content`: the content Texture
@@ -1540,9 +1539,9 @@ local PictureButton = beClass.class({
 }, beWidget.Widget)
 
 local CheckBox = beClass.class({
+	_value = false,
 	_enabled = true,
 	_pressed = false,
-	_value = false,
 
 	-- Constructs a CheckBox with the specific content.
 	-- `content`: the content string
@@ -1660,8 +1659,9 @@ local CheckBox = beClass.class({
 }, beWidget.Widget)
 
 local RadioBox = beClass.class({
-	_pressed = false,
 	_value = false,
+	_enabled = true,
+	_pressed = false,
 
 	-- Constructs a RadioBox with the specific content.
 	-- `content`: the content string
@@ -1688,14 +1688,25 @@ local RadioBox = beClass.class({
 		if self._value == val then
 			return self
 		end
-		self._value = val
-		self:_trigger('changed', self, self._value)
+		if self._enabled then
+			self._value = val
+			self:_trigger('changed', self, self._value)
+		end
 
 		return self
 	end,
 
 	setContent = function (self, content)
 		self.content = content
+
+		return self
+	end,
+
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
 
 		return self
 	end,
@@ -1763,7 +1774,7 @@ local RadioBox = beClass.class({
 			event.context.navigated = false
 		end
 
-		local elem = self._value and theme['radiobox_selected'] or theme['radiobox']
+		local elem = self._value and theme[self._enabled and 'radiobox_selected' or 'radiobox_selected_disabled'] or theme[self._enabled and 'radiobox' or 'radiobox_disabled']
 		local img = elem.resource
 		local area = elem.area
 		if self.transparency then
@@ -1779,9 +1790,10 @@ local RadioBox = beClass.class({
 }, beWidget.Widget)
 
 local ComboBox = beClass.class({
-	_pressed = false,
 	_value = -1,
 	_scrollable = true,
+	_enabled = true,
+	_pressed = false,
 
 	_buttonLeft = nil,
 	_buttonRight = nil,
@@ -1805,7 +1817,7 @@ local ComboBox = beClass.class({
 
 		self._buttonLeft = PictureButton.new(
 			'', false,
-			{ normal = 'combobox_button_left', pressed = 'combobox_button_left_down' }
+			{ normal = 'combobox_button_left', pressed = 'combobox_button_left_down', disabled = 'combobox_button_left_disabled' }
 		)
 			:put(0, 0)
 			:on('clicked', function (sender)
@@ -1819,7 +1831,7 @@ local ComboBox = beClass.class({
 			end)
 		self._buttonRight = PictureButton.new(
 			'', false,
-			{ normal = 'combobox_button_right', pressed = 'combobox_button_right_down' }
+			{ normal = 'combobox_button_right', pressed = 'combobox_button_right_down', disabled = 'combobox_button_right_disabled' }
 		)
 			:put(0, 0)
 			:on('clicked', function (sender)
@@ -1915,6 +1927,17 @@ local ComboBox = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+		self._buttonLeft:setEnabled(self._enabled)
+		self._buttonRight:setEnabled(self._enabled)
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -1960,37 +1983,47 @@ local ComboBox = beClass.class({
 			self._pressed = false
 			event.context.focus = self
 			if #self.content ~= 0 then
-				local val = self._value + 1
-				if val > #self.content then
-					val = 1
+				if self._enabled then
+					local val = self._value + 1
+					if val > #self.content then
+						val = 1
+					end
+					self:setValue(val)
 				end
-				self:setValue(val)
 			end
 		elseif intersects and event.mouseWheel < 0 and self._scrollable then
 			if #self.content ~= 0 then
-				local val = self._value - 1
-				if val < 1 then
-					val = #self.content
+				if self._enabled then
+					local val = self._value - 1
+					if val < 1 then
+						val = #self.content
+					end
+					self:setValue(val)
 				end
-				self:setValue(val)
 			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
-				local val = self._value + 1
-				if val > #self.content then
-					val = 1
+				if self._enabled then
+					local val = self._value + 1
+					if val > #self.content then
+						val = 1
+					end
+					self:setValue(val)
 				end
-				self:setValue(val)
 			end
 		elseif event.context.focus == self and event.context.navigated == 'dec' then
-			self._buttonLeft:_trigger('clicked', self._buttonLeft)
+			if self._enabled then
+				self._buttonLeft:_trigger('clicked', self._buttonLeft)
+			end
 			event.context.navigated = false
 		elseif event.context.focus == self and (event.context.navigated == 'inc' or event.context.navigated == 'press') then
-			self._buttonRight:_trigger('clicked', self._buttonRight)
+			if self._enabled then
+				self._buttonRight:_trigger('clicked', self._buttonRight)
+			end
 			event.context.navigated = false
 		end
 
-		local elem = theme['combobox']
+		local elem = theme[self._enabled and 'combobox' or 'combobox_disabled']
 		local img = elem.resource
 		local area = elem.area
 		beUtils.tex3Grid(elem, x - 1, y + (h - area[4]) * 0.5, math.ceil(w + 2), area[4], nil, self.transparency, nil)
@@ -2020,9 +2053,10 @@ local ComboBox = beClass.class({
 }, beWidget.Widget)
 
 local DropdownComboBox = beClass.class({
-	_pressed = false,
 	_value = -1,
 	_scrollable = true,
+	_enabled = true,
+	_pressed = false,
 	_toUpdateContent = false,
 	_toUpdateDropdownList = false,
 	_toOpenDropdownList = false,
@@ -2052,7 +2086,7 @@ local DropdownComboBox = beClass.class({
 
 		self._buttonDropdown = PictureButton.new(
 			'', false,
-			{ normal = 'dropdown_combobox_button_dropdown', pressed = 'dropdown_combobox_button_dropdown_down' }
+			{ normal = 'dropdown_combobox_button_dropdown', pressed = 'dropdown_combobox_button_dropdown_down', disabled = 'dropdown_combobox_button_dropdown_disabled' }
 		)
 			:put(0, 0)
 			:on('clicked', function (sender)
@@ -2141,6 +2175,16 @@ local DropdownComboBox = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+		self._buttonDropdown:setEnabled(self._enabled)
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -2170,7 +2214,9 @@ local DropdownComboBox = beClass.class({
 				:put(0, (i - 1) * (h_ + 1))
 				:resize(P(100), h_)
 				:on('clicked', function (sender)
-					self:setValue(i)
+					if self._enabled then
+						self:setValue(i)
+					end
 					context.root:closePopup() -- Close popup.
 					self._dropDownWidget = nil
 				end)
@@ -2323,25 +2369,33 @@ local DropdownComboBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			self._buttonDropdown:_trigger('clicked', self._buttonDropdown)
+			if self._enabled then
+				self._buttonDropdown:_trigger('clicked', self._buttonDropdown)
+			end
 		elseif intersects and event.mouseWheel < 0 and self._scrollable then
 			if #self.content ~= 0 then
-				local val = self._value - 1
-				if val < 1 then
-					val = #self.content
+				if self._enabled then
+					local val = self._value - 1
+					if val < 1 then
+						val = #self.content
+					end
+					self:setValue(val)
 				end
-				self:setValue(val)
 			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
-				local val = self._value + 1
-				if val > #self.content then
-					val = 1
+				if self._enabled then
+					local val = self._value + 1
+					if val > #self.content then
+						val = 1
+					end
+					self:setValue(val)
 				end
-				self:setValue(val)
 			end
 		elseif event.context.focus == self and event.context.navigated == 'press' then
-			self._buttonDropdown:_trigger('clicked', self._buttonDropdown)
+			if self._enabled then
+				self._buttonDropdown:_trigger('clicked', self._buttonDropdown)
+			end
 			event.context.navigated = false
 		end
 
@@ -2357,7 +2411,7 @@ local DropdownComboBox = beClass.class({
 			self._toUpdateDropdownList = false
 			self:_updateDropdownList(theme, x, y, w, h)
 		end
-		local elem = theme['dropdown_combobox']
+		local elem = theme[self._enabled and 'dropdown_combobox' or 'dropdown_combobox_disabled']
 		local img = elem.resource
 		local area = elem.area
 		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, math.ceil(w + 1), area[4], nil, self.transparency, nil)
@@ -2387,7 +2441,6 @@ local DropdownComboBox = beClass.class({
 }, beWidget.Widget)
 
 local NumberBox = beClass.class({
-	_pressed = false,
 	_value = -1,
 	_step = 1,
 	_minValue = nil,
@@ -2396,6 +2449,8 @@ local NumberBox = beClass.class({
 	_format = nil,
 	_valueTheme = nil,
 	_scrollable = true,
+	_enabled = true,
+	_pressed = false,
 
 	_buttonUp = nil,
 	_buttonDown = nil,
@@ -2428,21 +2483,25 @@ local NumberBox = beClass.class({
 
 		self._buttonUp = PictureButton.new(
 			'', true,
-			{ normal = 'numberbox_button_up', pressed = 'numberbox_button_up_down' }
+			{ normal = 'numberbox_button_up', pressed = 'numberbox_button_up_down', disabled = 'numberbox_button_up_disabled' }
 		)
 			:put(0, 0)
 			:on('clicked', function (sender)
-				local val = self._value + self._step
-				self:setValue(val)
+				if self._enabled then
+					local val = self._value + self._step
+					self:setValue(val)
+				end
 			end)
 		self._buttonDown = PictureButton.new(
 			'', true,
-			{ normal = 'numberbox_button_down', pressed = 'numberbox_button_down_down' }
+			{ normal = 'numberbox_button_down', pressed = 'numberbox_button_down_down', disabled = 'numberbox_button_down_disabled' }
 		)
 			:put(0, 0)
 			:on('clicked', function (sender)
-				local val = self._value - self._step
-				self:setValue(val)
+				if self._enabled then
+					local val = self._value - self._step
+					self:setValue(val)
+				end
 			end)
 		self._buttonDown.navigatable = function (self)
 			return nil
@@ -2544,6 +2603,17 @@ local NumberBox = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+		self._buttonUp:setEnabled(self._enabled)
+		self._buttonDown:setEnabled(self._enabled)
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'all'
 	end,
@@ -2587,23 +2657,33 @@ local NumberBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			local val = self._value + self._step
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value + self._step
+				self:setValue(val)
+			end
 		elseif intersects and event.mouseWheel < 0 and self._scrollable then
-			local val = self._value - self._step
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value - self._step
+				self:setValue(val)
+			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
-			local val = self._value + self._step
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value + self._step
+				self:setValue(val)
+			end
 		elseif event.context.focus == self and event.context.navigated == 'dec' then
-			self._buttonDown:_trigger('clicked', self._buttonDown)
+			if self._enabled then
+				self._buttonDown:_trigger('clicked', self._buttonDown)
+			end
 			event.context.navigated = false
 		elseif event.context.focus == self and (event.context.navigated == 'inc' or event.context.navigated == 'press') then
-			self._buttonUp:_trigger('clicked', self._buttonUp)
+			if self._enabled then
+				self._buttonUp:_trigger('clicked', self._buttonUp)
+			end
 			event.context.navigated = false
 		end
 
-		local elem = theme['numberbox']
+		local elem = theme[self._enabled and 'numberbox' or 'numberbox_disabled']
 		local img = elem.resource
 		local area = elem.area
 		beUtils.tex3Grid(elem, x, y + (h - area[4]) * 0.5, math.ceil(w + 1), area[4], nil, self.transparency, nil)
@@ -2822,12 +2902,12 @@ local ProgressBar = beClass.class({
 }, beWidget.Widget)
 
 local Slide = beClass.class({
-	_enabled = true,
-	_pressed = false,
 	_value = -1,
 	_minValue = nil,
 	_maxValue = nil,
 	_scrollable = true,
+	_enabled = true,
+	_pressed = false,
 
 	-- Constructs a Slide with the specific value.
 	-- `value`: the initial value number

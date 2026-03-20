@@ -142,8 +142,23 @@ local function default()
 			area = { 0, 13, 13, 13 },
 			content_offset = { 16, 1 }
 		},
+		['radiobox_disabled'] = {
+			resource = Resources.load('imgs/radiobox.png'),
+			area = { 13, 0, 13, 13 },
+			content_offset = { 16, 1 }
+		},
+		['radiobox_selected_disabled'] = {
+			resource = Resources.load('imgs/radiobox.png'),
+			area = { 13, 13, 13, 13 },
+			content_offset = { 16, 1 }
+		},
 
 		['combobox'] = {
+			resource = Resources.load('imgs/panel_gray.png'),
+			area = { 0, 0, 17, 17 },
+			content_offset = { 1, 1 }
+		},
+		['combobox_disabled'] = {
 			resource = Resources.load('imgs/panel_gray.png'),
 			area = { 0, 0, 17, 17 },
 			content_offset = { 1, 1 }
@@ -158,6 +173,11 @@ local function default()
 			area = { 0, 17, 17, 17 },
 			content_offset = nil
 		},
+		['combobox_button_left_disabled'] = {
+			resource = Resources.load('imgs/button_left.png'),
+			area = { 0, 34, 17, 17 },
+			content_offset = nil
+		},
 		['combobox_button_right'] = {
 			resource = Resources.load('imgs/button_right.png'),
 			area = { 0, 0, 17, 17 },
@@ -168,8 +188,18 @@ local function default()
 			area = { 0, 17, 17, 17 },
 			content_offset = nil
 		},
+		['combobox_button_right_disabled'] = {
+			resource = Resources.load('imgs/button_right.png'),
+			area = { 0, 34, 17, 17 },
+			content_offset = nil
+		},
 
 		['dropdown_combobox'] = {
+			resource = Resources.load('imgs/panel_gray.png'),
+			area = { 0, 0, 17, 17 },
+			content_offset = { 1, 1 }
+		},
+		['dropdown_combobox_disabled'] = {
 			resource = Resources.load('imgs/panel_gray.png'),
 			area = { 0, 0, 17, 17 },
 			content_offset = { 1, 1 }
@@ -184,8 +214,18 @@ local function default()
 			area = { 0, 17, 17, 17 },
 			content_offset = nil
 		},
+		['dropdown_combobox_button_dropdown_disabled'] = {
+			resource = Resources.load('imgs/button_dropdown.png'),
+			area = { 0, 34, 17, 17 },
+			content_offset = nil
+		},
 
 		['numberbox'] = {
+			resource = Resources.load('imgs/panel_gray.png'),
+			area = { 0, 0, 17, 17 },
+			content_offset = { 1, 1 }
+		},
+		['numberbox_disabled'] = {
 			resource = Resources.load('imgs/panel_gray.png'),
 			area = { 0, 0, 17, 17 },
 			content_offset = { 1, 1 }
@@ -200,6 +240,11 @@ local function default()
 			area = { 0, 17, 17, 17 },
 			content_offset = nil
 		},
+		['numberbox_button_up_disabled'] = {
+			resource = Resources.load('imgs/button_up.png'),
+			area = { 0, 34, 17, 17 },
+			content_offset = nil
+		},
 		['numberbox_button_down'] = {
 			resource = Resources.load('imgs/button_down.png'),
 			area = { 0, 0, 17, 17 },
@@ -208,6 +253,11 @@ local function default()
 		['numberbox_button_down_down'] = {
 			resource = Resources.load('imgs/button_down.png'),
 			area = { 0, 17, 17, 17 },
+			content_offset = nil
+		},
+		['numberbox_button_down_disabled'] = {
+			resource = Resources.load('imgs/button_down.png'),
+			area = { 0, 34, 17, 17 },
 			content_offset = nil
 		},
 

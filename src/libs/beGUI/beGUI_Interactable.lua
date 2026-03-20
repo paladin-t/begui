@@ -30,8 +30,9 @@ Widgets.
 ]]
 
 local Clickable = beClass.class({
-	_pressed = false,
 	_rule = 'inside',
+	_enabled = true,
+	_pressed = false,
 
 	ctor = function (self)
 		beWidget.Widget.ctor(self)
@@ -48,6 +49,15 @@ local Clickable = beClass.class({
 	-- Sets the click detection rule.
 	setRule = function (self, val)
 		self._rule = val
+
+		return self
+	end,
+
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
 
 		return self
 	end,
@@ -97,9 +107,13 @@ local Clickable = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 		elseif event.context.focus == self and event.context.navigated == 'press' then
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 			event.context.navigated = false
 		end
 
@@ -114,6 +128,7 @@ local ClickableText = beClass.class({
 	_normalTheme = nil,
 	_selectedTheme = nil,
 	_disabledTheme = nil,
+	_enabled = true,
 
 	ctor = function (self, content)
 		beWidget.Widget.ctor(self)
@@ -141,6 +156,9 @@ local ClickableText = beClass.class({
 		return self._selected
 	end,
 	setSelected = function (self, val)
+		if not self._enabled then
+			return self
+		end
 		if self._selected == val then
 			return self
 		end
@@ -167,6 +185,18 @@ local ClickableText = beClass.class({
 		self._normalTheme = normalTheme
 		self._selectedTheme = selectedTheme
 		self._disabledTheme = disabledTheme
+
+		return self
+	end,
+
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		if self._enabled and not val and self._selected then
+			self:setSelected(false)
+		end
+		self._enabled = val
 
 		return self
 	end,
@@ -203,7 +233,9 @@ local ClickableText = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 			event.context.focus = self
-			self:_trigger('clicked', self)
+			if self._enabled then
+				self:_trigger('clicked', self)
+			end
 		end
 		if self._selectable then
 			if not self._selected and intersects then

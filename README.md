@@ -735,6 +735,11 @@ Shortcut to create `Percent` object.
 * `radiobox:setContent(val)`: sets the text content of this `Widget`
   * `val`: the content string
   * returns `self`
+* `radiobox:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `radiobox:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 **Events**
 
@@ -776,6 +781,11 @@ A `ComboBox` provides multiple in-place options for selecting.
 * `combobox:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
+* `combobox:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `combobox:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 **Events**
 
@@ -816,6 +826,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
   * returns `true` for scrollable, otherwise `false`
 * `dropdown:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
+* `dropdown:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `dropdown:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
   * returns `self`
 
 **Events**
@@ -876,6 +891,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
   * returns `true` for scrollable, otherwise `false`
 * `numberbox:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
+* `numberbox:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `numberbox:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
   * returns `self`
 
 **Events**
@@ -986,6 +1006,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `clickable:setRule(val)`: sets the click detection rule
   * `val`: the click detection rule, can be either `'inside'` or `'outside'`; defaults to `'inside'`
   * returns `self`
+* `clickable:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `clickable:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 **Events**
 
@@ -1023,6 +1048,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
   * `normalTheme`: the normal theme
   * `selectedTheme`: the selected theme
   * `disabledTheme`: the not selectable theme
+  * returns `self`
+* `clickableText:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `clickableText:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
   * returns `self`
 
 **Events**
