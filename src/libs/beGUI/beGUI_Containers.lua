@@ -58,9 +58,11 @@ local Group = beClass.class({
 	end,
 	setEnabled = function (self, val)
 		self._enabled = val
-		for i, c in ipairs(self.children) do
-			if type(c.setEnabled) == 'function' then
-				c:setEnabled(self._enabled)
+		if self.children then
+			for i, c in ipairs(self.children) do
+				if type(c.setEnabled) == 'function' then
+					c:setEnabled(self._enabled)
+				end
 			end
 		end
 
@@ -190,9 +192,11 @@ local List = beClass.class({
 	end,
 	setEnabled = function (self, val)
 		self._enabled = val
-		for i, c in ipairs(self.children) do
-			if type(c.setEnabled) == 'function' then
-				c:setEnabled(self._enabled)
+		if self.children then
+			for i, c in ipairs(self.children) do
+				if type(c.setEnabled) == 'function' then
+					c:setEnabled(self._enabled)
+				end
 			end
 		end
 
@@ -622,9 +626,11 @@ local Tab = beClass.class({
 	end,
 	setEnabled = function (self, val)
 		self._enabled = val
-		for i, c in ipairs(self.children) do
-			if type(c.setEnabled) == 'function' then
-				c:setEnabled(self._enabled)
+		if self.children then
+			for i, c in ipairs(self.children) do
+				if type(c.setEnabled) == 'function' then
+					c:setEnabled(self._enabled)
+				end
 			end
 		end
 
