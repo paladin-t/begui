@@ -662,6 +662,7 @@ local Url = beClass.class({
 
 local InputBox = beClass.class({
 	_placeholder = nil,
+	_enabled = true,
 	_pressed = false,
 	_size = nil,
 	_ticks = 0,
@@ -715,7 +716,20 @@ local InputBox = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
+	end,
+
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -740,9 +754,13 @@ local InputBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if self._enabled then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			if self._enabled then
+				down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -767,6 +785,9 @@ local InputBox = beClass.class({
 		end
 
 		local font_ = theme[self._theme or 'font']
+		if not self._enabled then
+			font_ = theme[self._theme or 'font_placeholder']
+		end
 		if self._theme and self._theme ~= 'font' then
 			font(theme[self._theme].resource)
 		end
@@ -796,7 +817,7 @@ local InputBox = beClass.class({
 			else
 				beUtils.textLeft(self._placeholder, placeholder, x, y, w, h, elem.content_offset, self.transparency)
 			end
-			if self._ticks < 0.4 then
+			if self._ticks < 0.4 and self._enabled then
 				beUtils.textLeft('_', font_, caretX, y + (elem.content_offset[3] or 0), w, h, elem.content_offset, self.transparency)
 			end
 		end

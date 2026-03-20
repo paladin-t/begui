@@ -473,6 +473,11 @@ Shortcut to create `Percent` object.
 * `inputbox:setPlaceholder(val)`: sets the placeholder text
   * `val`: the specific placeholder string
   * returns `self`
+* `inputbox:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `inputbox:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 **Events**
 
