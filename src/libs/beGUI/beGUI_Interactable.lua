@@ -313,6 +313,10 @@ local Draggable = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'children'
 	end,
 
@@ -451,6 +455,10 @@ local Droppable = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
