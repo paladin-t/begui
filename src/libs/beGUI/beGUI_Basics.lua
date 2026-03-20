@@ -555,6 +555,10 @@ local Url = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -1321,6 +1325,10 @@ local Button = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -1440,6 +1448,10 @@ local PictureButton = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -1589,6 +1601,10 @@ local CheckBox = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -1712,6 +1728,10 @@ local RadioBox = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -1939,6 +1959,10 @@ local ComboBox = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -2186,6 +2210,10 @@ local DropdownComboBox = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -2615,6 +2643,10 @@ local NumberBox = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -2985,6 +3017,10 @@ local Slide = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 

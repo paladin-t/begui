@@ -73,6 +73,10 @@ local Clickable = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'children'
 	end,
 
@@ -202,6 +206,10 @@ local ClickableText = beClass.class({
 	end,
 
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
