@@ -1072,6 +1072,14 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 
 * beGUI.`Draggable.new()`: constructs a `Draggable`
 
+**Methods**
+
+* `draggable:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `draggable:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
+
 ### beGUI.Droppable
 
 **Model: `require 'libs/beGUI/beGUI'`, implements beGUI.`Widget`**
@@ -1079,6 +1087,14 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 **Constructor**
 
 * beGUI.`Droppable.new()`: constructs a `Droppable`
+
+**Methods**
+
+* `droppable:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `droppable:setEnabled(val)`: sets whether this `Widget` is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 **Events**
 

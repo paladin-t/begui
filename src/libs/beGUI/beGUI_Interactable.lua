@@ -281,6 +281,7 @@ local ClickableText = beClass.class({
 }, beWidget.Widget)
 
 local Draggable = beClass.class({
+	_enabled = true,
 	_draggedTimestamp = nil,
 	_draggedPosition = nil,
 	_draggingPosition = nil,
@@ -302,6 +303,15 @@ local Draggable = beClass.class({
 		return 'Draggable'
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
+	end,
+
 	navigatable = function (self)
 		return 'children'
 	end,
@@ -321,10 +331,12 @@ local Draggable = beClass.class({
 		local w, h = self:size()
 		local down = false
 		local intersects = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
-		if event.context.dragging then
-			down = event.mouseDown
-		else
-			down = event.mouseDown and intersects
+		if self._enabled then
+			if event.context.dragging then
+				down = event.mouseDown
+			else
+				down = event.mouseDown and intersects
+			end
 		end
 		local picking = false
 		local dropping = false
@@ -415,6 +427,7 @@ local Draggable = beClass.class({
 }, beWidget.Widget)
 
 local Droppable = beClass.class({
+	_enabled = true,
 	_pressed = false,
 	_dropping = nil,
 	_dropped = false,
@@ -426,6 +439,15 @@ local Droppable = beClass.class({
 
 	__tostring = function (self)
 		return 'Droppable'
+	end,
+
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+
+		return self
 	end,
 
 	navigatable = function (self)
@@ -447,7 +469,9 @@ local Droppable = beClass.class({
 		if event.canceled then
 			self._dropping = nil
 		else
-			down = event.mouseDown and intersects
+			if self._enabled then
+				down = event.mouseDown and intersects
+			end
 		end
 		if down and not self._dropping then
 			if event.context.dragging then
