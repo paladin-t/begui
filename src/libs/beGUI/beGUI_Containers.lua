@@ -30,6 +30,8 @@ Widgets.
 ]]
 
 local Group = beClass.class({
+	_enabled = true,
+
 	ctor = function (self, content)
 		beWidget.Widget.ctor(self)
 
@@ -51,7 +53,25 @@ local Group = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+		for i, c in ipairs(self.children) do
+			if type(c.setEnabled) == 'function' then
+				c:setEnabled(self._enabled)
+			end
+		end
+
+		return self
+	end,
+
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'children'
 	end,
 
@@ -83,6 +103,16 @@ local Group = beClass.class({
 }, beWidget.Widget)
 
 local List = beClass.class({
+	_scrollableVertically = true,
+	_scrollableHorizontally = false,
+	_childrenCount = 0,
+	_theme = nil,
+	_scrollable = true,
+	_enabled = true,
+	_inertance = nil,
+	_inertanceSpeed = nil,
+	_inertancePosition = nil,
+	_inertanceDirection = nil,
 	_withScrollBar = false,
 	_scrolledTimestamp = nil,
 	_pressed = false,
@@ -93,15 +123,6 @@ local List = beClass.class({
 	_scrollSpeed = 16,
 	_maxX = 0, _maxY = 0,
 	_scrollDirectionalTimestamp = nil,
-	_scrollableVertically = true,
-	_scrollableHorizontally = false,
-	_inertance = nil,
-	_inertanceSpeed = nil,
-	_inertancePosition = nil,
-	_inertanceDirection = nil,
-	_childrenCount = 0,
-	_theme = nil,
-	_scrollable = true,
 
 	-- Constructs a List.
 	-- `withScrollBar`: whether to draw scroll bar(s)
@@ -164,7 +185,25 @@ local List = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+		for i, c in ipairs(self.children) do
+			if type(c.setEnabled) == 'function' then
+				c:setEnabled(self._enabled)
+			end
+		end
+
+		return self
+	end,
+
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'content'
 	end,
 
@@ -182,9 +221,13 @@ local List = beClass.class({
 		if event.canceled or event.context.dragging then
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if self._enabled then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and intersects
+			if self._enabled then
+				down = event.mouseDown and intersects
+			end
 		end
 		local now = DateTime.ticks()
 		if down and not self._pressed then
@@ -291,22 +334,26 @@ local List = beClass.class({
 			end
 			self._pressingPosition = event.mousePosition
 		elseif intersects and event.mouseWheel < 0 and self._scrollable then
-			if self._withScrollBar then
-				self._scrolledTimestamp = now
-			end
-			if self._scrollableVertically and not key(beUtils.KeyCodeLShift) and not key(beUtils.KeyCodeRShift) then
-				self._scrollY = beUtils.clamp(self._scrollY - self._scrollSpeed, h - self._maxY, 0)
-			elseif self._scrollableHorizontally then
-				self._scrollX = beUtils.clamp(self._scrollX - self._scrollSpeed, w - self._maxX, 0)
+			if self._enabled then
+				if self._withScrollBar then
+					self._scrolledTimestamp = now
+				end
+				if self._scrollableVertically and not key(beUtils.KeyCodeLShift) and not key(beUtils.KeyCodeRShift) then
+					self._scrollY = beUtils.clamp(self._scrollY - self._scrollSpeed, h - self._maxY, 0)
+				elseif self._scrollableHorizontally then
+					self._scrollX = beUtils.clamp(self._scrollX - self._scrollSpeed, w - self._maxX, 0)
+				end
 			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
-			if self._withScrollBar then
-				self._scrolledTimestamp = now
-			end
-			if self._scrollableVertically and not key(beUtils.KeyCodeLShift) and not key(beUtils.KeyCodeRShift) then
-				self._scrollY = beUtils.clamp(self._scrollY + self._scrollSpeed, h - self._maxY, 0)
-			elseif self._scrollableHorizontally then
-				self._scrollX = beUtils.clamp(self._scrollX + self._scrollSpeed, w - self._maxX, 0)
+			if self._enabled then
+				if self._withScrollBar then
+					self._scrolledTimestamp = now
+				end
+				if self._scrollableVertically and not key(beUtils.KeyCodeLShift) and not key(beUtils.KeyCodeRShift) then
+					self._scrollY = beUtils.clamp(self._scrollY + self._scrollSpeed, h - self._maxY, 0)
+				elseif self._scrollableHorizontally then
+					self._scrollX = beUtils.clamp(self._scrollX + self._scrollSpeed, w - self._maxX, 0)
+				end
 			end
 		end
 		if not intersects then
@@ -476,11 +523,12 @@ local Tab = beClass.class({
 	_pages = nil,
 	_pagesInitialized = false,
 	_tabSize = nil,
-	_value = 1,
 	_focusArea = nil,
+	_value = 1,
 	_headHeight = nil,
 	_pressed = false,
 	_scrollable = true,
+	_enabled = true,
 
 	-- Constructs a Tab.
 	ctor = function (self)
@@ -569,7 +617,25 @@ local Tab = beClass.class({
 		return self
 	end,
 
+	enabled = function (self)
+		return self._enabled
+	end,
+	setEnabled = function (self, val)
+		self._enabled = val
+		for i, c in ipairs(self.children) do
+			if type(c.setEnabled) == 'function' then
+				c:setEnabled(self._enabled)
+			end
+		end
+
+		return self
+	end,
+
 	navigatable = function (self)
+		if not self._enabled then
+			return nil
+		end
+
 		return 'all'
 	end,
 
@@ -589,9 +655,13 @@ local Tab = beClass.class({
 		elseif event.canceled or event.context.dragging then
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if self._enabled then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			if self._enabled then
+				down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			end
 		end
 		local pressed = false
 		if down and not self._pressed then
@@ -602,27 +672,35 @@ local Tab = beClass.class({
 			pressed = true
 		elseif intersectsHead and event.mouseWheel < 0 and self._scrollable then
 			if #self.content ~= 0 then
-				local val = self._value + 1
-				if val > #self.content then
-					val = #self.content
+				if self._enabled then
+					local val = self._value + 1
+					if val > #self.content then
+						val = #self.content
+					end
+					self:setValue(val)
 				end
-				self:setValue(val)
 			end
 		elseif intersectsHead and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
-				local val = self._value - 1
-				if val < 1 then
-					val = 1
+				if self._enabled then
+					local val = self._value - 1
+					if val < 1 then
+						val = 1
+					end
+					self:setValue(val)
 				end
-				self:setValue(val)
 			end
 		elseif event.context.focus == self and event.context.navigated == 'inc' then
-			local val = self._value + 1
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value + 1
+				self:setValue(val)
+			end
 			event.context.navigated = false
 		elseif event.context.focus == self and event.context.navigated == 'dec' then
-			local val = self._value - 1
-			self:setValue(val)
+			if self._enabled then
+				local val = self._value - 1
+				self:setValue(val)
+			end
 			event.context.navigated = false
 		end
 
@@ -649,9 +727,11 @@ local Tab = beClass.class({
 				self._headHeight = h_
 			end
 			if pressed then
-				if Math.intersects(event.mousePosition, Rect.byXYWH(x_, y, w_, h_)) then
-					local val = i
-					self:setValue(val)
+				if self._enabled then
+					if Math.intersects(event.mousePosition, Rect.byXYWH(x_, y, w_, h_)) then
+						local val = i
+						self:setValue(val)
+					end
 				end
 			end
 			local col = Color.new(elem.color.r, elem.color.g, elem.color.b, self.transparency or 255)

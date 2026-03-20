@@ -1132,6 +1132,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `group:setValue(val)`: sets the content text
   * `val`: the specific content string
   * returns `self`
+* `group:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `group:setEnabled(val)`: sets whether this `Widget` and its children is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 ### beGUI.List
 
@@ -1167,6 +1172,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
 * `list:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
   * returns `self`
+* `list:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `list:setEnabled(val)`: sets whether this `Widget` and its children is enabled
+  * `val`: `true` for enabled, otherwise `false`
+  * returns `self`
 
 ### beGUI.Tab
 
@@ -1197,6 +1207,11 @@ A `DropdownComboBox` is similar to a `ComboBox`, it provides multiple options fo
   * returns `true` for scrollable, otherwise `false`
 * `tab:setScrollable(val)`: sets whether can scroll the widget by mouse wheel
   * `val`: `true` for allowing scrolling with a mouse wheel, otherwise `false`
+  * returns `self`
+* `tab:enabled()`: gets whether this `Widget` is enabled
+  * returns `true` for enabled, otherwise `false`
+* `tab:setEnabled(val)`: sets whether this `Widget` and its children is enabled
+  * `val`: `true` for enabled, otherwise `false`
   * returns `self`
 
 **Events**

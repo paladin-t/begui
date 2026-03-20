@@ -1370,10 +1370,8 @@ local Button = beClass.class({
 		end
 
 		local font_ = theme[self._theme or 'font']
-		local elem = nil
-		if self._enabled then
-			elem = down and theme[self._themeDown or 'button_down'] or theme[self._themeNormal or 'button']
-		else
+		local elem = down and theme[self._themeDown or 'button_down'] or theme[self._themeNormal or 'button']
+		if not self._enabled then
 			elem = theme[self._themeDisabled or 'button_disabled']
 		end
 		beUtils.tex9Grid(elem, x, y, w, h, nil, self.transparency, nil)
@@ -1650,10 +1648,8 @@ local CheckBox = beClass.class({
 			event.context.navigated = false
 		end
 
-		local normal, pressed = nil, nil
-		if self._enabled then
-			normal, pressed = theme['checkbox'], theme['checkbox_selected']
-		else
+		local normal, pressed = theme['checkbox'], theme['checkbox_selected']
+		if not self._enabled then
 			normal, pressed = theme['checkbox_disabled'], theme['checkbox_selected_disabled']
 		end
 		if self._value then
@@ -1794,7 +1790,10 @@ local RadioBox = beClass.class({
 			event.context.navigated = false
 		end
 
-		local elem = self._value and theme[self._enabled and 'radiobox_selected' or 'radiobox_selected_disabled'] or theme[self._enabled and 'radiobox' or 'radiobox_disabled']
+		local elem = self._value and theme['radiobox_selected'] or theme['radiobox']
+		if not self._enabled then
+			elem = self._value and theme['radiobox_selected_disabled'] or theme['radiobox_disabled']
+		end
 		local img = elem.resource
 		local area = elem.area
 		if self.transparency then
