@@ -2374,8 +2374,10 @@ local DropdownComboBox = beClass.class({
 			:anchor(anchorX, anchorY)
 			:put(posX, posY)
 			:resize(dropdownWidth + 1, dropdownHeight)
-		self._dropDownWidget:find('list')
+		local lst = self._dropDownWidget:find('list')
+		lst
 			:_updateHierarchy()
+		lst._withScrollBar = self._maxContentHeight > dropdownHeight
 	end,
 	_updateLayout = function (self, ...)
 		beWidget.Widget._updateLayout(self, ...)
