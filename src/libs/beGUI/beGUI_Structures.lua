@@ -45,11 +45,76 @@ local function percent(amount)
 	return Percent.new(amount)
 end
 
+local Calc = beClass.class({
+	expr = 0,
+	percent = 0,
+	offset = 0,
+
+	-- Constructs a Calc structure.
+	-- `expr`: the layout expression
+	ctor = function (self, expr)
+		local percentStr, opStr, pxStr = string.match(expr, '^(-?%d+%.?%d*)%%%s*([+-]?)%s*(-?%d+%.?%d*)px$')
+		if percentStr and pxStr then
+			self.percent = tonumber(percentStr) / 100
+			local sign = opStr or '+'
+			self.offset = tonumber(sign .. pxStr)
+		else
+			self.percent = 0
+			self.offset = 0
+		end
+	end,
+
+	__mul = function (self, num)
+		return self.percent * num + self.offset
+	end
+})
+
+local function calc(expr)
+	local y = type(expr)
+	if y == 'number' then
+		return expr
+	end
+	if y ~= 'string' then
+		return 0
+	end
+
+	if expr == 'left' or expr == 'top' or expr == 'begin' or expr == 'head' or expr == 'front' then
+		return Percent.new(0)
+	elseif expr == 'right' or expr == 'bottom' or expr == 'end' or expr == 'tail' or expr == 'back' then
+		return Percent.new(100)
+	elseif expr == 'middle' or expr == 'center' or expr == 'centre' then
+		return Percent.new(50)
+	end
+
+	expr = expr:gsub('^%s*(.-)%s*$', '%1')
+
+	local percentStr = string.match(expr, '^(-?%d+%.?%d*)%%$')
+	if percentStr then
+		return Percent.new(tonumber(percentStr))
+	end
+
+	local pxStr = string.match(expr, '^(-?%d+%.?%d*)px$')
+	if pxStr then
+		return tonumber(pxStr)
+	end
+
+	local numStr = string.match(expr, '^(-?%d+%.?%d*)$')
+	if numStr then
+		local num = tonumber(numStr)
+
+		return Percent.new(num * 100)
+	end
+
+	return Calc.new(expr)
+end
+
 --[[
 Exporting.
 ]]
 
 return {
 	Percent = Percent,
-	percent = percent
+	percent = percent,
+	Calc = Calc,
+	calc = calc
 }
