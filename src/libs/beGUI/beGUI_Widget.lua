@@ -150,8 +150,7 @@ Widget = beClass.class({
 	-- `y`: y position of the anchor in local space as number, typically
 	-- [0.0, 1.0] for [top, bottom]
 	anchor = function (self, x, y)
-		self.anchorX = x
-		self.anchorY = y
+		self.anchorX, self.anchorY = x, y
 
 		return self
 	end,
@@ -166,8 +165,7 @@ Widget = beClass.class({
 	-- `x`: number for absolute position, or Percent for relative position
 	-- `y`: number for absolute position, or Percent for relative position
 	put = function (self, x, y)
-		self.x = x
-		self.y = y
+		self.x, self.y = x, y
 
 		return self
 	end,
@@ -205,8 +203,7 @@ Widget = beClass.class({
 	-- `width`: number for absolute size, or Percent for relative size
 	-- `height`: number for absolute size, or Percent for relative size
 	resize = function (self, width, height)
-		self.width = width
-		self.height = height
+		self.width, self.height = width, height
 
 		return self
 	end,

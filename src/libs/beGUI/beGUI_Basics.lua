@@ -98,8 +98,7 @@ local Label = beClass.class({
 			self.height = height
 			self._requestedWidth = width
 		else
-			self.width = width
-			self.height = height
+			self.width, self.height = width, height
 			self._requestedWidth = width
 		end
 
@@ -546,8 +545,7 @@ local Url = beClass.class({
 			self.height = height
 			self._requestedWidth = width
 		else
-			self.width = width
-			self.height = height
+			self.width, self.height = width, height
 			self._requestedWidth = width
 		end
 
