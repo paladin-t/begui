@@ -1,4 +1,4 @@
-![](imgs/logo.png)
+<img src="imgs/logo.png" width="128" height="128">
 
 beGUI is a minimal customizable GUI system for Lua, and fully written in Lua.
 
