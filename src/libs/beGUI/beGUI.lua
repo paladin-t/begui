@@ -45,6 +45,8 @@ beGUI = beUtils.merge(
 
 		-- Data structure to represent relative number.
 		percent = beStructures.percent,
+		-- Data structure to represent expression calculation.
+		calc = beStructures.calc,
 
 		-- Widget class, base for other widgets, also could be used as container
 		-- of other widgets.

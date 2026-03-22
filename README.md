@@ -13,6 +13,8 @@ Try it [in browser](https://paladin-t.github.io/begui/).
   - [2. Structures](#2-structures)
     - [beStructures.Percent](#bestructurespercent)
     - [beGUI.percent](#beguipercent)
+    - [beStructures.Calc](#bestructurescalc)
+    - [beGUI.calc](#beguicalc)
   - [3. Widget](#3-widget)
     - [beGUI.Widget](#beguiwidget)
   - [4. Basic Widgets](#4-basic-widgets)
@@ -140,7 +142,7 @@ function update(delta)
 end
 ```
 
-Each widget has an anchor property which represents for the locating point in its local space, and a position property for either absolute or percentage position in its parent's space relatively. The final position is calculated according to these two properties. An anchor component is typically in range of values from 0.0 to 1.0, but it could be also less than 0.0 or greater than 1.0. A relative position component is typically in range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`.
+Each widget has an anchor property which represents for the locating point in its local space, a size property, and a position property for either absolute, percentage, or expression-based position in its parent's space relatively. The final position is calculated according to these two properties. An anchor component is typically in range of values from 0.0 to 1.0, but it could be also less than 0.0 or greater than 1.0. An absolute component represents for pixels. A relative component is typically in range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`. A expression calculation component could be a string, i.e. `'left'`, `'right'`, `'top'`, `'bottom'`, `'2%'`, `'0.02'`, `'100%-8px'`, `'20px'`, etc.
 
 ![](imgs/docking_absolutely.png)
 
@@ -178,6 +180,37 @@ Shortcut to create `Percent` object.
 * beGUI.`percent(amount)`: constructs a `Percent` object
   * `amount`: real number, no limit but often with range of values from 0 to 100
   * returns `Percent`
+
+### beStructures.Calc
+
+beStructures.`Calc` denotes expression calculation for positioning and sizing depending on its parent properties.
+
+**Model: `require 'libs/beGUI/beGUI_Structures'`**
+
+* beStructures.`Calc.new(expr)`: constructs a `Calc` object
+  * `expr`:expression calculation
+* `p.__mul(num)`: multiply the `Calc` value with another number
+  * `num`: the number to multiply
+  * returns result number
+
+### beGUI.calc
+
+Shortcut to create `Calc` object.
+
+**Model: `require 'libs/beGUI/beGUI'`**
+
+* beGUI.`calc(expr)`: constructs a `Calc` object
+  * `expr`:expression calculation
+  * returns `calc`
+
+This function supports the following formats:
+
+* `'left'`, `'top'`, `'begin'`, `'head'`, `'front'` for 0%
+* `'right'`, `'bottom'`, `'end'`, `'tail'`, `'back'` for 100%
+* `'middle'`, `'center'`, `'centre'` for 50%
+* `'2%'`, `'0.02'` for 2%
+* `'100%-8px'`, `'2%+8px'` for relative percentage multiplied by the outer parameter, plus an absolute pixel offset
+* `'20px'` for absolute pixel value
 
 </details>
 
@@ -222,16 +255,16 @@ Shortcut to create `Percent` object.
 * `widget:offset()`: gets the offset of the `Widget`
   * returns offset `x`, `y` in world space
 * `widget:put(x, y)`: sets the position of the `Widget`
-  * `x`: number for absolute position; or `Percent` for relative position, typically with range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`
-  * `y`: number for absolute position; or `Percent` for relative position, typically with range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`
+  * `x`: number for absolute position; or `Percent` for relative position, typically with range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`; or `Calc` for expression calculation, see [beStructures.Calc](#bestructurescalc) for details
+  * `y`: number for absolute position; or `Percent` for relative position, typically with range of values from `Percent(0)` to `Percent(100)`, but it could be also less than `Percent(0)` or greater than `Percent(100)`; or `Calc` for expression calculation, see [beStructures.Calc](#bestructurescalc) for details
   * returns `self`
 * `widget:position()`: gets the position of the `Widget`
   * returns position `x`, `y` in local space
 * `widget:worldPosition()`: gets the position of the `Widget` in world space
   * returns position `x`, `y` in world space
 * `widget:resize(width, height)`: sets the size of the `Widget`
-  * `width`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`
-  * `height`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`
+  * `width`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`; or `Calc` for expression calculation, see [beStructures.Calc](#bestructurescalc) for details
+  * `height`: number for absolute size; or `Percent` for relative size, typically with range of values from `Percent(0.00...n)` to `Percent(100)`, but it could be also greater than `Percent(100)`; or `Calc` for expression calculation, see [beStructures.Calc](#bestructurescalc) for details
   * returns `self`
 * `widget:size()`: gets the size of the `Widget`
   * returns size `width`, `height`

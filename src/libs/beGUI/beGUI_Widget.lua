@@ -177,14 +177,14 @@ Widget = beClass.class({
 		end
 		local canvasWidth, canvasHeight = Canvas.main:size()
 		local x, y = self.x, self.y
-		if beClass.is(x, beStructures.Percent) then
+		if type(x) ~= 'number' then -- beClass.is(x, beStructures.Percent) or beClass.is(x, beStructures.Calc).
 			if self.parent then
 				x = x * self.parentWidth
 			else
 				x = x * canvasWidth
 			end
 		end
-		if beClass.is(y, beStructures.Percent) then
+		if type(y) ~= 'number' then -- beClass.is(y, beStructures.Percent) or beClass.is(y, beStructures.Calc).
 			if self.parent then
 				y = y * self.parentHeight
 			else
@@ -213,10 +213,10 @@ Widget = beClass.class({
 			self:_updateHierarchy()
 		end
 		local w, h = self.width, self.height
-		if beClass.is(w, beStructures.Percent) then
+		if type(w) ~= 'number' then -- beClass.is(w, beStructures.Percent) or beClass.is(w, beStructures.Calc).
 			w = w * self.parentWidth
 		end
-		if beClass.is(h, beStructures.Percent) then
+		if type(h) ~= 'number' then -- beClass.is(h, beStructures.Percent) or beClass.is(h, beStructures.Calc).
 			h = h * self.parentHeight
 		end
 
