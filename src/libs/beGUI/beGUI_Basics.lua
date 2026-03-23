@@ -577,9 +577,13 @@ local Url = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if self._enabled then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and intersects
+			if self._enabled then
+				down = event.mouseDown and intersects
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -613,10 +617,22 @@ local Url = beClass.class({
 			if theme_.resource ~= theme['font'].resource then
 				font(theme_.resource)
 			end
-			if down and intersects then
-				if not self.transparency then
-					rect(x, y, x + w, y + h, true, theme[self._enabled and 'font_url' or 'font_placeholder'].color)
+			local col = nil
+			if (down and intersects) or (intersects or not self._enabled) then
+				if theme_.color then
+					if self.transparency then
+						col = Color.new(theme_.color.r, theme_.color.g, theme_.color.b, theme_.color.a * (self.transparency / 255))
+					else
+						col = theme_.color
+					end
+				else
+					if self.transparency then
+						col = Color.new(0, 0, 0, self.transparency)
+					end
 				end
+			end
+			if down and intersects then
+				rect(x, y, x + w, y + h, true, col)
 			end
 			if w <= 0 and h <= 0 then
 				local w_, h_ = measure(self.content, theme_.resource, theme_.margin or 1, theme_.scale or 1)
@@ -639,10 +655,8 @@ local Url = beClass.class({
 					end
 				end
 			end
-			if intersects then
-				if not self.transparency then
-					line(x, fy + fh, x + w, fy + fh, theme_.color)
-				end
+			if intersects or not self._enabled then
+				line(x, fy + fh, x + w, fy + fh, col)
 			end
 			if theme_.resource ~= theme['font'].resource then
 				font(theme['font'].resource)
