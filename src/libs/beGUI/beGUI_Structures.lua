@@ -53,6 +53,70 @@ local Calc = beClass.class({
 	-- Constructs a Calc structure.
 	-- `expr`: the layout expression
 	ctor = function (self, expr)
+		-- Prepare.
+		local y = type(expr)
+		if y == 'number' then
+			self.offset = expr
+
+			return
+		end
+		if y ~= 'string' then
+			-- Do nothing.
+
+			return
+		end
+		expr = expr:gsub('^%s*(.-)%s*$', '%1') -- Trim spaces.
+
+		-- Named values.
+		if
+			expr == 'left' or expr == 'top' or expr == 'begin' or expr == 'head' or expr == 'front' or
+			expr == 'empty' or expr == 'none'
+		then
+			-- Do nothing.
+
+			return
+		elseif
+			expr == 'right' or expr == 'bottom' or expr == 'end' or expr == 'tail' or expr == 'back' or
+			expr == 'full' or expr == 'all'
+		then
+			self.percent = 1
+
+			return
+		elseif
+			expr == 'middle' or expr == 'center' or expr == 'centre' or
+			expr == 'half'
+		then
+			self.percent = 0.5
+
+			return
+		end
+
+		-- Percent strings, i.e. '2%'.
+		local percentStr = string.match(expr, '^(-?%d+%.?%d*)%%$')
+		if percentStr then
+			self.percent = tonumber(percentStr) / 100
+
+			return
+		end
+
+		-- Pixel strings, i.e. '20px'.
+		local pxStr = string.match(expr, '^(-?%d+%.?%d*)px$')
+		if pxStr then
+			self.offset = tonumber(pxStr)
+
+			return
+		end
+
+		-- Numeric strings, i.e. '0.02'.
+		local numStr = string.match(expr, '^(-?%d+%.?%d*)$')
+		if numStr then
+			local num = tonumber(numStr)
+			self.percent = num
+
+			return
+		end
+
+		-- Construct a `Calc` object.
 		local percentStr, opStr, pxStr = string.match(expr, '^(-?%d+%.?%d*)%%%s*([+-]?)%s*(-?%d+%.?%d*)px$')
 		if percentStr and pxStr then
 			self.percent = tonumber(percentStr) / 100
@@ -70,6 +134,7 @@ local Calc = beClass.class({
 })
 
 local function calc(expr)
+	-- Prepare.
 	local y = type(expr)
 	if y == 'number' then
 		return expr
@@ -77,27 +142,39 @@ local function calc(expr)
 	if y ~= 'string' then
 		return 0
 	end
+	expr = expr:gsub('^%s*(.-)%s*$', '%1') -- Trim spaces.
 
-	if expr == 'left' or expr == 'top' or expr == 'begin' or expr == 'head' or expr == 'front' then
+	-- Named values.
+	if
+		expr == 'left' or expr == 'top' or expr == 'begin' or expr == 'head' or expr == 'front' or
+		expr == 'empty' or expr == 'none'
+	then
 		return Percent.new(0)
-	elseif expr == 'right' or expr == 'bottom' or expr == 'end' or expr == 'tail' or expr == 'back' then
+	elseif
+		expr == 'right' or expr == 'bottom' or expr == 'end' or expr == 'tail' or expr == 'back' or
+		expr == 'full' or expr == 'all'
+	then
 		return Percent.new(100)
-	elseif expr == 'middle' or expr == 'center' or expr == 'centre' then
+	elseif
+		expr == 'middle' or expr == 'center' or expr == 'centre' or
+		expr == 'half'
+	then
 		return Percent.new(50)
 	end
 
-	expr = expr:gsub('^%s*(.-)%s*$', '%1')
-
+	-- Percent strings, i.e. '2%'.
 	local percentStr = string.match(expr, '^(-?%d+%.?%d*)%%$')
 	if percentStr then
 		return Percent.new(tonumber(percentStr))
 	end
 
+	-- Pixel strings, i.e. '20px'.
 	local pxStr = string.match(expr, '^(-?%d+%.?%d*)px$')
 	if pxStr then
 		return tonumber(pxStr)
 	end
 
+	-- Numeric strings, i.e. '0.02'.
 	local numStr = string.match(expr, '^(-?%d+%.?%d*)$')
 	if numStr then
 		local num = tonumber(numStr)
@@ -105,6 +182,7 @@ local function calc(expr)
 		return Percent.new(num * 100)
 	end
 
+	-- Fall to construct a `Calc` object.
 	return Calc.new(expr)
 end
 

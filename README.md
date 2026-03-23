@@ -205,12 +205,18 @@ Shortcut to create `Calc` object.
 
 This function supports the following formats:
 
-* `'left'`, `'top'`, `'begin'`, `'head'`, `'front'` for 0%
-* `'right'`, `'bottom'`, `'end'`, `'tail'`, `'back'` for 100%
-* `'middle'`, `'center'`, `'centre'` for 50%
-* `'2%'`, `'0.02'` for 2%
-* `'100%-8px'`, `'2%+8px'` for relative percentage multiplied by the outer parameter, plus an absolute pixel offset
-* `'20px'` for absolute pixel value
+* For position
+  * `'left'`, `'top'`, `'begin'`, `'head'`, `'front'`: 0%
+  * `'right'`, `'bottom'`, `'end'`, `'tail'`, `'back'`: 100%
+  * `'middle'`, `'center'`, `'centre'`: 50%
+* For size
+  * `'empty'`, `'none'`: 0%
+  * `'full'`, `'all'`: 100%
+  * `'half'`: 50%
+* For both position and size
+  * `'2%'`, `'0.02'`: 2%
+  * `'100%-8px'`, `'2%+8px'`: relative percentage multiplied by the outer parameter, plus an absolute pixel offset
+  * `'20px'`: absolute pixel value
 
 </details>
 
