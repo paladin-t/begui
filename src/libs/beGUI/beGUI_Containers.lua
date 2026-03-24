@@ -679,9 +679,9 @@ local Tab = beClass.class({
 		elseif intersectsHead and event.mouseWheel < 0 and self._scrollable then
 			if #self.content ~= 0 then
 				if self._enabled then
-					local val = self._value + 1
-					if val > #self.content then
-						val = #self.content
+					local val = self._value - 1
+					if val < 1 then
+						val = 1
 					end
 					self:setValue(val)
 				end
@@ -689,9 +689,9 @@ local Tab = beClass.class({
 		elseif intersectsHead and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
 				if self._enabled then
-					local val = self._value - 1
-					if val < 1 then
-						val = 1
+					local val = self._value + 1
+					if val > #self.content then
+						val = #self.content
 					end
 					self:setValue(val)
 				end

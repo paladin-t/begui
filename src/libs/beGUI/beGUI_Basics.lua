@@ -2051,20 +2051,18 @@ local ComboBox = beClass.class({
 			if #self.content ~= 0 then
 				if self._enabled then
 					local val = self._value - 1
-					if val < 1 then
-						val = #self.content
+					if val >= 1 then
+						self:setValue(val)
 					end
-					self:setValue(val)
 				end
 			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
 				if self._enabled then
 					local val = self._value + 1
-					if val > #self.content then
-						val = 1
+					if val <= #self.content then
+						self:setValue(val)
 					end
-					self:setValue(val)
 				end
 			end
 		elseif event.context.focus == self and event.context.navigated == 'dec' then
@@ -2438,20 +2436,18 @@ local DropdownComboBox = beClass.class({
 			if #self.content ~= 0 then
 				if self._enabled then
 					local val = self._value - 1
-					if val < 1 then
-						val = #self.content
+					if val >= 1 then
+						self:setValue(val)
 					end
-					self:setValue(val)
 				end
 			end
 		elseif intersects and event.mouseWheel > 0 and self._scrollable then
 			if #self.content ~= 0 then
 				if self._enabled then
 					local val = self._value + 1
-					if val > #self.content then
-						val = 1
+					if val <= #self.content then
+						self:setValue(val)
 					end
-					self:setValue(val)
 				end
 			end
 		elseif event.context.focus == self and event.context.navigated == 'press' then

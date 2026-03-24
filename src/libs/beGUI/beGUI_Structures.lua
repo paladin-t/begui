@@ -110,8 +110,7 @@ local Calc = beClass.class({
 		-- Numeric strings, i.e. '0.02'.
 		local numStr = string.match(expr, '^(-?%d+%.?%d*)$')
 		if numStr then
-			local num = tonumber(numStr)
-			self.percent = num
+			self.percent = tonumber(numStr)
 
 			return
 		end
@@ -119,8 +118,8 @@ local Calc = beClass.class({
 		-- Construct a `Calc` object.
 		local percentStr, opStr, pxStr = string.match(expr, '^(-?%d+%.?%d*)%%%s*([+-]?)%s*(-?%d+%.?%d*)px$')
 		if percentStr and pxStr then
-			self.percent = tonumber(percentStr) / 100
 			local sign = opStr or '+'
+			self.percent = tonumber(percentStr) / 100
 			self.offset = tonumber(sign .. pxStr)
 		else
 			self.percent = 0
@@ -177,9 +176,7 @@ local function calc(expr)
 	-- Numeric strings, i.e. '0.02'.
 	local numStr = string.match(expr, '^(-?%d+%.?%d*)$')
 	if numStr then
-		local num = tonumber(numStr)
-
-		return Percent.new(num * 100)
+		return Percent.new(tonumber(numStr) * 100)
 	end
 
 	-- Fall to construct a `Calc` object.
