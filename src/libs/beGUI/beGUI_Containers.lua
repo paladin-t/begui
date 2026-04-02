@@ -125,6 +125,7 @@ local List = beClass.class({
 	_scrollSpeed = 16,
 	_maxX = 0, _maxY = 0,
 	_scrollDirectionalTimestamp = nil,
+	_doNotInteract = false,
 
 	-- Constructs a List.
 	-- `withScrollBar`: whether to draw scroll bar(s)
@@ -226,11 +227,20 @@ local List = beClass.class({
 			self._pressed = false
 		elseif self._pressed then
 			if self._enabled then
-				down = event.mouseDown
+				if not self._doNotInteract then
+					down = event.mouseDown
+				end
 			end
 		else
 			if self._enabled then
-				down = event.mouseDown and intersects
+				if not self._doNotInteract then
+					if event.mouseDown then
+						down = intersects
+						if not down and not self._doNotInteract then
+							self._doNotInteract = true
+						end
+					end
+				end
 			end
 		end
 		local now = DateTime.ticks()
@@ -301,6 +311,9 @@ local List = beClass.class({
 				end
 				self._inertancePosition = event.mousePosition
 			end
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local elem = theme[self._theme or 'list']
@@ -533,6 +546,7 @@ local Tab = beClass.class({
 	_pressed = false,
 	_scrollable = true,
 	_enabled = true,
+	_doNotInteract = false,
 
 	-- Constructs a Tab.
 	ctor = function (self)
@@ -662,11 +676,20 @@ local Tab = beClass.class({
 			self._pressed = false
 		elseif self._pressed then
 			if self._enabled then
-				down = event.mouseDown
+				if not self._doNotInteract then
+					down = event.mouseDown
+				end
 			end
 		else
 			if self._enabled then
-				down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+				if not self._doNotInteract then
+					if event.mouseDown then
+						down = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+						if not down and not self._doNotInteract then
+							self._doNotInteract = true
+						end
+					end
+				end
 			end
 		end
 		local pressed = false
@@ -708,6 +731,9 @@ local Tab = beClass.class({
 				self:setValue(val)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local font_ = theme['font']

@@ -476,6 +476,7 @@ local Url = beClass.class({
 	_theme = nil,
 	_enabled = true,
 	_pressed = false,
+	_doNotInteract = false,
 
 	-- Constructs a Url with the specific content.
 	-- `content`: the content string
@@ -570,7 +571,7 @@ local Url = beClass.class({
 		local x, y = dx + px + ox, dy + py + oy
 		local w, h = self:size()
 		local down = false
-		local intersects = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+		local intersects = not self._doNotInteract and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
 		if event.context.active and event.context.active ~= self then
 			self._pressed = false
 		elseif event.canceled or event.context.dragging then
@@ -578,11 +579,20 @@ local Url = beClass.class({
 			self._pressed = false
 		elseif self._pressed then
 			if self._enabled then
-				down = event.mouseDown
+				if not self._doNotInteract then
+					down = event.mouseDown
+				end
 			end
 		else
 			if self._enabled then
-				down = event.mouseDown and intersects
+				if not self._doNotInteract then
+					if event.mouseDown then
+						down = intersects
+						if not down and not self._doNotInteract then
+							self._doNotInteract = true
+						end
+					end
+				end
 			end
 		end
 		if down and not self._pressed then
@@ -600,6 +610,9 @@ local Url = beClass.class({
 				self:_trigger('clicked', self)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local elem = down and theme['url_down'] or theme['url']
@@ -680,6 +693,7 @@ local InputBox = beClass.class({
 	_ticks = 0,
 	_theme = nil,
 	_placeholderTheme = nil,
+	_doNotInteract = false,
 
 	-- Constructs an InputBox with the specific content.
 	-- `content`: the content string
@@ -767,11 +781,20 @@ local InputBox = beClass.class({
 			self._pressed = false
 		elseif self._pressed then
 			if self._enabled then
-				down = event.mouseDown
+				if not self._doNotInteract then
+					down = event.mouseDown
+				end
 			end
 		else
 			if self._enabled then
-				down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+				if not self._doNotInteract then
+					if event.mouseDown then
+						down = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+						if not down and not self._doNotInteract then
+							self._doNotInteract = true
+						end
+					end
+				end
 			end
 		end
 		if down and not self._pressed then
@@ -794,6 +817,9 @@ local InputBox = beClass.class({
 				self:setValue(input_)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local font_ = theme[self._theme or 'font']
@@ -1322,6 +1348,7 @@ local Button = beClass.class({
 	_themeNormal = nil, _themeDown = nil, _themeDisabled = nil,
 	_enabled = true,
 	_pressed = false,
+	_doNotInteract = false,
 
 	-- Constructs a Button with the specific content.
 	-- `content`: the content string
@@ -1381,9 +1408,18 @@ local Button = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -1400,6 +1436,9 @@ local Button = beClass.class({
 				self:_trigger('clicked', self)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local font_ = theme[self._theme or 'font']
@@ -1433,6 +1472,7 @@ local PictureButton = beClass.class({
 	_pressedTimestamp = nil,
 	_repeat = false,
 	_background = false,
+	_doNotInteract = false,
 
 	-- Constructs a PictureButton with the specific content.
 	-- `content`: the content Texture
@@ -1502,9 +1542,18 @@ local PictureButton = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -1539,6 +1588,9 @@ local PictureButton = beClass.class({
 				self:_trigger('clicked', self)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		if self._background then
@@ -1585,6 +1637,7 @@ local CheckBox = beClass.class({
 	_value = false,
 	_enabled = true,
 	_pressed = false,
+	_doNotInteract = false,
 
 	-- Constructs a CheckBox with the specific content.
 	-- `content`: the content string
@@ -1655,9 +1708,18 @@ local CheckBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -1679,6 +1741,9 @@ local CheckBox = beClass.class({
 				self:setValue(not self._value)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local normal, pressed = theme['checkbox'], theme['checkbox_selected']
@@ -1707,6 +1772,7 @@ local RadioBox = beClass.class({
 	_value = false,
 	_enabled = true,
 	_pressed = false,
+	_doNotInteract = false,
 
 	-- Constructs a RadioBox with the specific content.
 	-- `content`: the content string
@@ -1780,9 +1846,18 @@ local RadioBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -1822,6 +1897,9 @@ local RadioBox = beClass.class({
 			end
 			event.context.navigated = false
 		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
+		end
 
 		local elem = self._value and theme['radiobox_selected'] or theme['radiobox']
 		if not self._enabled then
@@ -1846,6 +1924,7 @@ local ComboBox = beClass.class({
 	_scrollable = true,
 	_enabled = true,
 	_pressed = false,
+	_doNotInteract = false,
 
 	_buttonLeft = nil,
 	_buttonRight = nil,
@@ -2027,9 +2106,18 @@ local ComboBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and intersects
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = intersects
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -2076,6 +2164,9 @@ local ComboBox = beClass.class({
 			end
 			event.context.navigated = false
 		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
+		end
 
 		local elem = theme[self._enabled and 'combobox' or 'combobox_disabled']
 		local img = elem.resource
@@ -2116,6 +2207,7 @@ local DropdownComboBox = beClass.class({
 	_toOpenDropdownList = false,
 	_maxContentWidth = 0,
 	_maxContentHeight = 0,
+	_doNotInteract = false,
 
 	_buttonDropdown = nil,
 	_dropDownWidget = nil,
@@ -2418,9 +2510,18 @@ local DropdownComboBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and intersects
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = intersects
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -2455,6 +2556,9 @@ local DropdownComboBox = beClass.class({
 				self._buttonDropdown:_trigger('clicked', self._buttonDropdown)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		if self._toOpenDropdownList then
@@ -2509,6 +2613,7 @@ local NumberBox = beClass.class({
 	_scrollable = true,
 	_enabled = true,
 	_pressed = false,
+	_doNotInteract = false,
 
 	_buttonUp = nil,
 	_buttonDown = nil,
@@ -2708,9 +2813,18 @@ local NumberBox = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and intersects
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = intersects
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -2743,6 +2857,9 @@ local NumberBox = beClass.class({
 				self._buttonUp:_trigger('clicked', self._buttonUp)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local elem = theme[self._enabled and 'numberbox' or 'numberbox_disabled']
@@ -2970,6 +3087,7 @@ local Slide = beClass.class({
 	_scrollable = true,
 	_enabled = true,
 	_pressed = false,
+	_doNotInteract = false,
 
 	-- Constructs a Slide with the specific value.
 	-- `value`: the initial value number
@@ -3072,9 +3190,18 @@ local Slide = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and intersects
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = intersects
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = self
@@ -3120,6 +3247,9 @@ local Slide = beClass.class({
 				self:setValue(val)
 			end
 			event.context.navigated = false
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local elem = nil

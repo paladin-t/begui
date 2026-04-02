@@ -133,6 +133,7 @@ local ClickableText = beClass.class({
 	_selectedTheme = nil,
 	_disabledTheme = nil,
 	_enabled = true,
+	_doNotInteract = false,
 
 	ctor = function (self, content)
 		beWidget.Widget.ctor(self)
@@ -230,9 +231,18 @@ local ClickableText = beClass.class({
 			event.context.active = nil
 			self._pressed = false
 		elseif self._pressed then
-			down = event.mouseDown
+			if not self._doNotInteract then
+				down = event.mouseDown
+			end
 		else
-			down = event.mouseDown and intersects
+			if not self._doNotInteract then
+				if event.mouseDown then
+					down = intersects
+					if not down and not self._doNotInteract then
+						self._doNotInteract = true
+					end
+				end
+			end
 		end
 		if down and not self._pressed then
 			event.context.active = nil -- DO NOT USE `event.context.active = self`.
@@ -251,6 +261,9 @@ local ClickableText = beClass.class({
 			elseif self._selected and not intersects then
 				self:setSelected(false)
 			end
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		local elem = theme[self._theme or 'clickable_text']
@@ -291,6 +304,7 @@ local Draggable = beClass.class({
 	_draggingEvent = nil,
 	_draggingTimeout = false,
 	_dropping = false,
+	_doNotInteract = false,
 
 	-- Constructs a Draggable.
 	ctor = function (self)
@@ -337,9 +351,18 @@ local Draggable = beClass.class({
 		local intersects = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
 		if self._enabled then
 			if event.context.dragging then
-				down = event.mouseDown
+				if not self._doNotInteract then
+					down = event.mouseDown
+				end
 			else
-				down = event.mouseDown and intersects
+				if not self._doNotInteract then
+					if event.mouseDown then
+						down = intersects
+						if not down and not self._doNotInteract then
+							self._doNotInteract = true
+						end
+					end
+				end
 			end
 		end
 		local picking = false
@@ -397,6 +420,9 @@ local Draggable = beClass.class({
 					self._draggingTimeout = true
 				end
 			end
+		end
+		if self._doNotInteract and not event.mouseDown then
+			self._doNotInteract = false
 		end
 
 		if self._draggingPosition then
