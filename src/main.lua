@@ -30,6 +30,10 @@ local DEBUG = false
 local widgets = nil
 local theme = nil
 
+local gcTicks = 0
+local <const> GC_INTERVAL = 10
+collectgarbage('incremental', 100, 100, 13)
+
 function setup()
 	print('beGUI v' .. beGUI.version)
 
@@ -643,6 +647,15 @@ function update(delta)
 	font(theme['font'].resource)
 	widgets:update(theme, delta)
 	font(nil)
+
+	if GC_INTERVAL then
+		gcTicks = gcTicks + delta
+		if gcTicks >= GC_INTERVAL then
+			gcTicks = 0
+			collectgarbage()
+			Resources.collect()
+		end
+	end
 
 	if DEBUG then
 		local x, y, lmb = mouse()
