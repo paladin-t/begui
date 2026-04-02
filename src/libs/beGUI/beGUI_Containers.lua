@@ -468,16 +468,34 @@ local List = beClass.class({
 			return
 		end
 		self._maxX, self._maxY = 0, 0
-		for i, c in ipairs(self.children) do
-			c:_update(theme, delta, dx, dy, event)
-			local px, py = c:position()
-			local w, h = c:size()
-			local x, y = px + w, py + h
-			if x > self._maxX then
-				self._maxX = x
+		if self._doNotInteract then
+			local md, mp = event.mouseDown, event.mousePosition
+			event.mouseDown, event.mousePosition = false, nil
+			for i, c in ipairs(self.children) do
+				c:_update(theme, delta, dx, dy, event)
+				local px, py = c:position()
+				local w, h = c:size()
+				local x, y = px + w, py + h
+				if x > self._maxX then
+					self._maxX = x
+				end
+				if y > self._maxY then
+					self._maxY = y
+				end
 			end
-			if y > self._maxY then
-				self._maxY = y
+			event.mouseDown, event.mousePosition = md, mp
+		else
+			for i, c in ipairs(self.children) do
+				c:_update(theme, delta, dx, dy, event)
+				local px, py = c:position()
+				local w, h = c:size()
+				local x, y = px + w, py + h
+				if x > self._maxX then
+					self._maxX = x
+				end
+				if y > self._maxY then
+					self._maxY = y
+				end
 			end
 		end
 	end,
