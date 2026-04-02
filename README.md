@@ -1386,6 +1386,7 @@ local beWidget = require 'libs/beGUI/beGUI_Widget'
 local MyWidget = beClass.class({
   _value = nil, -- Define your fields.
   _pressed = false,
+  _doNotInteract = false,
 
   ctor = function (self, ...)
     beWidget.Widget.ctor(self)
@@ -1434,10 +1435,19 @@ local MyWidget = beClass.class({
       event.context.active = nil
       self._pressed = false
     elseif self._pressed then
-      down = event.mouseDown
+      if not self._doNotInteract then
+        down = event.mouseDown
+      end
     else
       -- Intersection detection.
-      down = event.mouseDown and Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+      if not self._doNotInteract then
+        if event.mouseDown then
+          down = Math.intersects(event.mousePosition, Rect.byXYWH(x, y, w, h))
+          if not down and not self._doNotInteract then
+            self._doNotInteract = true
+          end
+        end
+      end
     end
     if down and not self._pressed then
       event.context.active = self
@@ -1450,6 +1460,9 @@ local MyWidget = beClass.class({
     elseif event.context.focus == self and event.context.navigated == 'press' then
       self:_trigger('clicked', self) -- Trigger 'clicked' event by key navigation.
       event.context.navigated = false
+    end
+    if self._doNotInteract and not event.mouseDown then
+      self._doNotInteract = false
     end
 
     -- Draw the widget.
