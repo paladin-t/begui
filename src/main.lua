@@ -25,14 +25,13 @@ require 'libs/beGUI/beGUI'
 require 'libs/beGUI/beTheme'
 require 'keycode'
 
-local DEBUG = false
+local <const> DEBUG = false
+local <const> GC_INTERVAL = 10
+local gcTicks = 0
+collectgarbage('incremental', 100, 100, 13)
 
 local widgets = nil
 local theme = nil
-
-local gcTicks = 0
-local <const> GC_INTERVAL = 10
-collectgarbage('incremental', 100, 100, 13)
 
 function setup()
 	print('beGUI v' .. beGUI.version)
