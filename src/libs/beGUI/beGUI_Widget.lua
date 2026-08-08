@@ -589,7 +589,7 @@ Widget = beClass.class({
 	-- `event`: optional, omit it for common usage, pass a prefilled event to prevent default event
 	touch = function (self, theme, delta, event)
 		self:update(theme, delta)
-		Application.skipFrame()
+		beUtils.skipFrame()
 
 		return self
 	end,

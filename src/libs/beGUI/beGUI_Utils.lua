@@ -475,6 +475,10 @@ local function textRight(txt, font_, x, y, w, h, offset_, alpha)
 	return fx, fy, textWidth, textHeight
 end
 
+--[[ Canvas interactions. ]]
+
+local skipFrame = Application.skipFrame or Canvas.main.skipFrame
+
 --[[
 Exporting.
 ]]
@@ -501,5 +505,6 @@ return {
 	textLeftSameLine = textLeftSameLine,
 	textLeft = textLeft,
 	textCenter = textCenter,
-	textRight = textRight
+	textRight = textRight,
+	skipFrame = skipFrame
 }
